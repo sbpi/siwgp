@@ -1,3 +1,5 @@
 * text=auto !eol
+documentacao/instalacao/siw_instalacao.doc -text
+documentacao/sistema/Manual[!!-~]Sistema[!!-~]-[!!-~]Parcial.doc -text
 fontes/classes/mailAlternative/LICENSE -text
 fontes/classes/mailAlternative/README -text
