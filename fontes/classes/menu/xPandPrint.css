@@ -1,0 +1,183 @@
+#container
+{
+}
+.Xtree
+{
+    PADDING-LEFT: 0px;
+    MARGIN: 0px;
+    LIST-STYLE-TYPE: none;
+    BACKGROUND-COLOR: transparent
+}
+.XtreeRoot
+{
+    PADDING-LEFT: 0px;
+    MARGIN: 0px;
+    LIST-STYLE-TYPE: none;
+    BACKGROUND-COLOR: transparent
+}
+.Xtree
+{
+    PADDING-LEFT: 25px;
+    MARGIN-LEFT: 3px;
+    BORDER-LEFT: #aaa 1px dotted
+}
+.Xnode
+{
+    MARGIN-TOP: 3px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: none;
+    MARGIN-BOTTOM: 3px;
+    CURSOR: pointer;
+    COLOR: black;
+    BACKGROUND-REPEAT: repeat;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: transparent
+}
+.Xleaf
+{
+    MARGIN-TOP: 2px;
+    FONT-WEIGHT: bold;
+    FONT-SIZE: 10px;
+    BACKGROUND-IMAGE: none;
+    MARGIN-BOTTOM: 2px;
+    COLOR: black;
+    BACKGROUND-REPEAT: repeat;
+    FONT-FAMILY: verdana;
+    HEIGHT: 20px;
+    BACKGROUND-COLOR: transparent
+}
+.Xnode A
+{
+    COLOR: black;
+    BACKGROUND-COLOR: transparent;
+    TEXT-DECORATION: none
+}
+.Xnode A:hover
+{
+    FONT-WEIGHT: lighter;
+    COLOR: red;
+    BACKGROUND-COLOR: transparent;
+    TEXT-DECORATION: none
+}
+.Xleaf A
+{
+    COLOR: black;
+    BACKGROUND-COLOR: transparent;
+    TEXT-DECORATION: none
+}
+.Xleaf A:hover
+{
+    FONT-WEIGHT: bolder;
+    BACKGROUND-IMAGE: none;
+    COLOR: red;
+    BACKGROUND-REPEAT: repeat;
+    BACKGROUND-COLOR: transparent;
+    TEXT-DECORATION: none
+}
+.Xlink
+{
+    FONT-WEIGHT: lighter;
+    FONT-SIZE: 8pt;
+    COLOR: blue;
+    FONT-STYLE: italic;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: transparent
+}
+.Xlink A
+{
+    TEXT-DECORATION: none
+}
+.Xlink A:hover
+{
+    COLOR: red;
+    TEXT-DECORATION: none
+}
+BODY
+{
+    FONT-SIZE: 8pt;
+    FONT-FAMILY: Arial
+}
+.HL
+{
+    FONT-FAMILY: Arial, Verdana;
+    TEXT-DECORATION: none
+}
+.HL A
+{
+    TEXT-DECORATION: none
+}
+.HL A:hover
+{
+    COLOR: red;
+    TEXT-DECORATION: none
+}
+.SS
+{
+    FONT-WEIGHT: bolder;
+    FONT-SIZE: 8pt;
+    TEXT-DECORATION: none
+}
+.SS A
+{
+    TEXT-DECORATION: none
+}
+.SS A:hover
+{
+    TEXT-DECORATION: none
+}
+.STB
+{
+    BORDER-RIGHT: 1px solid;
+    BORDER-TOP: 1px solid;
+    FONT-WEIGHT: lighter;
+    FONT-SIZE: 8pt;
+    BORDER-LEFT: 1px solid;
+    COLOR: black;
+    BORDER-BOTTOM: 1px solid;
+    FONT-FAMILY: Verdana;
+    BACKGROUND-COLOR: #c0c0c0
+}
+.STI
+{
+    BORDER-RIGHT: black 1px solid;
+    BORDER-TOP: black 1px solid;
+    FONT-SIZE: 8pt;
+    BORDER-LEFT: black 1px solid;
+    BORDER-BOTTOM: black 1px solid;
+    BACKGROUND-COLOR: #f5f5f5
+}
+.STS
+{
+    BORDER-RIGHT: thin solid;
+    BORDER-TOP: thin solid;
+    FONT-SIZE: 8pt;
+    BORDER-LEFT: thin solid;
+    BORDER-BOTTOM: thin solid;
+    BACKGROUND-COLOR: #f5f5f5
+}
+.STR
+{
+    BORDER-RIGHT: medium none;
+    BORDER-TOP: medium none;
+    FONT-SIZE: 8pt;
+    BORDER-LEFT: medium none;
+    BORDER-BOTTOM: medium none;
+    BACKGROUND-COLOR: #f5f5f5
+}
+.STC
+{
+    FONT-SIZE: 8pt
+}
+TD
+{
+    FONT-SIZE: 8pt;
+    FONT-FAMILY: Arial
+}
+.LH
+{
+    COLOR: red;
+    FONT-FAMILY: Verdana;
+    TEXT-DECORATION: none
+}
