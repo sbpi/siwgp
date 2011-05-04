@@ -1189,6 +1189,7 @@ fontes/visualalerta.php -text
 fontes/visualprojeto.php -text
 modelos/oracle/SIWGP.pdm -text
 modelos/oracle/script.sql -text
+modelos/oracle/sqmdata12.sqm -text
 sp/oracle/acentos.fnc -text
 sp/oracle/acesso.fnc -text
 sp/oracle/acesso_recurso.fnc -text
