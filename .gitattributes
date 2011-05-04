@@ -1187,6 +1187,7 @@ fontes/trabalho.php -text
 fontes/visualCliente.php -text
 fontes/visualalerta.php -text
 fontes/visualprojeto.php -text
+modelos/oracle/SIWGP.pdm -text
 modelos/oracle/script.sql -text
 sp/oracle/acentos.fnc -text
 sp/oracle/acesso.fnc -text
