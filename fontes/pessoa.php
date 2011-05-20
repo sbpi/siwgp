@@ -365,7 +365,7 @@ function Benef() {
             if ($_REQUEST['w_nome']>"") {
                 $SQL = new db_getPersonList; $RS = $SQL->getInstanceOf($dbms,$w_cliente,null,"PESSOA",$_REQUEST['w_nome'],null,null,null);
                 ShowHTML('<tr><td align="center" colspan=3>');
-                ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+                ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
                 ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
                 ShowHTML('          <td><b>Nome</font></td>');
                 ShowHTML('          <td><b>Nome resumido</font></td>');
@@ -923,7 +923,7 @@ function BuscaUsuario() {
     ShowHTML('</tr>');
     ShowHTML('</form>');
     if ($w_nome>'' || $w_sg_unidade>'') {
-        ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
+        ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
         ShowHTML('<tr><td>');
         ShowHTML('    <TABLE WIDTH="100%" border=0>');
         if (count($RS)==0) {
@@ -1047,7 +1047,7 @@ function BuscaPessoa() {
     ShowHTML('</tr>');
     ShowHTML('</form>');
     if ($p_nome!='' || $p_cpf!='' || $p_cnpj!='') {
-        ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
+        ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
         ShowHTML('<tr><td>');
         ShowHTML('    <TABLE WIDTH="100%" border=0>');
         if (count($RS)==0) {

@@ -526,6 +526,8 @@ fontes/funcoes.php -text
 fontes/funcoes/FC_Colors.php -text
 fontes/funcoes/FusionCharts.js -text
 fontes/funcoes/FusionCharts.php -text
+fontes/funcoes/arquivoExcel.php -text
+fontes/funcoes/arquivoWord.php -text
 fontes/funcoes/cabecalhoWordOR.php -text
 fontes/funcoes/cabecalhoWordRel.php -text
 fontes/funcoes/cabecalhoWordSint.php -text
@@ -989,6 +991,7 @@ fontes/images/close.gif -text
 fontes/images/colapsar.gif -text
 fontes/images/controls.png -text
 fontes/images/down.gif -text
+fontes/images/excel.gif -text
 fontes/images/excel.jpg -text
 fontes/images/expandir.gif -text
 fontes/images/f2.gif -text

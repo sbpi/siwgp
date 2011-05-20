@@ -179,9 +179,9 @@ function DataEspecial() {
       ShowHTML('<tr><td><font size="2">');
       ShowHTML('    <a accesskey="I" class="ss" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
       ShowHTML('    <a accesskey="G" class="ss" href="'.$w_dir.$w_pagina.'Grava&R='.$w_pagina.$par.'&O=G&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" onClick="return(confirm(\'Confirma geração ou atualização do arquivo de calendário?\'))"><u>G</u>erar arquivo</a>&nbsp;');
-      ShowHTML('    <td align="right"><b>Registros existentes: '.count($RS));
+      ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
       ShowHTML('<tr><td align="center" colspan=3>');
-      ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+      ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
       ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
       ShowHTML('          <td><b>'.LinkOrdena('Data','data_especial').'</td>');
       ShowHTML('          <td><b>'.LinkOrdena('Descricao','nome').'</td>');
@@ -189,7 +189,7 @@ function DataEspecial() {
       ShowHTML('          <td><b>Abrangência</td>');
       ShowHTML('          <td><b>'.LinkOrdena('Expediente','expediente').'</td>');
       ShowHTML('          <td><b>'.LinkOrdena('Ativo','ativo').'</td>');
-      ShowHTML('          <td><b> Operações </td>');
+      ShowHTML('          <td class="remover"><b> Operações </td>');
       ShowHTML('        </tr>');
       if (count($RS)<=0) {
         // Se não foram selecionados registros, exibe mensagem
@@ -236,7 +236,7 @@ function DataEspecial() {
           } else {
             ShowHTML('        <td align="center">'.RetornaSimNao(f($row,'ativo')).'</td>');
           } 
-          ShowHTML('        <td align="top" nowrap>');
+          ShowHTML('        <td class="remover" align="top" nowrap>');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_chave='.f($row,'chave').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.' &SG='.$SG.MontaFiltro('GET').'" Title="Nome">AL </A>&nbsp');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_chave='.f($row,'chave').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.' &SG='.$SG.'">EX </A>&nbsp');
           ShowHTML('        </td>');

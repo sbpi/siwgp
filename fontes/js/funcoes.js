@@ -354,3 +354,29 @@ function replaceExtChars(text) {
     text = replaceAll(text,fromTo[i+1],fromTo[i]);
   return (text);
 }
+
+function exportarArquivo(id){
+  $(document).ready(function() {
+    var elemento = "#"+id;
+    //$("#nada").remove();
+    $("#botaoExcel").click(function() {
+      var texto = $("<div>").append( $(elemento).eq(0).clone()).html();
+      texto = texto.replace('id=tudo','id=nada');
+      $("#conteudo").val(texto);
+      $("#temp").attr('action',$('#caminho').val() + 'funcoes/arquivoExcel.php');
+      $("#temp").submit();
+    });
+    $("#botaoWord").click(function(event) {
+      var texto = $("<div>").append( $(elemento).eq(0).clone()).html();
+      texto = texto.replace('id=tudo','id=nada');
+      $("#conteudo").val(texto);
+      $("#temp").attr('action',$('#caminho').val() + 'funcoes/arquivoWord.php');
+      $("#temp").submit();
+    });
+
+    $("#botaoPDF").click(function(event) {
+      $("#conteudo").val( $("<div>").append( $(elemento).eq(0).clone()).html());
+      $("#temp").submit();
+    });
+  });
+}

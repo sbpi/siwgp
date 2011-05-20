@@ -549,16 +549,16 @@ function Localizacao() {
   if ($O=='L') {
     ShowHTML('<tr><td><a accesskey="I" class="ss" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_unidade='.$w_sq_unidade.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('    <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="opener.focus(); window.close();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>Localização</td>');
     ShowHTML('          <td><b>Cidade</td>');
     ShowHTML('          <td><b>Telefone</td>');
     ShowHTML('          <td><b>Ramal</td>');
     ShowHTML('          <td><b>Ativo</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS) <= 0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=6 align="center"><b>Não foram encontrados registros.</b></td></tr>');
@@ -570,7 +570,7 @@ function Localizacao() {
         ShowHTML('        <td align="center">'.f($row,'telefone').'&nbsp;</td>');
         ShowHTML('        <td align="center">'.f($row,'ramal').'&nbsp;</td>');
         ShowHTML('        <td align="center">'.f($row,'ativo').'</td>');
-        ShowHTML('        <td align="top" nowrap>');
+        ShowHTML('        <td class="remover" align="top" nowrap>');
         ShowHTML('          <A class="hl" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_localizacao='.f($row,'sq_localizacao').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_unidade='.$w_sq_unidade.'" title="Alterar">AL</A>&nbsp');
         ShowHTML('          <A class="hl" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_localizacao='.f($row,'sq_localizacao').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_unidade='.$w_sq_unidade.'" title="Excluir">EX</A>&nbsp');
         ShowHTML('        </td>');
@@ -702,9 +702,9 @@ function Documentos() {
     // Exibe a quantidade de registros apresentados na listagem e o cabeçalho da tabela de listagem 
     ShowHTML('<tr><td><a accesskey="I" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_chave='.$w_chave.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('    <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="opener.focus(); window.close();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros existentes: '.count($RS));
+    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.linkOrdena('Ordem','ordem').'</td>');
     ShowHTML('          <td><b>'.linkOrdena('Tipo do arquivo','nm_tipo_arquivo').'</td>');
@@ -903,13 +903,13 @@ function Responsavel() {
   if ($O=='L') {
     ShowHTML('<tr><td><a accesskey="I" class="ss" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_unidade='.$w_sq_unidade.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('    <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="opener.focus(); window.close();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>Titular</td>');
     ShowHTML('          <td><b>Substituto</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=3 align="center"><b>Não foram encontrados registros.</b></td></tr>');
@@ -921,7 +921,7 @@ function Responsavel() {
           ShowHTML('      <tr bgcolor="'.$conTrBgColor.'">');
           ShowHTML('        <td align="left">'.f($row,'titular1').'</td>');
           ShowHTML('        <td align="left">'.f($row,'substituto1').'</td>');
-          ShowHTML('        <td align="top" nowrap>');
+          ShowHTML('        <td class="remover" align="top" nowrap>');
           ShowHTML('          <A class="hl" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_unidade='.$w_sq_unidade.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Alterar">AL</A>&nbsp');
           ShowHTML('          <A class="hl" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_unidade='.$w_sq_unidade.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Excluir">EX</A>&nbsp');
           ShowHTML('        </td>');
@@ -1055,7 +1055,7 @@ function BuscaUnidade() {
     ShowHTML('</tr>');
     ShowHTML('</form>');
     if ($w_nome>'' || $w_sigla>'') {
-      ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
+      ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
       ShowHTML('<tr><td>');
       ShowHTML('    <TABLE WIDTH="100%" border=0>');
       if (count($RS)<=0) {
@@ -1068,7 +1068,7 @@ function BuscaUnidade() {
         ShowHTML('            <td><b>Nome</td>');
         ShowHTML('            <td><b>Endereço</td>');
         ShowHTML('            <td><b>Cidade</td>');
-        ShowHTML('            <td><b>Operações</td>');
+        ShowHTML('            <td class="remover"><b>Operações</td>');
         ShowHTML('          </tr>');
         foreach($RS as $row) {
           $w_cor = ($w_cor==$conTrBgColor || $w_cor=='') ? $w_cor=$conTrAlternateBgColor : $w_cor=$conTrBgColor;
@@ -1087,7 +1087,7 @@ function BuscaUnidade() {
       } 
     } 
   } else {
-    ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
+    ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td colspan=6>');
     ShowHTML('    <TABLE WIDTH="100%" border=0>');
     if (count($RS)<=0) {
@@ -1100,7 +1100,7 @@ function BuscaUnidade() {
       ShowHTML('            <td><b>Nome</td>');
       ShowHTML('            <td><b>Endereço</td>');
       ShowHTML('            <td><b>Cidade</td>');
-      ShowHTML('            <td><b>Operações</td>');
+      ShowHTML('            <td class="remover"><b>Operações</td>');
       ShowHTML('          </tr>');
       foreach($RS as $row) {
         $w_cor = ($w_cor==$conTrBgColor || $w_cor=='') ? $w_cor=$conTrAlternateBgColor : $w_cor=$conTrBgColor;

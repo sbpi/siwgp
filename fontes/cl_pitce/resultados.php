@@ -259,7 +259,7 @@ function Inicial() {
     ShowHTML('  <td>Período de busca: <b>'.formataDataEdicao($w_inicio,9).'</b> a <b>'.formataDataEdicao($w_fim,9).'</b></td>');
     ShowHTML('  <td align="right">Resultados: '.count($RS_Resultado).'</td></tr>');
     ShowHTML('<tr><td align="center" colspan=2>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     if($w_embed != 'WORD'){
       ShowHTML('          <td nowrap><b>&nbsp;'.linkOrdena('Data','mes_ano').'&nbsp;</td>');

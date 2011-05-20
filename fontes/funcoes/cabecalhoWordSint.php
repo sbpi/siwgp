@@ -32,7 +32,7 @@ function CabecalhoWordSint($w_logo,$w_pag,$w_linha,$p_responsavel,$p_prioridade,
     ShowHTML('<table border=0><tr valign="top"><td><font size=1><b>Filtro:</b><td nowrap><font size=1><ul>'.$w_filtro.'</ul></td></tr></table></td></tr>'); 
   }
   ShowHTML('<tr><td align="center" colspan=3>');
-  ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+  ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
   ShowHTML('      <tr bgcolor="'.$conTrBgColor.'" align="center">');
   ShowHTML('        <td><b>Nome</font></td>');
   if (!(strpos($p_campos,'responsavel')===false)) {

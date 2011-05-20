@@ -183,9 +183,9 @@ function TipoEndereco() {
     } else {
       ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'"><u>F</u>iltrar (Inativo)</a>');
     } 
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.LinkOrdena('Chave','sq_tipo_endereco').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Aplicação','sq_tipo_pessoa').'</td>');
@@ -195,7 +195,7 @@ function TipoEndereco() {
     ShowHTML('          <td><b>'.LinkOrdena('Ativo','ativodesc').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Padrão','padraodesc').'</td>');
     if ($w_libera_edicao=='S') {
-      ShowHTML('          <td><b>Operações</td>');
+      ShowHTML('          <td class="remover"><b>Operações</td>');
     } 
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
@@ -214,7 +214,7 @@ function TipoEndereco() {
         ShowHTML('        <td align="center">'.f($row,'padraodesc').'</td>');
         if ($w_libera_edicao=='S') {
           ShowHTML('        <td align="top" nowrap>');
-          ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_tipo_endereco='.f($row,'sq_tipo_endereco').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Alterar">AL</A>&nbsp');
+          ShowHTML('          <A class="remover" class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_tipo_endereco='.f($row,'sq_tipo_endereco').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Alterar">AL</A>&nbsp');
           ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_tipo_endereco='.f($row,'sq_tipo_endereco').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Excluir">EX</A>&nbsp');
           ShowHTML('        </td>');
         } 
@@ -385,16 +385,16 @@ function TipoTelefone() {
     } else {
       ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'"><u>F</u>iltrar (Inativo)</a>');
     } 
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.LinkOrdena('Chave','sq_tipo_telefone').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Aplicação','sq_tipo_pessoa').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Nome','nome').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Ativo','ativodesc').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Padrão','padraodesc').'</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=6 align="center"><b>Não foram encontrados registros.</b></td></tr>');
@@ -408,7 +408,7 @@ function TipoTelefone() {
         ShowHTML('        <td>'.f($row,'nome').'</td>');
         ShowHTML('        <td align="center">'.f($row,'ativodesc').'</td>');
         ShowHTML('        <td align="center">'.f($row,'padraodesc').'</td>');
-        ShowHTML('        <td align="top" nowrap>');
+        ShowHTML('        <td class="remover" align="top" nowrap>');
         ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_tipo_telefone='.f($row,'sq_tipo_telefone').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Alterar">AL</A>&nbsp');
         ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_tipo_telefone='.f($row,'sq_tipo_telefone').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Excluir">EX</A>&nbsp');
         ShowHTML('        </td>');
@@ -579,16 +579,16 @@ function TipoPessoa() {
     } else {
       ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'"><u>F</u>iltrar (Inativo)</a>');
     } 
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.LinkOrdena('Chave','sq_tipo_pessoa').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Nome','nome').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Ativo','ativodesc').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Padrão','padraodesc').'</td>');
     if ($w_libera_edicao=='S') {
-      ShowHTML('          <td><b>Operações</td>');
+      ShowHTML('          <td class="remover"><b>Operações</td>');
     }  
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
@@ -603,7 +603,7 @@ function TipoPessoa() {
         ShowHTML('        <td align="center">'.f($row,'ativodesc').'</td>');
         ShowHTML('        <td align="center">'.f($row,'padraodesc').'</td>');
         if ($w_libera_edicao=='S') {
-          ShowHTML('        <td align="top" nowrap>');
+          ShowHTML('        <td class="remover" align="top" nowrap>');
           ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_tipo_pessoa='.f($row,'sq_tipo_pessoa').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Alterar">AL</A>&nbsp');
           ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_tipo_pessoa='.f($row,'sq_tipo_pessoa').'&p_nome='.$p_nome.'&p_ativo='.$p_ativo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"title="Excluir">EX</A>&nbsp');
           ShowHTML('        </td>');

@@ -38,8 +38,8 @@ $(document).ready(function() {
           .html((this.title || this.alt));
           this.title = "";
           this.alt = "";
-
-
+				
+				
 
           $("body").append(div);
           this.tooltipset = true;

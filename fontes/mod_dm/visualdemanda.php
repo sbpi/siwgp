@@ -137,7 +137,7 @@ function VisualDemanda($l_chave,$operacao,$w_usuario,$l_tipo=null) {
     if (count($RSQuery)>0) {
       $l_html.=chr(13).'      <tr><td colspan="2"><br><font size="2"><b>TAREFAS SUBORDINADAS<hr NOSHADE color=#000000 SIZE=1></b></font></td></tr>';
       $l_html.=chr(13).'      <tr><td valign="top" colspan="2"><table border=0 width="100%" cellspacing=0>';
-      $l_html.=chr(13).'        <tr><td align="right"><b>Registros: '.count($RSQuery);
+      $l_html.=chr(13).'        <tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RSQuery);
       $l_html.=chr(13).'        <tr><td align="center" colspan=3>';
       $l_html.=chr(13).'          <table width=100%  border="1" bordercolor="#00000">';
       $l_html.=chr(13).'            <tr align="center">';

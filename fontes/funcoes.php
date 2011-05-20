@@ -81,6 +81,21 @@ function SortArray() {
   return $array;
 }
 
+// =========================================================================
+// Montagem de link para exportação de conteúdo para excel
+// -------------------------------------------------------------------------
+function exportaOffice() {
+  extract($GLOBALS);
+  return('<form style="vertical-align: bottom; margin-left: 85%; float: left;" method="post" id="temp" action="'.$conRootSIW.'/funcoes/arquivoExcel.php">'.
+         '  <img id="botaoExcel" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Excel" SRC="images/excel.gif" style="float: left;" alt="img" />'.
+         '  <img id="botaoWord" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Word" SRC="images/word.gif" style="float: left;" alt="img" />'.
+         '  <input type="hidden" name="opcao" id="opcao" value="E">'.
+         '  <input type="hidden" name="caminho" id="caminho" value="'.$conRootSIW.'">'.
+         '  <input type="hidden" id="texto" name="texto"/>'.
+         '  <input type="hidden" id="conteudo" name="conteudo"/>'.
+         '</form>');
+}
+
 
 // =========================================================================
 // Montagem da URL para consulta ao módulo de telefonia
@@ -274,10 +289,10 @@ function headerWord($p_orientation='LANDSCAPE') {
   ShowHTML('--> ');
   ShowHTML('</style> ');
   ShowHTML('</head> ');
-  BodyOpen('onLoad=this.focus();');
+  BodyOpenMail();
   ShowHTML('<div class=Section1> ');
-  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
-  ShowHTML('<BASE HREF="'.$conRootSIW.'">');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
+  ShowHTML('<base HREF="'.$conRootSIW.'">');
 }
 
 // =========================================================================
@@ -381,17 +396,17 @@ function CabecalhoWord($p_cliente,$p_titulo,$p_pagina, $l_lspan=null, $l_rspan=n
   extract($GLOBALS);
   include_once($w_dir_volta.'classes/sp/db_getCustomerData.php');
   $sql = new db_getCustomerData; $l_RS = $sql->getInstanceOf($dbms,$p_cliente);
-  ShowHTML('<TABLE WIDTH="100%" BORDER=0>');
-  ShowHTML('  <TR>');
+  ShowHTML('<table WIDTH="100%" BORDER=0>');
+  ShowHTML('  <tr>');
   if (nvl($p_pagina,0)>0) $l_rowspan = 4; else $l_rowspan = 3;
-  ShowHTML('    <TD '.((nvl($l_lspan,'')=='') ? '' : 'colspan="'.$l_lspan.'"').' ROWSPAN='.$l_rowspan.'><IMG ALIGN="LEFT" SRC="'.$conFileVirtual.$w_cliente.'/img/'.f($l_RS,'LOGO').'">');
-  ShowHTML('    <TD '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><B><FONT SIZE=3 COLOR="#000000">'.$p_titulo.'</FONT>');
-  ShowHTML('  </TR>');
-  ShowHTML('  <TR><TD '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><B><FONT COLOR="#000000">'.DataHora().'</B></TD></TR>');
-  ShowHTML('  <TR><TD '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><B><FONT COLOR="#000000">'.$_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].'</B></TD></TR>');
-  if (nvl($p_pagina,0)>0) ShowHTML('  <TR><TD '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><B><FONT SIZE=2 COLOR="#000000">Página: '.$p_pagina.'</B></TD></TR>');
-  ShowHTML('  <TR><TD colspan="'.(nvl($l_lspan,2)+nvl($l_rspan,0)).'" height="1" bgcolor="#000000"></td></tr>');
-  ShowHTML('</TABLE>');
+  ShowHTML('    <td '.((nvl($l_lspan,'')=='') ? '' : 'colspan="'.$l_lspan.'"').' ROWSPAN='.$l_rowspan.'><img ALIGN="LEFT" SRC="'.$conFileVirtual.$w_cliente.'/img/'.f($l_RS,'LOGO').'" alt="img" /></td>');
+  ShowHTML('    <td '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><b><font SIZE=3 COLOR="#000000">'.$p_titulo.'</font></b></td>');
+  ShowHTML('  </tr>');
+  ShowHTML('  <tr><td '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><b><font COLOR="#000000">'.DataHora().'</font></b></td></tr>');
+  ShowHTML('  <tr><td '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><b><font COLOR="#000000">'.$_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].'</font></b></td></tr>');
+  if (nvl($p_pagina,0)>0) ShowHTML('  <tr><td '.((nvl($l_rspan,'')=='') ? '' : 'colspan="'.$l_rspan.'"').' ALIGN="RIGHT"><b><font SIZE=2 COLOR="#000000">Página: '.$p_pagina.'</font></b></td></tr>');
+  ShowHTML('  <tr><td colspan="'.(nvl($l_lspan,2)+nvl($l_rspan,0)).'" height="1" bgcolor="#000000"></td></tr>');
+  ShowHTML('</table>');
 }
 
 // =========================================================================
@@ -506,38 +521,51 @@ function MontaBarra($p_link,$p_PageCount,$p_AbsolutePage,$p_PageSize,$p_RecordCo
   extract($GLOBALS);
   ShowHTML('<SCRIPT LANGUAGE="JAVASCRIPT">');
   ShowHTML('  function pagina (pag) {');
-  ShowHTML('    document.Barra.P3.value = pag;');
+  ShowHTML('    if(pag < 0) {');
+  ShowHTML('      document.Barra.P3.value = 1;');
+  ShowHTML('      document.Barra.P4.value = '.$conPageSize.';');
+  ShowHTML('    } else if(pag == 0) {');
+  ShowHTML('      document.Barra.P3.value = 1;');
+  ShowHTML('      document.Barra.P4.value = '.$p_RecordCount.';');
+  ShowHTML('    } else {');
+  ShowHTML('      document.Barra.P3.value = pag;');
+  ShowHTML('    }');
   ShowHTML('    document.Barra.submit();');
   ShowHTML('  }');
   ShowHTML('</SCRIPT>');
-  ShowHTML('<FORM ACTION="'.$p_link.'" METHOD="POST" name="Barra">');
+  ShowHTML('<form ACTION="'.$p_link.'" METHOD="POST" name="Barra">');
   ShowHTML('<input type="Hidden" name="P4" value="'.$p_PageSize.'">');
   ShowHTML('<input type="Hidden" name="P3" value="">');
   ShowHTML(MontaFiltro('POST'));
-  if ($p_PageSize<$p_RecordCount) {
+  if ($p_PageSize<$p_RecordCount || $p_PageSize > $conPageSize) {
     if ($p_PageCount==$p_AbsolutePage) {
-      ShowHTML('<span class="STC"><br>'.($p_RecordCount-(($p_PageCount-1)*$p_PageSize)).' linhas apresentadas de '.$p_RecordCount.' linhas');
+      ShowHTML('<span class="STC"><br />'.($p_RecordCount-(($p_PageCount-1)*$p_PageSize)).' linhas apresentadas de '.$p_RecordCount.' linhas');
     } else {
-      ShowHTML('<span class="STC"><br>'.$p_PageSize.' linhas apresentadas de '.$p_RecordCount.' linhas');
+      ShowHTML('<span class="STC"><br />'.$p_PageSize.' linhas apresentadas de '.$p_RecordCount.' linhas');
     }
-    ShowHTML('<br>na página '.$p_AbsolutePage.' de '.$p_PageCount.' páginas');
-    if ($p_AbsolutePage>1) {
-      ShowHTML('<br>[<A class="ss" TITLE="Primeira página" HREF="javascript:pagina(1)" onMouseOver="window.status=\'Primeira (1/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true;">Primeira</A>]&nbsp;');
-      ShowHTML('[<A class="ss" TITLE="Página anterior" HREF="javascript:pagina('.($p_AbsolutePage-1).')" onMouseOver="window.status=\'Anterior ('.($p_AbsolutePage-1).'/'.$p_PageCount.')\'; return true;" onMouseOut="window.status=\'\'; return true;">Anterior</A>]&nbsp;');
+    ShowHTML('<br />na página '.$p_AbsolutePage.' de '.$p_PageCount.' páginas');
+    if ($p_PageSize > $conPageSize) {
+      ShowHTML('<br />[<a class="ss" TITLE="Todas" HREF="javascript:pagina(-1)"  onMouseOver="window.status=\'Voltar a '.$conPageSize.' linhas por página\'; return true" onMouseOut="window.status=\'\'; return true">Voltar a '.$conPageSize.' linhas por página</a>]');
     } else {
-      ShowHTML('<br>[Primeira]&nbsp;');
-      ShowHTML('[Anterior]&nbsp;');
-    }
-    if ($p_PageCount==$p_AbsolutePage) {
-      ShowHTML('[Próxima]&nbsp;');
-      ShowHTML('[Última]');
-    } else {
-      ShowHTML('[<A class="ss" TITLE="Página seguinte" HREF="javascript:pagina('.($p_AbsolutePage+1).')"  onMouseOver="window.status=\'Próxima ('.($p_AbsolutePage+1).'/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true">Próxima</A>]&nbsp;');
-      ShowHTML('[<A class="ss" TITLE="Última página" HREF="javascript:pagina('.$p_PageCount.')"  onMouseOver="window.status=\'Última ('.$p_PageCount.'/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true">Última</A>]');
+      if ($p_AbsolutePage>1) {
+        ShowHTML('<br />[<a class="ss" TITLE="Primeira página" HREF="javascript:pagina(1)" onMouseOver="window.status=\'Primeira (1/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true;">Primeira</a>]&nbsp;');
+        ShowHTML('[<a class="ss" TITLE="Página anterior" HREF="javascript:pagina('.($p_AbsolutePage-1).')" onMouseOver="window.status=\'Anterior ('.($p_AbsolutePage-1).'/'.$p_PageCount.')\'; return true;" onMouseOut="window.status=\'\'; return true;">Anterior</a>]&nbsp;');
+      } else {
+        ShowHTML('<br />[Primeira]&nbsp;');
+        ShowHTML('[Anterior]&nbsp;');
+      }
+      if ($p_PageCount==$p_AbsolutePage) {
+        ShowHTML('[Próxima]&nbsp;');
+        ShowHTML('[Última]');
+      } else {
+        ShowHTML('[<a class="ss" TITLE="Página seguinte" HREF="javascript:pagina('.($p_AbsolutePage+1).')"  onMouseOver="window.status=\'Próxima ('.($p_AbsolutePage+1).'/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true">Próxima</a>]&nbsp;');
+        ShowHTML('[<a class="ss" TITLE="Última página" HREF="javascript:pagina('.$p_PageCount.')"  onMouseOver="window.status=\'Última ('.$p_PageCount.'/'.$p_PageCount.')\'; return true" onMouseOut="window.status=\'\'; return true">Última</a>]');
+      }
+      ShowHTML('[<a class="ss" TITLE="Todas" HREF="javascript:pagina(0)"  onMouseOver="window.status=\'Todas\'; return true" onMouseOut="window.status=\'\'; return true">Todas</a>]');
     }
     ShowHTML('</span>');
   }
-  ShowHtml('</FORM>');
+  ShowHtml('</form>');
 }
 
 // =========================================================================

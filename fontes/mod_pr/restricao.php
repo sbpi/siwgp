@@ -291,9 +291,9 @@ function Restricao() {
     if ($P1==2) {
       ShowHTML('        <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
     }
-    ShowHTML('    <td align="right"><b>Registros existentes: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td>'.linkOrdena('Tipo','nm_tipo').'</td>');
     ShowHTML('          <td>'.linkOrdena('Descrição','descricao').'</td>');
@@ -301,7 +301,7 @@ function Restricao() {
     ShowHTML('          <td>'.linkOrdena('Estratégia','estrategia').'</td>');    
     ShowHTML('          <td>'.linkOrdena('Ação de resposta','acao_resposta').'</td>');
     ShowHTML('          <td>'.linkOrdena('Fase','nm_fase_atual').'</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       // Se não foram selecionados registros, exibe mensagem
@@ -329,7 +329,7 @@ function Restricao() {
         ShowHTML('        <td align="center">'.f($row,'nm_estrategia').'</td>');        
         ShowHTML('        <td>'.f($row,'acao_resposta').'</td>');
         ShowHTML('        <td>'.f($row,'nm_fase_atual').'</td>');
-        ShowHTML('        <td align="top" nowrap>');
+        ShowHTML('        <td class="remover" align="top" nowrap>');
         if ($w_edita || f($row,'sq_pessoa')==$w_usuario) {
           ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_chave='.f($row,'chave').'&w_chave_aux='.f($row,'chave_aux').'&w_problema='.$w_problema.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" title="Alterar">AL</A>&nbsp');
           ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_chave='.f($row,'chave').'&w_chave_aux='.f($row,'chave_aux').'&w_problema='.$w_problema.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" title="Excluir">EX</A>&nbsp');
@@ -641,14 +641,14 @@ function ComentarioEtapa() {
     ShowHTML('<tr><td>');
     ShowHTML('  <a accesskey="I" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_solic='.$w_solic.'&w_chave='.$w_chave.'&w_chave_aux='.$w_chave_aux.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('        <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros existentes: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td>'.linkOrdena('Registro','phpdt_registro').'</td>');
     ShowHTML('          <td>'.linkOrdena('Comentário','comentario').'</td>');
     ShowHTML('          <td>'.linkOrdena('Responsável','nm_resumido_pessoa').'</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       // Se não foram selecionados registros, exibe mensagem
@@ -664,7 +664,7 @@ function ComentarioEtapa() {
           if (Nvl(f($row,'caminho'),'')!='') ShowHTML('        <td>'.CRLF2BR(Nvl(f($row,'comentario'),'---').'<br>'.LinkArquivo('HL',$w_cliente,f($row,'sq_siw_arquivo'),'_blank','Clique para exibir o anexo em outra janela.','Anexo: '.f($row,'nome_original').' ('.round(f($row,'tamanho')/1024,1).' KB',null)).')</td>');
           else                               ShowHTML('        <td>'.CRLF2BR(Nvl(f($row,'comentario'),'---')).'</td>');
           ShowHTML('        <td width="1%" nowrap>'.ExibePessoa(null,$w_cliente,f($row,'sq_pessoa_inclusao'),$TP,f($row,'nm_resumido_pessoa')).'</td>');
-          ShowHTML('        <td width="1%" nowrap align="top" nowrap>');
+          ShowHTML('        <td class="remover" width="1%" nowrap align="top" nowrap>');
           if (f($row,'sq_pessoa_inclusao')==$w_usuario && f($row,'registrado')=='N') {
             ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_solic='.$w_solic.'&w_chave='.f($row,'sq_projeto_etapa').'&w_chave_aux='.f($row,'sq_etapa_comentario').'&w_sq_coment='.f($row,'sq_etapa_comentario').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" title="Alterar">AL</A>&nbsp');
             ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_solic='.$w_solic.'&w_chave='.f($row,'sq_projeto_etapa').'&w_chave_aux='.f($row,'sq_etapa_comentario').'&w_sq_coment='.f($row,'sq_etapa_comentario').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" title="Excluir">EX</A>&nbsp');

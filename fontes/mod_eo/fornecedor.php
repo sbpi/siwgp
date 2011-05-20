@@ -194,15 +194,15 @@ function Inicial() {
     } else {
       ShowHTML('                         <a accesskey="F" class="ss" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u>F</u>iltrar (Inativo)</a>');
     } 
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS_Benef));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS_Benef));
     ShowHTML('<tr><td align="center" colspan=3>');
-    ShowHTML('    <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.LinkOrdena('Nome','nm_pessoa').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Cidade','nm_cidade').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Tipo','sq_tipo_pessoa').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('CPF/CNPJ','identificador_primario').'</td>');
-    ShowHTML('          <td><b>Operações</td>');
+    ShowHTML('          <td class="remover"><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS_Benef)<=0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=6 align="center"><b>Não foram encontrados registros.</b></td></tr>');
@@ -217,7 +217,7 @@ function Inicial() {
         else                               ShowHTML('        <td>---</td>');
         ShowHTML('        <td>'.f($row,'nm_tipo_pessoa').'</td>');
         ShowHTML('        <td align="center">'.Nvl(f($row,'identificador_primario'),'---').'</td>');
-        ShowHTML('        <td align="top" nowrap>');
+        ShowHTML('        <td class="remover" align="top" nowrap>');
         if ($w_submenu>'') {
           ShowHTML('          <A class="hl" HREF="menu.php?par=ExibeDocs&O=A&w_sq_pessoa='.f($row,'sq_pessoa').'&R='.$w_pagina.$par.'&SG='.$SG.'&TP='.$TP.'&w_documento='.f($row,'nome_resumido').MontaFiltro('GET').'" title="Altera as informações cadastrais do fornecedor." TARGET="menu">AL</a>&nbsp;');
         } else {
@@ -563,7 +563,7 @@ function Geral() {
     ShowHTML('</tr>');
     ShowHTML('</form>');
     if ($p_nome!='' || $p_cpf!='' || $p_cnpj!='') {
-      ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
+      ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
       ShowHTML('<tr><td>');
       ShowHTML('    <TABLE WIDTH="100%" border=0>');
       if (count($RS)==0) {
