@@ -48,12 +48,6 @@ include_once('funcoes/montaStringOpcao.php');
 //                   = D   : Detalhes
 //                   = N   : Nova solicitação de envio
 
-// Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
-
-// Declaração de variáveis
-$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
-
 // Carrega variáveis locais com os dados dos parâmetros recebidos
 $par        = upper($_REQUEST['par']);
 $P1         = $_REQUEST['P1'];
@@ -69,6 +63,12 @@ $w_assinatura   = upper($_REQUEST['w_assinatura']);
 $w_pagina       = 'seguranca1.php?par=';
 $w_Disabled     = 'ENABLED';
 $w_dir_volta    = '';
+
+// Verifica se o usuário está autenticado
+if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+
+// Declaração de variáveis
+$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 $p_localizacao  = upper($_REQUEST['p_localizacao']);
 $p_lotacao      = upper($_REQUEST['p_lotacao']);
@@ -218,13 +218,13 @@ function AcessoTramite() {
     ShowHTML('<tr><td><font size="2">');
     ShowHTML('    <a accesskey="I" class="ss" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_menu='.$w_sq_menu.'&w_sq_siw_tramite='.$w_sq_siw_tramite.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('    <font size="2"><a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
     ShowHTML('<tr><td colspan=2>');
-    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center" valign="top">');
     ShowHTML('          <td><b>Username</font></td>');
     ShowHTML('          <td><b>Nome</font></td>');
-    ShowHTML('          <td><b>Operações</font></td>');
+    ShowHTML('          <td class="remover"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     $w_contaux='';
     if (count($RS)<=0) {
@@ -240,7 +240,7 @@ function AcessoTramite() {
         ShowHTML('      <tr bgcolor="'.$conTrBgColor.'" valign="top">');
         ShowHTML('        <td valign="top" align="center">'.f($row,'username').'</td>');
         ShowHTML('        <td valign="top">'.f($row,'nome').'</td>');
-        ShowHTML('        <td>');
+        ShowHTML('        <td class="remover">');
         if (f($row,'tipo')=='GESTOR') {
           ShowHTML('          Gestor do módulo');
         } else {
@@ -291,9 +291,9 @@ function AcessoTramite() {
       ShowHTML('<INPUT type="hidden" name="w_sq_menu" value="'.$w_sq_menu.'">');
       ShowHTML('<INPUT type="hidden" name="w_sq_siw_tramite" value="'.$w_sq_siw_tramite.'">');
       ShowHTML('  <tr><td valign="top"><font size=2><b>Usuários que ainda não têm acesso a esta opção</b>');
-      ShowHTML('      <td nowrap valign="bottom" align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+      ShowHTML('      <td nowrap valign="bottom" align="right"><b>Registros: '.count($RS));
       ShowHTML('  <tr><td align="center" colspan=2>');
-      ShowHTML('      <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+      ShowHTML('      <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
       if (count($RS)<=0) {
         ShowHTML('        <tr bgcolor="'.$conTrBgColor.'"><td colspan=5 align="center"><font size="2"><b>Não foram encontrados registros.</b></td></tr>');
       } else {
@@ -436,15 +436,15 @@ function Tramite() {
   if ($O=='L') {
     ShowHTML('<tr><td><font size="2"><a accesskey="I" class="ss" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&w_sq_menu='.$w_sq_menu.'&O=I&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('        <a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
     ShowHTML('<tr><td colspan=3>');
-    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><font size="2"><b>Ordem</font></td>');
     ShowHTML('          <td><font size="2"><b>Nome</font></td>');
     ShowHTML('          <td><font size="2"><b>Sigla</font></td>');
     ShowHTML('          <td><font size="2"><b>Ativo</font></td>');
-    ShowHTML('          <td class="remover"><font size="2"><b>Operações</font></td>');
+    ShowHTML('          <td class="remover" ><font size="2"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=6 align="center"><font  size="2"><b>Não foram encontrados registros.</b></td></tr>');
@@ -697,10 +697,10 @@ function AcessoMenu() {
     ShowHTML('    <font size="2"><a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
     ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS1));
     ShowHTML('<tr><td colspan=2>');
-    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center" valign="top">');
     ShowHTML('          <td><b>Tipo de vínculo</font></td>');
-    ShowHTML('          <td><b>Operações</font></td>');
+    ShowHTML('          <td class="remover"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     $w_contaux='';
     if (count($RS1)<=0) {
@@ -715,7 +715,7 @@ function AcessoMenu() {
         } 
         ShowHTML('      <tr bgcolor="'.$conTrBgColor.'" valign="top">');
         ShowHTML('        <td valign="top">'.f($row1,'nome').'</td>');
-        ShowHTML('        <td>');
+        ShowHTML('        <td class="remover">');
         ShowHTML('          <A class="hl" HREF="'.$w_pagina.'GRAVA&R='.$w_pagina.$par.'&O=E&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG=ACESSOMENUPERFIL&w_sq_menu='.$w_sq_menu.'&w_sq_tipo_vinculo='.f($row1,'sq_tipo_vinculo').'&w_sq_pessoa_endereco='.f($row1,'sq_pessoa_endereco').'" onClick="return(confirm(\'Confirma exclusão do acesso deste usuário para esta opção?\'));">EX</A>&nbsp');
         ShowHTML('&nbsp');
         ShowHTML('        </td>');
@@ -733,11 +733,11 @@ function AcessoMenu() {
     ShowHTML('    <font size="2"><a accesskey="F" class="ss" HREF="javascript:this.status.value;" onClick="window.close(); opener.focus();"><u>F</u>echar</a>&nbsp;');
     ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td colspan=2>');
-    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center" valign="top">');
     ShowHTML('          <td><b>Username</font></td>');
     ShowHTML('          <td><b>Nome</font></td>');
-    ShowHTML('          <td><b>Operações</font></td>');
+    ShowHTML('          <td class="remover"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     $w_contaux='';
     if (count($RS)<=0)  {
@@ -753,7 +753,7 @@ function AcessoMenu() {
         ShowHTML('      <tr bgcolor="'.$conTrBgColor.'" valign="top">');
         ShowHTML('        <td valign="top" align="center">'.f($row,'username').'</td>');
         ShowHTML('        <td valign="top">'.f($row,'nome').'</td>');
-        ShowHTML('        <td>');
+        ShowHTML('        <td class="remover">');
         ShowHTML('          <A class="hl" HREF="'.$w_pagina.'GRAVA&R='.$w_pagina.$par.'&O=E&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_sq_menu='.$w_sq_menu.'&w_sq_pessoa='.f($row,'sq_pessoa').'&w_username='.f($row,'username').'&w_sq_pessoa_endereco='.f($row,'sq_pessoa_endereco').'" onClick="return(confirm(\'Confirma exclusão do acesso deste usuário para esta opção?\'));">EX</A>&nbsp');
         ShowHTML('&nbsp');
         ShowHTML('        </td>');
@@ -793,9 +793,9 @@ function AcessoMenu() {
       AbreForm('Form1',$w_pagina.'Grava','POST','return(Validacao1(this));',null,$P1,$P2,$P3,$P4,$TP,$SG,$R,$O);
       ShowHTML('<INPUT type="hidden" name="w_sq_menu" value="'.$w_sq_menu.'">');
       ShowHTML('  <tr><td valign="top"><font size=2><b>Usuários que ainda não têm acesso a esta opção</b>');
-      ShowHTML('      <td nowrap valign="bottom" align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+      ShowHTML('      <td nowrap valign="bottom" align="right"><b>Registros: '.count($RS));
       ShowHTML('  <tr><td align="center" colspan=2>');
-      ShowHTML('      <TABLE WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+      ShowHTML('      <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
       if (count($RS)<=0) {
         ShowHTML('        <tr bgcolor="'.$conTrBgColor.'"><td colspan=5 align="center"><font size="2"><b>Não foram encontrados registros.</b></td></tr>');
       } else {
@@ -998,9 +998,9 @@ function Endereco() {
   ShowHTML('<tr><td><b><font size=1 class="hl">'.montaStringOpcao($w_sq_menu).'</font></b>');
   ShowHTML('<tr><td><p>&nbsp;</p>');
   ShowHTML('<tr><td><div align="justify"><ul><b>Informações:</b><li>Você pode indicar em quais endereços uma determinada opção do menu estará disponível.<li>A princípio, todas as opções estão disponíveis em todos os endereços.<li>Para remover a opção de um endereço específico, desmarque o quadrado ao lado do endereço.<li>A opção deve estar disponível em pelo menos um dos endereços.</ul></div></p>');
-  ShowHTML('<tr><td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+  ShowHTML('<tr><td align="right"><b>Registros: '.count($RS));
   ShowHTML('<tr><td align="center" colspan=3>');
-  ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+  ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
   ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
   ShowHTML('          <td><font size="2"><b>Habilitado</font></td>');
   ShowHTML('          <td><font size="2"><b>Endereço</font></td>');

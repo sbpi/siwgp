@@ -355,9 +355,27 @@ function replaceExtChars(text) {
   return (text);
 }
 
+function destacaLinha(){
+  //alert('oi');
+  if (typeof jQuery != 'undefined') {  
+    $(document).ready(function() {
+      $(".tudo tr").hover(
+        function(){
+          $(this).addClass("highlight");
+        },
+        function(){
+          //alert('oi');
+          $(this).removeClass("highlight");
+        }
+        )
+    });
+  }
+}
+destacaLinha();
+
 function exportarArquivo(id){
   $(document).ready(function() {
-    var elemento = "#"+id;
+    var elemento = "."+id;
     //$("#nada").remove();
     $("#botaoExcel").click(function() {
       var texto = $("<div>").append( $(elemento).eq(0).clone()).html();

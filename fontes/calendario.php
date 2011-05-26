@@ -37,28 +37,30 @@
 // Local    : Brasília - DF
 // -------------------------------------------------------------------------
   
-  // Verifica se o usuário está autenticado
-  if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+//Declaração de variáveis
+$w_pagina     = 'calendario.php';  
 
-  //Declaração de variáveis
-  $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
-  $w_pagina     = 'calendario.php';  
-  $w_cliente    = RetornaCliente();
-  $w_usuario    = RetornaUsuario();
-  $w_form       = $_REQUEST['form'];
-  $w_campo      = $_REQUEST['field'];
-  //exibeVariaveis();
-  if($_REQUEST['w_mes'] != ''){
-    $w_mes      = substr($_REQUEST['w_mes'],0,2);
-    $w_ano      = substr($_REQUEST['w_mes'],2,4);
-  }elseif($_REQUEST['vData'] != ''){
-    $w_mes      = substr($_REQUEST['vData'],3,2);
-    $w_ano      = substr($_REQUEST['vData'],6,4);
-  }else{
-    $w_mes      = RetornaMes();
-    $w_ano      = RetornaAno();
-  }
-  //Recupera os dados da unidade de lotação do usuário
+// Verifica se o usuário está autenticado
+if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+
+// Declaração de variáveis
+$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
+
+$w_cliente    = RetornaCliente();
+$w_usuario    = RetornaUsuario();
+$w_form       = $_REQUEST['form'];
+$w_campo      = $_REQUEST['field'];
+if($_REQUEST['w_mes'] != ''){
+  $w_mes      = substr($_REQUEST['w_mes'],0,2);
+  $w_ano      = substr($_REQUEST['w_mes'],2,4);
+}elseif($_REQUEST['vData'] != ''){
+  $w_mes      = substr($_REQUEST['vData'],3,2);
+  $w_ano      = substr($_REQUEST['vData'],6,4);
+}else{
+  $w_mes      = RetornaMes();
+  $w_ano      = RetornaAno();
+}
+//Recupera os dados da unidade de lotação do usuário
     include_once($w_dir_volta.'classes/sp/db_getUorgData.php');
     // Verifica a quantidade de colunas a serem exibidas
 

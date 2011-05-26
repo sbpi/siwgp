@@ -48,13 +48,6 @@ include_once('funcoes/selecaoProjeto.php');
 //                   = V   : Geração de gráfico
 //                   = W   : Geração de documento no formato MS-Word (Office 2003)
 
-// Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
-
-
-// Declaração de variáveis
-$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
-
 // Carrega variáveis locais com os dados dos parâmetros recebidos
 $par        = upper($_REQUEST['par']);
 $P1         = $_REQUEST['P1'];
@@ -72,6 +65,12 @@ $w_Disabled     = 'ENABLED';
 $w_dir          = '';
 $w_dir_volta    = '';
 $w_troca        = upper($_REQUEST['w_troca']);
+
+// Verifica se o usuário está autenticado
+if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+
+// Declaração de variáveis
+$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 if ($O=='') $O='P';
 
@@ -108,7 +107,6 @@ $p_prazo         = upper($_REQUEST['p_prazo']);
 $p_fase          = explodeArray($_REQUEST['p_fase']);
 $p_agrega        = upper(nvl($_REQUEST['p_agrega'],'GRPRRESP'));
 $p_tamanho       = upper($_REQUEST['p_tamanho']);
-$p_sqcc          = upper($_REQUEST['p_sqcc']);
 $p_projeto       = upper($_REQUEST['p_projeto']);
 $p_orprior      = upper($_REQUEST['p_orprior']);
 $p_atividade     = upper($_REQUEST['p_atividade']);
@@ -156,7 +154,7 @@ function Gerencial() {
   if (count($RS)>0) $w_viagem='S'; else $w_viagem='N'; 
   $sql = new db_getSiwCliModLis; $RS = $sql->getInstanceOf($dbms,$w_cliente,null,'IS');
   if (count($RS)>0) $w_acao='S'; else $w_acao='N'; 
-  if ($O=='L' || $O=='V' || $p_tipo=='WORD' || $p_tipo=='PDF') {
+  if ($O=='L' || $O=='V' || $p_tipo=='WORD' || $p_tipo=='PDF' || $p_tipo=='EXCEL') {
 
     $w_filtro='';
     switch ($p_agrega) {
@@ -311,10 +309,16 @@ function Gerencial() {
     CabecalhoWord($w_cliente,'Consulta de '.f($RS_Menu,'nome'),$w_pag);
     $w_embed = 'WORD';
     if ($w_filtro>'') ShowHTML($w_filtro);
-  }elseif($p_tipo == 'PDF'){
+  } elseif($p_tipo == 'PDF') {
     $w_embed = 'WORD';
     $w_linha_pag = ((nvl($_REQUEST['orientacao'],'PORTRAIT')=='PORTRAIT') ? 60: 35);
     HeaderPdf('Consulta de '.f($RS_Menu,'nome'),$w_pag);
+    if ($w_filtro>'') ShowHTML($w_filtro);
+  } elseif ($p_tipo=='EXCEL') {
+    $w_embed = 'WORD';
+    $w_linha_pag = ((nvl($_REQUEST['orientacao'],'PORTRAIT')=='PORTRAIT') ? 60: 35);
+    HeaderExcel($_REQUEST['orientacao']);
+    CabecalhoWord($w_cliente,'Visualização de '.f($RS_Menu,'nome'),0,1,6);
     if ($w_filtro>'') ShowHTML($w_filtro);
   } else {
     $w_embed = 'HTML';
@@ -384,13 +388,13 @@ function Gerencial() {
       ShowHTML('<HR>');
     } 
   } 
-  ShowHTML('<div align=center><center>');
+  ShowHTML('<div align=center>');
   ShowHTML('<table border="0" cellpadding="0" cellspacing="0" width="100%">');
   if ($O=='L' || $w_embed =='WORD') {
     if ($O=='L' && $w_embed != 'WORD') {
       ShowHTML('<tr><td><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr valign="bottom">');
       ShowHTML('    <td>');
-      if (MontaFiltro('GET')>'') {
+      if (strpos(str_replace('p_ordena','w_ordena',MontaFiltro('GET')),'p_')) {
         ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u><font color="#BC5100">F</u>iltrar (Ativo)</a></font>');
       } else {
         ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u>F</u>iltrar (Inativo)</a>');
@@ -736,14 +740,14 @@ function Gerencial() {
           ShowHTML('  </td>');
           ShowHTML('</tr>');
           ShowHTML('</table>');
-          ShowHTML('</center></div>');
+          ShowHTML('</div>');
           if ($p_tipo=='PDF') ShowHTML('    <pd4ml:page.break>');
           else                ShowHTML('    <br style="page-break-after:always">');
           $w_linha=$w_linha_filtro;
           $w_pag=$w_pag+1;
           CabecalhoWord($w_cliente,$w_TP,$w_pag);
           if ($w_filtro>'') ShowHTML($w_filtro);
-          ShowHTML('<div align=center><center>');
+          ShowHTML('<div align=center>');
           ShowHTML('<table border="0" cellpadding="0" cellspacing="0" width="100%">');
           ImprimeCabecalho();
           if ($p_agrega=='GRPRVINC') { 
@@ -804,18 +808,12 @@ function Gerencial() {
       ShowHTML('          <td><b>Totais</td>');
       ImprimeLinha($t_totsolic,$t_totcad,$t_tottram,$t_totconc,$t_totatraso,$t_totaviso,$t_totvalor,$t_totcusto,$t_totacima,-1);
     } 
-    ShowHTML('      </center>');
     ShowHTML('    </table>');
     ShowHTML('  </td>');
     ShowHTML('</tr>');
   
     if (count($RS1)>0 && $p_graf=='N') {
-      if($p_tipo == 'PDF'){
-        $w_embed = 'WORD';
-        $w_legenda = array('Acima do valor previsto','Em aviso de atraso','Atrasados','Cadastramento','Em execucao','Concluidos','Total');
-      } else {
-        $w_legenda = array('Acima do valor previsto','Em aviso de atraso','Atrasados','Cadastramento','Em execução','Concluídos','Total');
-      }
+      $w_legenda = array('Acima do valor previsto','Em aviso de atraso','Atrasados','Cadastramento','Em execução','Concluídos','Total');
       include_once($w_dir_volta.'funcoes/geragraficogoogle.php');
       ShowHTML('<tr><td align="center"><br>');
       ShowHTML(geraGraficoGoogle(f($RS_Menu,'nome').' - Resumo',$SG,'bar',
@@ -823,7 +821,7 @@ function Gerencial() {
                                  $w_legenda
                                 )
               );
-      ShowHTML('<tr><td align="center"><br>');
+      ShowHTML('<br>');
       ShowHTML(geraGraficoGoogle(f($RS_Menu,'nome').' em andamento',$SG,'pie',
                                  array(($t_tottram+$t_totcad-$t_totatraso-$t_totaviso),$t_totaviso,$t_totatraso),
                                  array('Normal','Aviso','Atrasados')
@@ -922,11 +920,8 @@ function Gerencial() {
     ScriptClose();
   } 
   ShowHTML('</table>');
-  ShowHTML('</center>');
-  if($p_tipo == 'PDF'){
-    RodapePdf();
-  }
-  Rodape();
+  if($p_tipo == 'PDF') RodapePdf();
+  else                 Rodape();
 }
 
 // =========================================================================
@@ -936,7 +931,7 @@ function ImprimeCabecalho() {
   extract($GLOBALS);
 
   ShowHTML('<tr><td align="center">');
-  ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+  ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
   ShowHTML('        <tr bgcolor="#DCDCDC" align="center">');
   switch ($p_agrega) {
     case 'GRPRVINC':    ShowHTML('          <td><b>Vinculação</td>');           break;
@@ -970,9 +965,7 @@ function ImprimeCabecalho() {
 // -------------------------------------------------------------------------
 function ImprimeLinha($l_solic,$l_cad,$l_tram,$l_conc,$l_atraso,$l_aviso,$l_valor,$l_custo,$l_acima,$l_chave) {
   extract($GLOBALS);
-  if($p_tipo == 'PDF' || $p_tipo == 'WORD'){
-      $w_embed = 'WORD';  
-  }
+  if (nvl($p_tipo,'HTML')!='HTML') $w_embed = 'WORD';
   if ($w_embed != 'WORD')                  ShowHTML('          <td align="right"><a class="hl" href="javascript:lista(\''.$l_chave.'\', -1, -1, -1, -1);" onMouseOver="window.status=\'Exibe os projetos.\'; return true" onMouseOut="window.status=\'\'; return true">'.formatNumber($l_solic,0).'</a>&nbsp;</td>');                             else ShowHTML('          <td align="right">'.formatNumber($l_solic,0).'&nbsp;</td>');
   if ($l_cad>0 && $w_embed != 'WORD')      ShowHTML('          <td align="right"><a class="hl" href="javascript:lista(\''.$l_chave.'\', 0, -1, -1, -1);" onMouseOver="window.status=\'Exibe os projetos.\'; return true" onMouseOut="window.status=\'\'; return true">'.formatNumber($l_cad,0).'</a>&nbsp;</td>');                                else ShowHTML('          <td align="right">'.formatNumber($l_cad,0).'&nbsp;</td>');
   if ($l_tram>0 && $w_embed != 'WORD')     ShowHTML('          <td align="right"><a class="hl" href="javascript:lista(\''.$l_chave.'\', -1, 0, -1, -1);" onMouseOver="window.status=\'Exibe os projetos.\'; return true" onMouseOut="window.status=\'\'; return true">'.formatNumber($l_tram,0).'</a>&nbsp;</td>');                               else ShowHTML('          <td align="right">'.formatNumber($l_tram,0).'&nbsp;</td>');
@@ -1002,7 +995,7 @@ function Main() {
     Estrutura_Menu();
     Estrutura_Corpo_Abre();
     Estrutura_Texto_Abre();
-    ShowHTML('<div align=center><center><br><br><br><br><br><br><br><br><br><br><img src="images/icone/underc.gif" align="center"> <b>Esta opção está sendo desenvolvida.</b><br><br><br><br><br><br><br><br><br><br></center></div>');
+    ShowHTML('<div align=center><br><br><br><br><br><br><br><br><br><br><img src="images/icone/underc.gif" align="center"> <b>Esta opção está sendo desenvolvida.</b><br><br><br><br><br><br><br><br><br><br></div>');
     Estrutura_Texto_Fecha();
     Estrutura_Fecha();
     Estrutura_Fecha();

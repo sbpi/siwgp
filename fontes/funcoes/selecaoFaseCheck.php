@@ -11,7 +11,7 @@ function selecaoFaseCheck($label,$accesskey,$hint,$chave,$chaveAux,$campo,$restr
     ShowHTML('          <td colspan="'.$colspan.'"><b>'.$label.'</b>');
     foreach($RS as $row)  {
       if (nvl($chave,'')=='' && nvl($restricao,'')!='MENURELAC') { 
-        if (f($row,'sigla')!='CA' && (f($row,'sg_menu')!='PADCAD' || (f($row,'sg_menu')=='PADCAD' && strpos('EL,AT,DE,DS',f($row,'sigla'))===false))) {
+        if (f($row,'sigla')!='CA' && (f($row,'sg_menu')!='PADCAD' || (f($row,'sg_menu')=='PADCAD' && strpos('CI,EL,AT,DE,DS',f($row,'sigla'))===false))) {
           ShowHTML('          <BR><input type="CHECKBOX" name="'.$campo.'" value="'.f($row,'SQ_SIW_TRAMITE').'" CHECKED>'.f($row,'nome')); 
         } else {
           ShowHTML('          <BR><input type="CHECKBOX" name="'.$campo.'" value="'.f($row,'SQ_SIW_TRAMITE').'">'.f($row,'nome')); 

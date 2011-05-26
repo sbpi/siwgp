@@ -11,14 +11,14 @@ if (isset($_SESSION['LOGON'])) {
 
 if ($_SESSION['DBMS']=='' || isset($_POST['p_dbms'])) {
     if (!isset($_POST['p_dbms'])) {
-        if (isset($_POST['p_cliente'])) {
+      if (isset($_REQUEST['w_rdbms'])) { $_SESSION['DBMS']=$_REQUEST['w_rdbms']; }
+      elseif (isset($_POST['p_cliente'])) {
             if ($_POST['p_cliente']!=1) {
                 print '*** Erro';
                 exit();
             }
         }
-    }
-    else { $_SESSION['DBMS']=$_POST['p_dbms']; }
+    } else { $_SESSION['DBMS']=$_POST['p_dbms']; }
 }
 
 if (isset($_POST['p_root'])) {
@@ -35,6 +35,7 @@ include_once('classes/sp/db_verificasenha.php');
 include_once('classes/sp/db_updatePassword.php');
 include_once('classes/sp/db_getCustomerData.php');
 include_once('classes/sp/db_getUserData.php');
+include_once('classes/sp/db_getPersonData.php');
 include_once('classes/sp/db_getLinkData.php');
 include_once('classes/sp/db_getCustomerSite.php');
 // =========================================================================
@@ -52,7 +53,7 @@ include_once('classes/sp/db_getCustomerSite.php');
 
 // Carrega variáveis locais com os dados dos parâmetros recebidos
 
-if (count($_POST) > 0) {
+if (count($_POST) > 0 && nvl($_REQUEST['optsess'],'')=='') {
     $wTipoLogin  = $_POST['tipoLogin'];
     $wNoUsuario  = upper($_POST['Login']);
     
@@ -73,6 +74,8 @@ if (isset($_SESSION['DBMS'])) {
   $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 }
 
+$optsess=true;
+
 Main();
 
 // Fecha conexão com o banco de dados
@@ -85,8 +88,14 @@ exit;
 // -------------------------------------------------------------------------
 function Valida() {
     extract($GLOBALS);
-    
+    global $optsess;
+
     $w_erro=0;
+    if (nvl($_REQUEST['w_user'],'')!='') {
+      $sql = new db_getPersonData; $RS = $sql->getInstanceOf($dbms, $_SESSION['P_CLIENTE'], $_REQUEST['w_user'], null, null);
+      $wNoUsuario = f($RS,'username');
+    }
+
     $sql = new db_verificaUsuario; $RS = $sql->getInstanceOf($dbms, $_SESSION['P_CLIENTE'], $wNoUsuario);
     if ($RS==0) {
       $w_erro=1;
@@ -97,7 +106,7 @@ function Valida() {
         if ($wDsSenha>'') { $w_erro= new db_verificaSenha; $w_erro = $w_erro->getInstanceOf($dbms, $_SESSION['P_CLIENTE'],$wNoUsuario,$wDsSenha); }
       } else {
         include_once('classes/ldap/ldap.php');
-        $sql = new db_getCustomerData; $RS1 = $sql->getInstanceOf($dbms, $_SESSION['P_CLIENTE']);
+        $sql = new db_getCustomerData; $RS1 = $sql->getInstanceOf($dbms, $_SESSION['P_CLIENTE']);      
 
         if ($w_tipo=='A') {
           $array = array(            
@@ -136,22 +145,28 @@ function Valida() {
       elseif ($w_erro==5) $w_msg = 'Senha de rede inválida ou expirada!';
 
       ScriptOpen('JavaScript');
-      ShowHTML('  alert(\''.$w_msg.'!\');');
+      ShowHTML('  alert("'.$w_msg.'!");');
 
-      // Registra no servidor syslog
-      $w_resultado = enviaSyslog('LI','LOGIN INVÁLIDO',$wNoUsuario.' - '.$w_msg);
-      if ($w_resultado>'') ShowHTML('  alert(\'ATENÇÃO: erro no registro do log.\n'.$w_resultado.'\');');
-      
-      // Se for SBPI e senha inválida, devolve a username, dispensando sua redigitação.
-      if ($_SESSION['P_CLIENTE']==1 && $w_erro=2) {
+      if (nvl($_REQUEST['w_user'],'')=='') {
+        // Registra no servidor syslog
+        $w_resultado = enviaSyslog('LI','LOGIN INVÁLIDO',$wNoUsuario.' - '.$w_msg);
+        if ($w_resultado>'') ShowHTML('  alert("ATENÇÃO: erro no registro do log.\n'.$w_resultado.'");');
+
+        if ($_SESSION['P_CLIENTE']==1 && $w_erro=2) {
+          // Se for SBPI e senha inválida, devolve a username, dispensando sua redigitação.
           $w_retorno = $_SERVER['HTTP_REFERER'];
           $w_pos = strpos($w_retorno,'?');
           if ($w_pos!==false) $w_retorno = substr($w_retorno,0,$w_pos);
           ShowHTML('  location.href=\''.$w_retorno.'?Login='.$wNoUsuario.'\';');
-      } else {
+        } else {
           ShowHTML('  location.href=\''.$_SERVER['HTTP_REFERER'].'\';');
+        }
+        ScriptClose();
+      } else {
+        ScriptClose();
+        $optsess = false;
+        encerraSessao();
       }
-      ScriptClose();
     } else {
       // Recupera informações do cliente, relativas ao envio de e-mail
       $sql = new db_getCustomerData; $RS = $sql->getInstanceOf($dbms,$_SESSION['P_CLIENTE']);
@@ -174,42 +189,63 @@ function Valida() {
       $_SESSION['ANO']             = Date('Y');
       $_SESSION['USUARIO']         = ((nvl(f($RS,'sexo'),'M')=='M') ? 'Usuário' : 'Usuária');
       
-      // Registra no servidor syslog
-      $w_resultado = enviaSyslog('LV','LOGIN','('.$_SESSION['SQ_PESSOA'].') '.$_SESSION['NOME_RESUMIDO']);
-      if ($w_resultado>'') {
-        ScriptOpen('JavaScript');
-        ShowHTML('  alert(\''.$w_resultado.'\');');
-        ScriptClose();
-      }
       
-      // Se a geração de log estiver ativada, registra.
-      if ($conLog) {
-        // Define o caminho fisico do diretório e do arquivo de log
-        $l_caminho = $conLogPath;
-        $l_arquivo = $l_caminho.$_SESSION['P_CLIENTE'].'/'.date(Ymd).'.log';
+      if (nvl($_REQUEST['w_user'],'')=='') {
+        // Registra no servidor syslog se não for renovação de sessão
+        $w_resultado = enviaSyslog('LV','LOGIN','('.$_SESSION['SQ_PESSOA'].') '.$_SESSION['NOME_RESUMIDO']);
+        if ($w_resultado>'') {
+          ScriptOpen('JavaScript');
+          ShowHTML('  alert("'.$w_resultado.'");');
+          ScriptClose();
+        }
 
-        // Verifica a necessidade de criação dos diretórios de log
-        if (!file_exists($l_caminho)) mkdir($l_caminho);
-        if (!file_exists($l_caminho.$_SESSION['P_CLIENTE'])) mkdir($l_caminho.$_SESSION['P_CLIENTE']);
+        // Se a geração de log estiver ativada, registra.
+        if ($conLog) {
+          // Define o caminho fisico do diretório e do arquivo de log
+          $l_caminho = $conLogPath;
+          $l_arquivo = $l_caminho.$_SESSION['P_CLIENTE'].'/'.date(Ymd).'.log';
 
-        // Abre o arquivo de log
-        $l_log = @fopen($l_arquivo, 'a');
+          // Verifica a necessidade de criação dos diretórios de log
+          if (!file_exists($l_caminho)) mkdir($l_caminho);
+          if (!file_exists($l_caminho.$_SESSION['P_CLIENTE'])) mkdir($l_caminho.$_SESSION['P_CLIENTE']);
 
-        fwrite($l_log, '['.date(ymd.'_'.Gis.'_'.time()).']'.$crlf);
-        fwrite($l_log, $_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].' ('.$_SESSION['SQ_PESSOA'].')'.$crlf);
-        fwrite($l_log, 'IP     : '.$_SERVER['REMOTE_ADDR'].$crlf);
-        fwrite($l_log, 'Ação   : LOGIN'.$crlf.$crlf);
+          // Abre o arquivo de log
+          $l_log = @fopen($l_arquivo, 'a');
 
-        // Fecha o arquivo e o diretório de log
-        @fclose($l_log);
-        @closedir($l_caminho);
+          fwrite($l_log, '['.date(ymd.'_'.Gis.'_'.time()).']'.$crlf);
+          fwrite($l_log, $_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].' ('.$_SESSION['SQ_PESSOA'].')'.$crlf);
+          fwrite($l_log, 'IP     : '.$_SERVER['REMOTE_ADDR'].$crlf);
+          fwrite($l_log, 'Ação   : LOGIN'.$crlf.$crlf);
+
+          // Fecha o arquivo e o diretório de log
+          @fclose($l_log);
+          @closedir($l_caminho);
+        }
       }
 
-      if ($par=='Log') {
+      if ($par=='Log' || nvl($_REQUEST['w_user'],'')!='') {
         ScriptOpen('JavaScript');
-        if ($_POST['p_cliente']==1) ShowHTML('  top.location.href=\'menu.php?par=Frames\';');
-        else                        ShowHTML('  location.href=\'menu.php?par=Frames\';');
-        ScriptClose();
+        if ($_POST['p_cliente']==6761 && $_POST['p_versao']==2) {
+          if ($RS['interno']=='S') {
+              ShowHTML('  top.location.href=\'cl_cespe/trabalho.php?par=mesa&TP=Acompanhamento\';');
+          } else {
+             $sql = new db_getLinkData; $RS = $sql->getInstanceOf($dbms, $_SESSION['P_CLIENTE'], 'PJCADP');
+             ShowHTML('  location.href=\''.$RS['link'].'&O=&P1='.$RS['P1'].'&P2='.$RS['P2'].'&P3='.$RS['P3'].'&P4='.$RS['P4'].'&TP='.$RS['nome'].'&SG='.$RS['sigla'].'\';');
+          }
+          ScriptClose();
+        } elseif (nvl($_REQUEST['w_user'],'')=='') {
+          if ($_POST['p_cliente']==1) ShowHTML('  top.location.href=\'menu.php?par=Frames\';');
+          else                        ShowHTML('  location.href=\'menu.php?par=Frames\';');
+          ScriptClose();
+        } else {
+          ShowHTML('  alert("Sessão renovada com sucesso!");');
+          ScriptClose();
+          $optsess = true;
+          RetornaFormulario($_REQUEST['w_troca'],$_REQUEST['SG'],$_REQUEST['w_menu'],$_REQUEST['O'],null,
+                            $conRootSIW.$_REQUEST['w_dir'].$_REQUEST['w_pagina'],$_REQUEST['par'],
+                            $_REQUEST['P1'],$_REQUEST['P2'],$_REQUEST['P3'],$_REQUEST['P4'],$_REQUEST['TP'],$_REQUEST['R']
+                           );
+        }
       } else {
         // Configura texto
         if ($w_tipo=='B') $w_texto_mail = 'senha de acesso e assinatura eletrônica'; else $w_texto_mail = 'assinatura eletrônica';
@@ -305,6 +341,52 @@ function Valida() {
       }
       DesconectaBD();
     }
+    exit();
+}
+
+// =========================================================================
+// Renova logon do usuário
+// -------------------------------------------------------------------------
+function RenovarLogon() {
+    extract($GLOBALS);
+    Cabecalho();
+    head();
+    ShowHTML('<TITLE>'.$conSgSistema.' - Autenticação</TITLE>');
+    ShowHTML('<link rel="shortcut icon" href="'.$conRootSIW.'favicon.ico" type="image/ico" />');
+    ScriptOpen('JavaScript');
+    ValidateOpen('Validacao');
+    Validate('Password1','Senha','1','1','3','19','1','1');
+    ShowHTML('  theForm.Password.value = theForm.Password1.value; ');
+    ShowHTML('  theForm.Password1.value = ""; ');
+    ValidateClose();
+    ScriptClose();
+    ShowHTML('</HEAD>');
+    // Se receber a username, dá foco na senha
+    bodyOpen('onLoad="document.Form.Password1.focus();"');
+    ShowHTML('<form method="post" action="default.php" onsubmit="return(Validacao(this));" name="Form"> ');
+    ShowHTML('<INPUT TYPE="HIDDEN" NAME="Password" VALUE=""> ');
+    $l_form = '';
+    foreach ($_POST as $l_Item => $l_valor) {
+      if (strpos($l_form,'NAME="'.$l_Item.'"')===false) {
+        if (is_array($_POST[$l_Item])) {
+          foreach($_POST[$l_Item] as $k => $v) $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'['.$k.']" VALUE="'.$v.'">';
+        } else {
+          $l_form .= chr(13).'<INPUT CLASS="BTM" TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+        }
+      }
+    }
+    ShowHTML($l_form);
+    ShowHTML('<table width="100%" border="0" cellpadding=1 cellspacing=1> ');
+    ShowHTML('  <tr><td colspan="2"><hr NOSHADE color=#000000 size=2></td></tr>');
+    ShowHTML('  <tr><td bgcolor="#f0f0f0" colspan="2" align="center"><font size="2"><b>SESSÃO EXPIRADA! Informe novamente sua senha de acesso para renovar sua sessão.</b></font></td></tr>');
+    ShowHTML('  <tr><td colspan="2"><hr NOSHADE color=#000000 size=2></td></tr>');
+    ShowHTML('  <tr><td width="50%" align="right"><b>Senha:</b></td><td><input class="cText" type="Password" name="Password1" size="19" onKeyUp="this.value=trim(this.value);" AUTOCOMPLETE="off"></td></tr>');
+    ShowHTML('  <tr><td width="50%"></td><td><input class="STB" type="submit" name="Botao" value="OK"></td></tr>');
+    ShowHTML('  <tr><td colspan="2"><hr NOSHADE color=#000000 size=1></td></tr>');
+    ShowHTML('</table> ');
+    ShowHTML('</form> ');
+    ShowHTML('</body> ');
+    ShowHTML('</html> ');
 }
 
 // =========================================================================
@@ -314,7 +396,7 @@ function LogOn() {
     extract($GLOBALS);
 
     $w_username = $_REQUEST['Login'];
-    ShowHTML('<HTML>');
+    Cabecalho();
     head();
     ShowHTML('<link rel="shortcut icon" href="'.$conRootSIW.'favicon.ico" type="image/ico" />');
     ShowHTML('<script type="text/javascript" src="js/modal/js/ajax.js"></script>');
@@ -410,8 +492,7 @@ function LogOn() {
     ShowHTML('  </tr> ');
     ShowHTML('</table>');
     ShowHTML('</form> ');
-    ShowHTML('</body>');
-    ShowHTML('</html>');
+    Rodape();
 }
 
 // =========================================================================
@@ -420,10 +501,15 @@ function LogOn() {
 function Main() {
     extract($GLOBALS);
     // Monta o formulário de autenticação apenas para a SBPI
-    if (!isset($_POST['p_cliente'])) { LogOn(); }
-    else {
-        $_SESSION['P_CLIENTE']=$_POST['p_cliente'];
+    if (!isset($_POST['p_cliente']) && nvl($_REQUEST['optsess'],'')=='' && nvl($_SESSION['SQ_PESSOA'],'')=='')       LogOn();
+    else{
+      if (nvl($_SESSION['P_CLIENTE'],'')=='') $_SESSION['P_CLIENTE']=nvl($_POST['p_cliente'],$_REQUEST['w_client']);
+      if (isset($_REQUEST['optsess'])) {
+        if (nvl($_REQUEST['w_user'],'')!='' && nvl($_SESSION['SQ_PESSOA'],'')=='') $_SESSION['SQ_PESSOA'] = $_REQUEST['w_user'];
+        RenovarLogon();
+      } else {
         Valida();
+      }
     }
 }
 ?>

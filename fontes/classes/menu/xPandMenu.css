@@ -15,6 +15,17 @@
 
 }
 
+.tudo tr.highlight {
+  background-color: #B8DFF5;
+/*  color:#fff;*/
+}
+
+.tudo tr.highlight a{
+  background-color: #B8DFF5;
+/*  color:#fff;*/
+}
+
+
 .Xtree
 {
   PADDING-LEFT: 0px;

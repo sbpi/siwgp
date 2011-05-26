@@ -32,12 +32,6 @@ include_once('funcoes/selecaoServico.php');
 // Versao   : 1.0.0.0
 // Local    : Brasília - DF
 // -------------------------------------------------------------------------
-//
-// Verifica se o usuário está autenticado
-if ($_SESSION['LOGON'] !='Sim') EncerraSessao();
-
-// Declaração de variáveis
-$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 // Carrega variáveis locais com os dados dos parâmetros recebidos
 $par        = upper($_REQUEST['par']);
@@ -48,6 +42,12 @@ $TP         = $_REQUEST['TP'];
 $SG         = upper($_REQUEST['SG']);
 $R          = lower($_REQUEST['R']);
 $O          = upper($_REQUEST['O']);
+
+// Verifica se o usuário está autenticado
+if ($_SESSION['LOGON'] !='Sim') EncerraSessao();
+
+// Declaração de variáveis
+$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 $p_cliente  = $_SESSION['P_CLIENTE'];
 $sq_pessoa  = $_SESSION['SQ_PESSOA'];
@@ -150,7 +150,7 @@ function ExibeDocs() {
                          eval('$node'.i.'_'.j.'_'.k.'_'.l.' = &$node'.i.'_'.j.'_'.k.'->addItem(new XNode(f($row3,\'nome\'),f($row3,\'LINK\'),$w_Imagem,$w_Imagem,f($row3,\'target\')));');
                       }
                     } else {
-                       eval('$node'.i.'_'.j.'_'.k.'_'.l.' = &$node'.i.'_'.j.'_'.k.'->addItem(new XNode(f($row3,\'nome\'),f($row3,\'LINK\').\'&P1=\'.f($row3,\'P1\').\'&P2=\'.f($row3,\'P2\').\'&P3=\'.f($row3,\'P3\').\'&P4=\'.f($row3,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row3,\'SIGLA\'),$w_Imagem,$w_Imagem,f($row3,\'target\')));');
+                       eval('$node'.i.'_'.j.'_'.k.'_'.l.' = &$node'.i.'_'.j.'_'.k.'->addItem(new XNode(f($row3,\'nome\'),f($row3,\'LINK\').\'&P1=\'.f($row3,\'P1\').\'&P2=\'.f($row3,\'P2\').\'&P3=\'.f($row3,\'P3\').\'&P4=\'.f($row3,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row3,\'SIGLA\').MontaFiltro(\'GET\'),$w_Imagem,$w_Imagem,f($row3,\'target\')));');
                     }
                   } else {
                     eval('$node'.i.'_'.j.'_'.k.'_'.l.' = &$node'.i.'_'.j.'_'.k.'->addItem(new XNode(null,null,null,null,\'<img src="\'.$w_Imagem.\'" border=0>\'.f($row3,\'nome\'),null,null,null,null));');
@@ -168,7 +168,7 @@ function ExibeDocs() {
                        eval('$node'.i.'_'.j.'_'.k.' = &$node'.i.'_'.j.'->addItem(new XNode(f($row2,\'nome\'),f($row2,\'LINK\'),$w_Imagem,$w_Imagem,f($row2,\'target\')));');
                     }
                   } else {
-                     eval('$node'.i.'_'.j.'_'.k.' = &$node'.i.'_'.j.'->addItem(new XNode(f($row2,\'nome\'),f($row2,\'LINK\').\'&P1=\'.f($row2,\'P1\').\'&P2=\'.f($row2,\'P2\').\'&P3=\'.f($row2,\'P3\').\'&P4=\'.f($row2,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row2,\'SIGLA\'),$w_Imagem,$w_Imagem,f($row2,\'target\')));');
+                     eval('$node'.i.'_'.j.'_'.k.' = &$node'.i.'_'.j.'->addItem(new XNode(f($row2,\'nome\'),f($row2,\'LINK\').\'&P1=\'.f($row2,\'P1\').\'&P2=\'.f($row2,\'P2\').\'&P3=\'.f($row2,\'P3\').\'&P4=\'.f($row2,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row2,\'SIGLA\').MontaFiltro(\'GET\'),$w_Imagem,$w_Imagem,f($row2,\'target\')));');
                   }
                 } else {
                   eval('$node'.i.'_'.j.'_'.k.' = &$node'.i.'_'.j.'->addItem(new XNode(null,null,null,null,\'<img src="\'.$w_Imagem.\'" border=0>\'.f($row2,\'nome\'),null,null,null,null));');
@@ -187,7 +187,7 @@ function ExibeDocs() {
                    eval('$node'.i.'_'.j.' = &$node'.i.'->addItem(new XNode(f($row1,\'nome\'),f($row1,\'LINK\'),$w_Imagem,$w_Imagem,f($row1,\'target\')));');
                 }
               } else {
-                 eval('$node'.i.'_'.j.' = &$node'.i.'->addItem(new XNode(f($row1,\'nome\'),f($row1,\'LINK\').\'&P1=\'.f($row1,\'P1\').\'&P2=\'.f($row1,\'P2\').\'&P3=\'.f($row1,\'P3\').\'&P4=\'.f($row1,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row1,\'SIGLA\'),$w_Imagem,$w_Imagem,f($row1,\'target\')));');
+                 eval('$node'.i.'_'.j.' = &$node'.i.'->addItem(new XNode(f($row1,\'nome\'),f($row1,\'LINK\').\'&P1=\'.f($row1,\'P1\').\'&P2=\'.f($row1,\'P2\').\'&P3=\'.f($row1,\'P3\').\'&P4=\'.f($row1,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row1,\'SIGLA\').MontaFiltro(\'GET\'),$w_Imagem,$w_Imagem,f($row1,\'target\')));');
               }
             } else {
               eval('$node'.i.'_'.j.' = &$node'.i.'->addItem(new XNode(null,null,null,null,\'<img src="\'.$w_Imagem.\'" border=0>\'.f($row1,\'nome\'),null,null,null,null));');
@@ -207,7 +207,7 @@ function ExibeDocs() {
               eval('$node'.i.' = &$root->addItem(new XNode(f($row,\'nome\'),f($row,\'LINK\'),$w_Imagem,$w_Imagem,f($row,\'target\')));');
             }
           } else {
-            eval('$node'.i.' = &$root->addItem(new XNode(f($row,\'nome\'),f($row,\'LINK\').\'&P1=\'.f($row,\'P1\').\'&P2=\'.f($row,\'P2\').\'&P3=\'.f($row,\'P3\').\'&P4=\'.f($row,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row,\'SIGLA\'),$w_Imagem,$w_Imagem,f($row,\'target\')));');
+            eval('$node'.i.' = &$root->addItem(new XNode(f($row,\'nome\'),f($row,\'LINK\').\'&P1=\'.f($row,\'P1\').\'&P2=\'.f($row,\'P2\').\'&P3=\'.f($row,\'P3\').\'&P4=\'.f($row,\'P4\').\'&TP=<img src=\'.$w_Imagem.\' BORDER=0>\'.$w_titulo.\'&SG=\'.f($row,\'SIGLA\').MontaFiltro(\'GET\'),$w_Imagem,$w_Imagem,f($row,\'target\')));');
           }
         } else {
           eval('$node'.i.' = &$root->addItem(new XNode(null,null,null,null,\'<img src="\'.$w_Imagem.\'" border=0>\'.f($row,\'nome\'),null,null,null,null));');
@@ -525,7 +525,7 @@ function Vinculacao() {
     ShowHTML('    <a class="ss" HREF="javascript:this.status.value;" onClick="opener.focus(); window.close();">Fechar</a>&nbsp;');
     ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=2>');
-    ShowHTML('    <TABLE id="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
+    ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center" valign="top">');
     ShowHTML('          <td><b>Serviço</td>');
     ShowHTML('          <td class="remover"><b>Operações</td>');

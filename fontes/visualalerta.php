@@ -21,9 +21,9 @@ function VisualAlerta($l_cliente,$l_usuario,$l_tipo, $l_rs_solic, $l_rs_pacote, 
     } else {
       $l_html .= '    <td>'.chr(13).chr(10);
     }
-    $l_html .= '    <td align="right">'.exportaOffice().'<b>Registros: '.count($l_rs_solic).chr(13).chr(10);
+    $l_html .= '    <td align="right"><b>Registros: '.count($l_rs_solic).chr(13).chr(10);
     $l_html .= '<tr><td align="center" colspan=2>'.chr(13).chr(10);
-    $l_html .= '    <TABLE WIDTH="100%" bgcolor='.$conTableBgColor.' BORDER='.$conTableBorder.' CELLSPACING='.$conTableCellSpacing.' CELLPADDING='.$conTableCellPadding.' BorderColorDark='.$conTableBorderColorDark.' BorderColorLight='.$conTableBorderColorLight.'>'.chr(13).chr(10);
+    $l_html .= '    <TABLE class="tudo" WIDTH="100%" bgcolor='.$conTableBgColor.' BORDER='.$conTableBorder.' CELLSPACING='.$conTableCellSpacing.' CELLPADDING='.$conTableCellPadding.' BorderColorDark='.$conTableBorderColorDark.' BorderColorLight='.$conTableBorderColorLight.'>'.chr(13).chr(10);
     $l_html .= '        <tr bgcolor='.$conTrBgColor.' align="center">'.chr(13).chr(10);
     $l_html .= '          <td><b>Módulo</td>'.chr(13).chr(10);
     $l_html .= '          <td><b>Serviço</td>'.chr(13).chr(10);
@@ -127,9 +127,9 @@ function VisualAlerta($l_cliente,$l_usuario,$l_tipo, $l_rs_solic, $l_rs_pacote, 
     $l_blocos = 1;
     $l_html .= '<tr>'.chr(13).chr(10);
     $l_html .= '    <td><b>PACOTES DE TRABALHO EM ATRASO OU ALERTA: '.chr(13).chr(10);
-    $l_html .= '    <td align="right">'.exportaOffice().'<b>Registros: '.count($l_rs_pacote).chr(13).chr(10);
+    $l_html .= '    <td align="right"><b>Registros: '.count($l_rs_pacote).chr(13).chr(10);
     $l_html .= '<tr><td align="center" colspan=2>'.chr(13).chr(10);
-    $l_html .= '    <TABLE WIDTH="100%" bgcolor='.$conTableBgColor.' BORDER='.$conTableBorder.' CELLSPACING='.$conTableCellSpacing.' CELLPADDING='.$conTableCellPadding.' BorderColorDark='.$conTableBorderColorDark.' BorderColorLight='.$conTableBorderColorLight.'>'.chr(13).chr(10);
+    $l_html .= '    <TABLE class="tudo" WIDTH="100%" bgcolor='.$conTableBgColor.' BORDER='.$conTableBorder.' CELLSPACING='.$conTableCellSpacing.' CELLPADDING='.$conTableCellPadding.' BorderColorDark='.$conTableBorderColorDark.' BorderColorLight='.$conTableBorderColorLight.'>'.chr(13).chr(10);
     $l_html .= '        <tr bgcolor='.$conTrBgColor.' align="center">'.chr(13).chr(10);
     $l_html .= '          <tr align="center">'.chr(13).chr(10);
     $l_html .= '            <td rowspan=2 bgColor="#f0f0f0" width="20">&nbsp;</td>'.chr(13).chr(10);

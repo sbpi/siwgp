@@ -40,11 +40,6 @@ if ($_POST['suporte']=='y') {
   $_SESSION['P_CLIENTE'] = $_POST['p_cliente'];
   $_SESSION['SQ_PESSOA'] = $_POST['sq_pessoa'];
 }
-// Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
-
-// Declaração de variáveis
-$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 //Inicializa objeto de conexão e executa a query
 if (nvl($_REQUEST['dataBank'],'')!='') {
@@ -67,6 +62,12 @@ $w_pagina       = 'exec.php?par=';
 $w_Disabled     = 'ENABLED';
 $w_dir          = 'mod_dc/';
 $w_troca        = $_REQUEST['w_troca'];
+
+// Verifica se o usuário está autenticado
+if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+
+// Declaração de variáveis
+$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 // Se for acompanhamento, entra na filtragem  
 if (nvl($O,'')=='') {

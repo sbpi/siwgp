@@ -82,46 +82,11 @@ function SortArray() {
 }
 
 // =========================================================================
-// Montagem de link para exportação de conteúdo para excel
-// -------------------------------------------------------------------------
-function exportaOffice() {
-  extract($GLOBALS);
-  return('<form style="vertical-align: bottom; margin-left: 85%; float: left;" method="post" id="temp" action="'.$conRootSIW.'/funcoes/arquivoExcel.php">'.
-         '  <img id="botaoExcel" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Excel" SRC="images/excel.gif" style="float: left;" alt="img" />'.
-         '  <img id="botaoWord" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Word" SRC="images/word.gif" style="float: left;" alt="img" />'.
-         '  <input type="hidden" name="opcao" id="opcao" value="E">'.
-         '  <input type="hidden" name="caminho" id="caminho" value="'.$conRootSIW.'">'.
-         '  <input type="hidden" id="texto" name="texto"/>'.
-         '  <input type="hidden" id="conteudo" name="conteudo"/>'.
-         '</form>');
-}
-
-
-// =========================================================================
-// Montagem da URL para consulta ao módulo de telefonia
-// -------------------------------------------------------------------------
-function consultaTelefone($p_cliente) {
-  extract($GLOBALS,EXTR_PREFIX_SAME,'l_');
-
-  // Verifica se o cliente tem o módulo de telefonia contratado
-  include_once($w_dir_volta.'classes/sp/db_getSiwCliModLis.php');
-  $sql = new db_getSiwCliModLis; $l_rs_ac = $sql->getInstanceOf($dbms, $p_cliente, null, 'TT');
-  $l_mod_tt = false;
-  $l_string = '';
-  foreach ($l_rs_ac as $row) {
-    $l_mod_tt = true;
-    $l_string = '<a href="'.$conRootSIW.montaUrl('LIGACAO').'" target="telefone" title="Procurar na base de ligações telefônicas."><img src="'.$conRootSIW.'/images/icone/fone_1.gif" border=0></a>';
-    break;
-  }
-  return $l_string;
-}
-
-// =========================================================================
 // Montagem do link para abrir o calendário
 // -------------------------------------------------------------------------
 function exibeCalendario($form, $campo) {
   extract($GLOBALS);
-  return '   <a class="ss" HREF="javascript:this.status.value;" onClick="window.open(\'' . $conRootSIW . 'calendario.php?form=' . $form . '&field=' . $campo . '&vData=\'+document.' . $form . '.' . $campo . '.value,\'dp\',\'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0, width=150, height=160, left=500, top=200\'); return false;" title="Visualizar calendário"><img src="images/icone/GotoTop.gif" border=0 align=top height=16 width=16></a>';
+  return '   <a class="ss" HREF="javascript:this.status.value;" onClick="window.open(\'' . $conRootSIW . 'calendario.php?form=' . $form . '&field=' . $campo . '&vData=\'+document.' . $form . '.' . $campo . '.value,\'dp\',\'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0, width=150, height=160, left=500, top=200\'); return false;" title="Visualizar calendário"><img src="images/icone/GotoTop.gif" alt="img" border=0 align=top height=16 width=16 /></a>';
   //return '   <a class="ss" HREF="javascript:this.status.value;" onClick="javascript:window.open("calendar.php?form=frmMain&field=txtDate","","top=50,left=400,width=200,height=120,menubar=no,toolbar=no,scrollbars=no,resizable=no,status=no"); return false;
 }
 
@@ -129,7 +94,7 @@ function exibeCalendario($form, $campo) {
 // Retorna buffer de saída
 // -------------------------------------------------------------------------
 function callback($buffer) {
-  return strip_tags($buffer, '<html><head><link><title><style><base><table><tr><td><div><b><p><hr><font>');;
+  return strip_tags($buffer, '<html><head><link><title><style><base><table><tr><td><div></b><p><hr /><font>');;
 }
 
 // =========================================================================
@@ -181,21 +146,21 @@ function CriaBaseLine($l_chave,$l_html,$l_nome,$l_tramite) {
   $l_arq = @fopen($l_arquivo, 'w');
   $l_html = str_replace("display:none","",$l_html);
   $l_html = str_replace("mais.jpg","menos.jpg",$l_html);
-  fwrite($l_arq,'<HTML>');
-  fwrite($l_arq,'<HEAD>');
-  fwrite($l_arq,'<TITLE>Visualização de '.$l_nome.'</TITLE>');
-  fwrite($l_arq,'</HEAD>');
-  fwrite($l_arq,'<BASE HREF="'.$conRootSIW.'">');
-  fwrite($l_arq,'<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
-  fwrite($l_arq,'<BODY>');
+  fwrite($l_arq,'<html>');
+  fwrite($l_arq,'<head>');
+  fwrite($l_arq,'<title>Visualização de '.$l_nome.'</title>');
+  fwrite($l_arq,'</head>');
+  fwrite($l_arq,'<base HREF="'.$conRootSIW.'">');
+  fwrite($l_arq,'<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
+  fwrite($l_arq,'<body>');
   fwrite($l_arq,'<div align="center">');
   fwrite($l_arq,'<table width="95%" border="0" cellspacing="3">');
   fwrite($l_arq,'<tr><td colspan="2">');
   fwrite($l_arq,$l_html);
   fwrite($l_arq,'</table>');
   fwrite($l_arq,'</div>');
-  fwrite($l_arq,'</BODY>');
-  fwrite($l_arq,'</HTML>');
+  fwrite($l_arq,'</body>');
+  fwrite($l_arq,'</html>');
   @fclose($l_arq);
   $SQL = new dml_putBaseLine; $SQL->getInstanceOf($dbms,$w_cliente,$l_chave,$w_usuario,$l_tramite,$l_nome_arq,filesize($l_arquivo),'text/html',$l_nome_arq);
 }
@@ -320,10 +285,10 @@ function headerPdf($titulo,$pag=null) {
   ob_start();
   Cabecalho();
   head();
-  ShowHTML('<TITLE>'.$titulo.'</TITLE>');
-  ShowHTML('<link rel="stylesheet" type="text/css" href="' . $conRootSIW . '/classes/menu/xPandMenu.css">');
-  ShowHTML('</HEAD>');
-  ShowHTML('<BASE HREF="'.$conRootSIW.'">');
+  ShowHTML('<title>'.$titulo.'</title>');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="' . $conRootSIW . '/classes/menu/xPandMenu.css"/>');
+  ShowHTML('</head>');
+  ShowHTML('<base HREF="'.$conRootSIW.'">');
   CabecalhoWord($w_cliente, $titulo, $pag);
   BodyOpenMail(null);
 }
@@ -374,7 +339,7 @@ function headerExcel($p_orientation='LANDSCAPE') {
   ShowHTML('      <x:ValidPrinterInfo/>');
   ShowHTML('     </x:Print>');
   ShowHTML('     <x:Selected/>');
-  ShowHTML('     <x:ProtectContents>True</x:ProtectContents>');
+  ShowHTML('     <x:ProtectContents>False</x:ProtectContents>');
   ShowHTML('     <x:ProtectObjects>False</x:ProtectObjects>');
   ShowHTML('     <x:ProtectScenarios>False</x:ProtectScenarios>');
   ShowHTML('    </x:WorksheetOptions>');
@@ -384,7 +349,7 @@ function headerExcel($p_orientation='LANDSCAPE') {
   ShowHTML('  <x:ProtectWindows>False</x:ProtectWindows>');
   ShowHTML(' </x:ExcelWorkbook>');
   ShowHTML('</xml><![endif]-->');
-  ShowHTML('<BASE HREF="'.$conRootSIW.'">');
+  ShowHTML('<base HREF="'.$conRootSIW.'">');
   ShowHTML('</head> ');
   ShowHTML(BodyOpenMail('bgcolor="#000000"'));
 }
@@ -410,10 +375,33 @@ function CabecalhoWord($p_cliente,$p_titulo,$p_pagina, $l_lspan=null, $l_rspan=n
 }
 
 // =========================================================================
+// Montagem de link para exportação de conteúdo para excel
+// -------------------------------------------------------------------------
+function exportaOffice() {
+  extract($GLOBALS);
+  if ($P1 != '3') {
+    return('<form style="vertical-align: bottom; float: right;" method="post" id="temp" action="' . $conRootSIW . '/funcoes/arquivoExcel.php">' .
+    '  <img id="botaoExcel" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Excel" SRC="images/excel.gif" style="float: left;" alt="img" />' .
+    '  <img id="botaoWord" height="16" width="16" style="cursor:pointer" onclick="exportarArquivo(\'tudo\');" TITLE="Gerar Word" SRC="images/word.gif" style="float: left;" alt="img" />' .
+    '  <input type="hidden" name="opcao" id="opcao" value="E">' .
+    '  <input type="hidden" name="caminho" id="caminho" value="' . $conRootSIW . '">' .
+    '  <input type="hidden" id="texto" name="texto"/>' .
+    '  <input type="hidden" id="conteudo" name="conteudo"/>' .
+    '</form>');
+  }
+}
+
+// =========================================================================
 // Montagem de link para ordenação, usada nos títulos de colunas
 // -------------------------------------------------------------------------
 function LinkOrdena($p_label,$p_campo,$p_form=null) {
   extract($GLOBALS);
+  $html = true;
+  foreach(headers_list() as $k => $v) {
+    if (strpos(upper($v),'FILENAME')!==false) $html = false;
+  }
+  if (!$html) return $p_label;
+
   foreach($_POST as $chv => $vlr) {
     if (nvl($vlr,'')>'' && (upper(substr($chv,0,2))=="W_" || upper(substr($chv,0,2))=="P_")) {
       if (upper($chv)=="P_ORDENA") {
@@ -442,10 +430,10 @@ function LinkOrdena($p_label,$p_campo,$p_form=null) {
     if (upper($p_campo)==str_replace(' DESC','',str_replace(' ASC','',upper($l_ordena)))) {
       if (strpos(upper($l_ordena),' DESC') !== false) {
         $l_string = $p_campo.' asc';
-        $l_img='&nbsp;<img src="images/down.gif" width=8 height=8 border=0 align="absmiddle">';
+        $l_img='&nbsp;<img src="images/down.gif" width=8 height=8 border=0 align="absmiddle" alt="img" />';
       } else {
         $l_string = $p_campo.' desc';
-        $l_img='&nbsp;<img src="images/up.gif" width=8 height=8 border=0 align="absmiddle">';
+        $l_img='&nbsp;<img src="images/up.gif" width=8 height=8 border=0 align="absmiddle" alt="img" />';
       }
     } else {
       $l_string = $p_campo.' asc';
@@ -455,10 +443,10 @@ function LinkOrdena($p_label,$p_campo,$p_form=null) {
     if (upper($p_campo)==str_replace(' DESC','',str_replace(' ASC','',upper($l_ordena)))) {
       if (strpos(upper($l_ordena),' DESC') !== false) {
         $l_string .= '&p_ordena='.$p_campo.' asc&';
-        $l_img='&nbsp;<img src="images/down.gif" width=8 height=8 border=0 align="absmiddle">';
+        $l_img='&nbsp;<img src="images/down.gif" width=8 height=8 border=0 align="absmiddle" alt="img" />';
       } else {
         $l_string .= '&p_ordena='.$p_campo.' desc&';
-        $l_img='&nbsp;<img src="images/up.gif" width=8 height=8 border=0 align="absmiddle">';
+        $l_img='&nbsp;<img src="images/up.gif" width=8 height=8 border=0 align="absmiddle" alt="img" />';
       }
     } else {
       $l_string .= '&p_ordena='.$p_campo.' asc&';
@@ -479,33 +467,33 @@ function CabecalhoRelatorio($p_cliente,$p_titulo,$p_rowspan=2,$l_chave=null,$tit
     if (f($RS_Logo,'logo')>'') {
       $p_logo='img/logo'.substr(f($RS_Logo,'logo'),(strpos(f($RS_Logo,'logo'),'.') ? strpos(f($RS_Logo,'logo'),'.')+1 : 0)-1,30);
     }
-    ShowHTML('<TABLE WIDTH="100%" BORDER=0><TR><TD ROWSPAN='.$p_rowspan.'><IMG ALIGN="LEFT" SRC="'.LinkArquivo(null,$p_cliente,$p_logo,null,null,null,'EMBED').'"><TD ALIGN="RIGHT"><B><FONT SIZE=4 COLOR="#000000">'.$p_titulo);
-    ShowHTML('</FONT></TR><TR><TD ALIGN="RIGHT"><B><FONT COLOR="#000000">'.DataHora().'</B></TD></TR>');
-    ShowHTML('<TR><TD ALIGN="RIGHT"><B><font COLOR="#000000">'.$_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].'</B></TD></TR>');  
+    ShowHTML('<table WIDTH="100%" BORDER=0><tr><td ROWSPAN='.$p_rowspan.'><img ALIGN="LEFT" SRC="'.LinkArquivo(null,$p_cliente,$p_logo,null,null,null,'EMBED').'" alt="img" /><td ALIGN="RIGHT"><b><font SIZE=4 COLOR="#000000">'.$p_titulo.'</font></b></td></tr>');
+    ShowHTML('<tr><td ALIGN="RIGHT"><b><font COLOR="#000000">'.DataHora().'</font></b></td></tr>');
+    ShowHTML('<tr><td ALIGN="RIGHT"><b><font COLOR="#000000">'.$_SESSION['USUARIO'].': '.$_SESSION['NOME_RESUMIDO'].'</font></b></td></tr>');
   }
   if (($p_tipo!='WORD' && $w_tipo!='WORD')) {
     if($titulo == 'S'){
-      ShowHTML('<TR><TD ALIGN="RIGHT">');
+      ShowHTML('<tr><td ALIGN="RIGHT">');
     }
     if(nvl($l_chave,'')>'') {
-      if(RetornaGestor($l_chave,$w_usuario)=='S') ShowHTML('&nbsp;<A  class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TelaAcessoUsuarios&w_chave='.nvl($l_chave,$w_chave).'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG=').'\',\'Usuarios\',\'width=780,height=550,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;"><IMG border=0 ALIGN="CENTER" TITLE="Usuários com acesso a este documento" SRC="images/Folder/User.gif"></a>');
+      if(RetornaGestor($l_chave,$w_usuario)=='S') ShowHTML('&nbsp;<a  class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TelaAcessoUsuarios&w_chave='.nvl($l_chave,$w_chave).'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG=').'\',\'Usuarios\',\'width=780,height=550,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;"><img border=0 ALIGN="CENTER" TITLE="Usuários com acesso a este documento" SRC="images/Folder/User.gif" alt="img" /></a>');
     }
-    ShowHTML('&nbsp;<IMG ALIGN="CENTER" TITLE="Imprimir" SRC="images/impressora.gif" onClick="window.print();">');
+    ShowHTML('&nbsp;<img ALIGN="CENTER" TITLE="Imprimir" SRC="images/impressora.gif" onClick="window.print();" alt="img" />');
     $word_par = montaurl_js($w_dir,$conRootSIW.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_ano='.$w_ano.'&w_mes='.$w_mes.'&w_usuario='.$w_usuario.'&w_dt_ini='.$w_dt_ini.'&w_dt_fim='.$w_dt_fim.'&p_tipo=WORD&w_tipo=WORD&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&SG='.$SG.MontaFiltro('GET'));
-    //ShowHTML('&nbsp;<a href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_sq_pessoa='.$l_chave.'&w_ano='.$w_ano.'w_mes='.$w_mes.'&&p_tipo=WORD&w_tipo=WORD&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><IMG border=0 ALIGN="CENTER" TITLE="Gerar word" SRC="images/word.jpg"></a>');
-    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="W"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar Word" SRC="images/word.jpg" />');
+    //ShowHTML('&nbsp;<a href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_sq_pessoa='.$l_chave.'&w_ano='.$w_ano.'w_mes='.$w_mes.'&&p_tipo=WORD&w_tipo=WORD&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><img border=0 ALIGN="CENTER" TITLE="Gerar word" SRC="images/word.gif" alt="img" /></a>');
+    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="W"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar Word" SRC="images/word.gif" alt="img" />');
 
     $excel_par = montaurl_js($w_dir,$conRootSIW.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=L&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_ano='.$w_ano.'&w_mes='.$w_mes.'&w_usuario='.$w_usuario.'&w_dt_ini='.$w_dt_ini.'&w_dt_fim='.$w_dt_fim.'&p_tipo=EXCEL&w_tipo=EXCEL&w_tipo_rel=EXCEL&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG='.$SG.MontaFiltro('GET'));
-    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="E"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar Excel" SRC="images/excel.jpg" />');
-    // ShowHTML('&nbsp;<a href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_ano='.$w_ano.'&p_tipo=PDF&w_tipo=PDF&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" target="_blank"><IMG border=0 ALIGN="CENTER" TITLE="Gerar PDF" SRC="images/pdf.png"></a>');
+    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="E"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar Excel" SRC="images/excel.gif" alt="img" />');
+    // ShowHTML('&nbsp;<a href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_ano='.$w_ano.'&p_tipo=PDF&w_tipo=PDF&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" target="_blank"><img border=0 ALIGN="CENTER" TITLE="Gerar PDF" SRC="images/pdf.png" alt="img" /></a>');
     $pdf_par = montaurl_js($w_dir,$conRootSIW.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O='.$O.'&w_chave='.nvl($l_chave,$w_chave).'&w_sq_pessoa='.$w_sq_pessoa.'&w_acordo='.$l_chave.'&p_plano='.$l_chave.'&w_ano='.$w_ano.'&w_mes='.$w_mes.'&w_usuario='.$w_usuario.'&w_dt_ini='.$w_dt_ini.'&w_dt_fim='.$w_dt_fim.'&p_tipo=PDF&w_tipo=PDF&w_tipo_rel=WORD&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4=1&SG='.$SG.MontaFiltro('GET'));
-    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="P"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar PDF" SRC="images/pdf.png" />');
-    ShowHTML('</TD></TR>');
+    ShowHtml('<img  style="cursor:pointer" onclick=\' document.temp.opcao.value="P"; displayMessage(310,140,"funcoes/orientacao.php");\' border=0 ALIGN="CENTER" TITLE="Gerar PDF" SRC="images/pdf.png" alt="img" />');
+    ShowHTML('</td></tr>');
   }
   if($titulo == 'S'){
-    ShowHTML('</TABLE>');
+    ShowHTML('</table>');
   }
-  ShowHTML('<form name="temp">');
+  ShowHTML('<form name="temp" method="POST" action="">');
   ShowHTML('<input type="hidden" name="word" id="word" value="'.$word_par.'">');
   ShowHTML('<input type="hidden" name="excel" id="excel" value="'.$excel_par.'">');
   ShowHTML('<input type="hidden" name="pdf" id="pdf" value="'.$pdf_par.'">');
@@ -586,14 +574,10 @@ function  extenso($valor = 0, $maiusculas = false) {
   $plural = array("centavos", "reais", "mil", "milhões", "bilhões", "trilhões",
       "quatrilhões");
 
-  $c = array("", "cem", "duzentos", "trezentos", "quatrocentos",
-      "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos");
-  $d = array("", "dez", "vinte", "trinta", "quarenta", "cinquenta",
-      "sessenta", "setenta", "oitenta", "noventa");
-  $d10 = array("dez", "onze", "doze", "treze", "quatorze", "quinze",
-      "dezesseis", "dezesete", "dezoito", "dezenove");
-  $u = array("", "um", "dois", "três", "quatro", "cinco", "seis",
-      "sete", "oito", "nove");
+  $c   = array("", "cem", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos");
+  $d   = array("", "dez", "vinte",    "trinta",    "quarenta",     "cinquenta",  "sessenta",   "setenta",    "oitenta",    "noventa");
+  $d10 = array("dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezesete",  "dezoito",    "dezenove");
+  $u   = array("",    "um",   "dois", "três",  "quatro",   "cinco",  "seis",      "sete",      "oito",       "nove");
 
   $z = 0;
   $rt = "";
@@ -807,6 +791,27 @@ function MontaFiltro($p_method) {
       }
     }
   }
+  if (strpos($l_string,'w_user')===false) {
+    if (upper($p_method)=='GET') {
+      $l_string.='&w_user='.nvl(nvl($w_user,$_REQUEST['w_user']),$_SESSION['SQ_PESSOA']);
+    } else {
+      $l_string .= '<INPUT TYPE="HIDDEN" NAME="w_user" VALUE="'.nvl(nvl($w_user,$_REQUEST['w_user']),$_SESSION['SQ_PESSOA']).'">';
+    }
+  }
+  if (strpos($l_string,'w_client')===false) {
+    if (upper($p_method)=='GET') {
+      $l_string.='&w_client='.nvl(nvl($w_client,$_REQUEST['w_client']),$_SESSION['P_CLIENTE']);
+    } else {
+      $l_string .= '<INPUT TYPE="HIDDEN" NAME="w_client" VALUE="'.nvl(nvl($w_client,$_REQUEST['w_client']),$_SESSION['P_CLIENTE']).'">';
+    }
+  }
+  if (strpos($l_string,'w_rdbms')===false) {
+    if (upper($p_method)=='GET') {
+      $l_string.='&w_rdbms='.nvl(nvl($w_rdbms,$_REQUEST['w_rdbms']),$_SESSION['DBMS']);
+    } else {
+      $l_string .= '<INPUT TYPE="HIDDEN" NAME="w_rdbms" VALUE="'.nvl(nvl($w_rdbms,$_REQUEST['w_rdbms']),$_SESSION['DBMS']).'">';
+    }
+  }
   return $l_string;
 }
 // =========================================================================
@@ -848,7 +853,7 @@ function RetornaFormulario($l_troca=null,$l_sg=null,$l_menu=null,$l_o=null,$l_di
     }
   }
   ShowHTML($l_form);
-  ShowHTML('</FORM>');
+  ShowHTML('</form>');
   ScriptOpen('JavaScript');
   // Registra no servidor syslog erro na assinatura eletrônica
   if (nvl($l_troca,'x')=='w_assinatura') {
@@ -859,6 +864,7 @@ function RetornaFormulario($l_troca=null,$l_sg=null,$l_menu=null,$l_o=null,$l_di
   ScriptClose();
   exit();
 }
+
 // =========================================================================
 // Exibe o conteúdo da querystring, do formulário e das variáveis de sessão
 // -------------------------------------------------------------------------
@@ -870,23 +876,23 @@ function ExibeArray($array) { echo '<pre>'.var_export($array,true).'</pre>'; }
 function ExibeVariaveis() {
   extract($GLOBALS);
 
-  ShowHTML('<DT><b>Dados da querystring:</b><table border=0>');
+  ShowHTML('<dt><b>Dados da querystring:</b><table border=0>');
   foreach($_GET as $chv => $vlr) { ShowHTML('<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'); }
-  ShowHTML('</table></DT><br>');
+  ShowHTML('</table></dt><br />');
 
-  ShowHTML('<DT><b>Dados do formulário:</b><table border=0>');
+  ShowHTML('<dt><b>Dados do formulário:</b><table border=0>');
   foreach($_POST as $chv => $vlr) { if (lower($chv)!='w_assinatura') ShowHTML('<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'); }
-  ShowHTML('</table></DT><br>');
+  ShowHTML('</table></dt><br />');
 
-  ShowHTML('<DT><b>Variáveis de sessão:</b><table border=0>');
+  ShowHTML('<dt><b>Variáveis de sessão:</b><table border=0>');
   foreach($_SESSION as $chv => $vlr) { if (strpos(upper($chv),'SENHA') !== true) { ShowHTML('<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'); } }
-  ShowHTML('</table></DT><br>');
+  ShowHTML('</table></dt><br />');
   
-  ShowHTML('<DT><b>Variáveis do servidor:</b><table border=0>');
+  ShowHTML('<dt><b>Variáveis do servidor:</b><table border=0>');
   foreach($_SERVER as $chv => $vlr) {
     ShowHTML('<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']');
   }
-  ShowHTML('</table></DT>');
+  ShowHTML('</table></dt>');
   $w_item=null;
   exit();
 }
@@ -903,7 +909,7 @@ function ExibeSolic($l_dir,$l_chave,$l_texto=null,$l_exibe_titulo=null,$l_word=n
     $l_array = explode('|@|', $l_texto);
     $l_hint = $l_array[4].(($l_exibe_titulo=='N') ? ' - '.$l_array[2] : '');
     if(nvl($l_embed,'-')!= 'WORD') {
-      $l_string = '<A class="hl" HREF="'.$conRootSIW.$l_array[10].'&O=L&w_chave='.$l_chave.'&P1='.$l_array[6].'&P2='.$l_array[7].'&P3='.$l_array[8].'&P4='.$l_array[9].'&TP='.$TP.'&SG='.$l_array[5].'" target="_blank" title="'.$l_hint.'">'.$l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '').'</a>';
+      $l_string = '<a class="hl" HREF="'.$conRootSIW.$l_array[10].'&O=L&w_chave='.$l_chave.'&P1='.$l_array[6].'&P2='.$l_array[7].'&P3='.$l_array[8].'&P4='.$l_array[9].'&TP='.$TP.'&SG='.$l_array[5].'" target="_blank" title="'.$l_hint.'">'.$l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '').'</a>';
     }else{
       $l_string = $l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '');
     }
@@ -914,7 +920,7 @@ function ExibeSolic($l_dir,$l_chave,$l_texto=null,$l_exibe_titulo=null,$l_word=n
     $l_array = explode('|@|', f($RS,'dados_solic'));
     if(nvl($l_embed,'-')!= 'WORD') {
       $l_hint = $l_array[4].(($l_exibe_titulo=='N') ? ' - '.$l_array[2] : '');
-      $l_string = '<A class="hl" HREF="'.$conRootSIW.$l_array[10].'&O=L&w_chave='.$l_chave.'&P1='.$l_array[6].'&P2='.$l_array[7].'&P3='.$l_array[8].'&P4='.$l_array[9].'&TP='.$TP.'&SG='.$l_array[5].'" target="_blank" title="'.$l_hint.'">'.$l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '').'</a>';
+      $l_string = '<a class="hl" HREF="'.$conRootSIW.$l_array[10].'&O=L&w_chave='.$l_chave.'&P1='.$l_array[6].'&P2='.$l_array[7].'&P3='.$l_array[8].'&P4='.$l_array[9].'&TP='.$TP.'&SG='.$l_array[5].'" target="_blank" title="'.$l_hint.'">'.$l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '').'</a>';
     } else {
       $l_string = $l_array[1].(($l_exibe_titulo=='S') ? ' - '.$l_array[2] : '');
     }
@@ -932,7 +938,7 @@ function ExibePessoa($p_dir,$p_cliente,$p_pessoa,$p_tp,$p_nome) {
   if (Nvl($p_nome,'')=='') {
     $l_string='&nbsp;';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TELAUSUARIO&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Pessoa\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta pessoa!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TELAUSUARIO&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Pessoa\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta pessoa!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -945,9 +951,9 @@ function ExibePessoaRel($p_dir,$p_cliente,$p_pessoa,$p_nome,$p_nome_resumido,$p_
   if (Nvl($p_nome,'')=='') {
     $l_string='&nbsp;';
   } elseif ($p_tipo=='Volta') {
-    $l_string .= '<A class="hl" HREF="'.$conRootSIW.$p_dir.'relatorios.php?par=TELAUSUARIOREL&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&w_tipo='.$p_tipo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&SG=" title="'.$p_nome.'">'.$p_nome_resumido.'</a>';
+    $l_string .= '<a class="hl" HREF="'.$conRootSIW.$p_dir.'relatorios.php?par=TELAUSUARIOREL&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&w_tipo='.$p_tipo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&SG=" title="'.$p_nome.'">'.$p_nome_resumido.'</a>';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.$p_dir.'relatorios.php?par=TELAUSUARIOREL&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&w_tipo='.$p_tipo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4).'\',\''.$p_tipo.'\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="'.$p_nome.'">'.$p_nome_resumido.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.$p_dir.'relatorios.php?par=TELAUSUARIOREL&w_cliente='.$p_cliente.'&w_sq_pessoa='.$p_pessoa.'&w_tipo='.$p_tipo.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4).'\',\''.$p_tipo.'\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="'.$p_nome.'">'.$p_nome_resumido.'</a>';
   }
   return $l_string;
 }
@@ -961,7 +967,7 @@ function ExibeFornecedor($p_dir,$p_cliente,$p_pessoa,$p_tp,$p_nome) {
   if (Nvl($p_nome,'')=='') {
     $l_string='---';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'mod_eo/fornecedor.php?par=Visual&w_sq_pessoa='.$p_pessoa.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Fornecedor\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste fornecedor!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'mod_eo/fornecedor.php?par=Visual&w_sq_pessoa='.$p_pessoa.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Fornecedor\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste fornecedor!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -975,9 +981,9 @@ function ExibePlano($p_dir,$p_cliente,$p_plano,$p_tp,$p_nome,$p_pitce=null) {
     $l_string='---';
   } else {
     if (nvl($p_pitce,'')=='') {
-      $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'mod_pe/tabelas.php?par=TELAPLANO&w_cliente='.$p_cliente.'&w_sq_plano='.$p_plano.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'plano\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste plano!">'.$p_nome.'</A>';
+      $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'mod_pe/tabelas.php?par=TELAPLANO&w_cliente='.$p_cliente.'&w_sq_plano='.$p_plano.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'plano\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste plano!">'.$p_nome.'</a>';
     } else {
-      $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'cl_pitce/tabelas.php?par=TELAPLANO&w_cliente='.$p_cliente.'&w_sq_plano='.$p_plano.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'plano\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste plano!">'.$p_nome.'</A>';
+      $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'cl_pitce/tabelas.php?par=TELAPLANO&w_cliente='.$p_cliente.'&w_sq_plano='.$p_plano.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'plano\',\'width=780,height=500,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste plano!">'.$p_nome.'</a>';
     }
   }
   return $l_string;
@@ -991,7 +997,7 @@ function ExibeUnidadePacote($O,$p_cliente,$p_chave,$p_chave_aux,$p_unidade,$p_tp
   if (Nvl($p_nome,'')=='') {
     $l_string='---';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'projeto.php?par=InteressadoPacote&w_chave='.$p_chave.'&O='.$O.'&w_chave_aux='.$p_chave_aux.'&w_sq_unidade='.$p_unidade.'&P1='.$p_P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.$p_sg.'\',\'Interessados\',\'width=780,height=550,top=50,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'projeto.php?par=InteressadoPacote&w_chave='.$p_chave.'&O='.$O.'&w_chave_aux='.$p_chave_aux.'&w_sq_unidade='.$p_unidade.'&P1='.$p_P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.$p_sg.'\',\'Interessados\',\'width=780,height=550,top=50,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -1006,7 +1012,7 @@ function VisualIndicador($p_dir,$p_cliente,$p_sigla,$p_tp,$p_nome) {
     if (Nvl($p_nome,'')=='') {
       $l_string='---';
     } else {
-      $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=TELAINDICADOR&w_cliente='.$p_cliente.'&w_sigla='.$p_sigla.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'Indicador\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste de indicador!">'.$p_nome.'</A>';
+      $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=TELAINDICADOR&w_cliente='.$p_cliente.'&w_sigla='.$p_sigla.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'Indicador\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste de indicador!">'.$p_nome.'</a>';
     }
   } else {
     $l_string=$p_sigla;
@@ -1022,7 +1028,7 @@ function ExibeUnidade($p_dir,$p_cliente,$p_unidade,$p_sq_unidade,$p_tp) {
   if (Nvl($p_unidade,'')=='') {
     $l_string='&nbsp;';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TELAUNIDADE&w_cliente='.$p_cliente.'&w_sq_unidade='.$p_sq_unidade.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Unidade\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta unidade!">'.$p_unidade.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.montaURL_JS(null,$conRootSIW.'seguranca.php?par=TELAUNIDADE&w_cliente='.$p_cliente.'&w_sq_unidade='.$p_sq_unidade.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG=').'\',\'Unidade\',\'width=780,height=300,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta unidade!">'.$p_unidade.'</a>';
   }
   return $l_string;
 }
@@ -1035,7 +1041,7 @@ function ExibeRecurso($p_dir,$p_cliente,$p_nome,$p_chave,$p_tp,$p_solic) {
   if (Nvl($p_chave,'')=='') {
     $l_string='---';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/recurso.php?par=TELARECURSO&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_solic='.$p_solic.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'Telarecurso\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste recurso!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/recurso.php?par=TELARECURSO&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_solic='.$p_solic.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'Telarecurso\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste recurso!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -1048,7 +1054,7 @@ function ExibeRestricao($O,$p_dir,$p_cliente,$p_tipo,$p_chave,$p_chave_aux,$p_tp
   if (Nvl($p_tipo,'')=='') {
     $l_string='---';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pr/restricao.php?par=VisualRestricao&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_chave_aux='.$p_chave_aux.'&O='.$O.'&w_solic='.$p_solic.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualRestriao\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta restricao!">'.$p_tipo.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pr/restricao.php?par=VisualRestricao&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_chave_aux='.$p_chave_aux.'&O='.$O.'&w_solic='.$p_solic.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualRestriao\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta restricao!">'.$p_tipo.'</a>';
   }
   return $l_string;
 }
@@ -1059,9 +1065,9 @@ function ExibeRestricao($O,$p_dir,$p_cliente,$p_tipo,$p_chave,$p_chave_aux,$p_tp
 function ExibeMeta($O,$p_dir,$p_cliente,$p_nome,$p_chave,$p_chave_aux,$p_tp,$p_solic,$p_plano=null) {
   extract($GLOBALS,EXTR_PREFIX_SAME,'l_');
   if (Nvl($p_plano,'')!='') {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=VisualMeta&w_cliente='.$p_cliente.'&w_chave=&w_chave_aux='.$p_chave_aux.'&w_plano='.$p_plano.'&O='.$O.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualMeta\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta meta!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=VisualMeta&w_cliente='.$p_cliente.'&w_chave=&w_chave_aux='.$p_chave_aux.'&w_plano='.$p_plano.'&O='.$O.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualMeta\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta meta!">'.$p_nome.'</a>';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=VisualMeta&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_chave_aux='.$p_chave_aux.'&w_solic='.$p_solic.'&O='.$O.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualMeta\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta meta!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=VisualMeta&w_cliente='.$p_cliente.'&w_chave='.$p_chave.'&w_chave_aux='.$p_chave_aux.'&w_solic='.$p_solic.'&O='.$O.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.'\',\'VisualMeta\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados desta meta!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -1074,7 +1080,7 @@ function ExibeIndicador($p_dir,$p_cliente,$p_nome,$p_dados,$p_tp) {
   if (Nvl($p_dados,'')=='') {
     $l_string='---';
   } else {
-    $l_string .= '<A class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=FramesAfericao&R='.$w_pagina.$par.'&O=L'.$p_dados.'&P1='.$l_p1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'\',\'TelaIndicador\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste indicador!">'.$p_nome.'</A>';
+    $l_string .= '<a class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.'mod_pe/indicador.php?par=FramesAfericao&R='.$w_pagina.$par.'&O=L'.$p_dados.'&P1='.$l_p1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'\',\'TelaIndicador\',\'width=785,height=570,top=10,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados deste indicador!">'.$p_nome.'</a>';
   }
   return $l_string;
 }
@@ -1094,7 +1100,7 @@ function ExibeEtapa($O,$p_chave,$p_chave_aux,$p_tipo,$p_P1,$p_etapa,$p_tp,$p_sg)
     if($w_embed == 'WORD'){
         $l_string .= $p_etapa;
     }else{
-        $l_string .= '<A name="'.$p_chave_aux.'" class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.(($w_dir=='mod_pr/') ? '' : $w_dir).'projeto.php?par=AtualizaEtapa&w_chave='.$p_chave.'&O='.$O.'&w_chave_aux='.$p_chave_aux.'&w_tipo='.$p_tipo.'&P1='.$p_P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.$p_sg.'\',\'Etapa\',\'width=780,height=550,top=50,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados!">'.$p_etapa.'</A>';
+        $l_string .= '<a name="'.$p_chave_aux.'" class="hl" HREF="javascript:this.status.value;" onClick="window.open(\''.$conRootSIW.(($w_dir=='mod_pr/') ? '' : $w_dir).'projeto.php?par=AtualizaEtapa&w_chave='.$p_chave.'&O='.$O.'&w_chave_aux='.$p_chave_aux.'&w_tipo='.$p_tipo.'&P1='.$p_P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$p_tp.'&SG='.$p_sg.'\',\'Etapa\',\'width=780,height=550,top=50,left=10,toolbar=no,scrollbars=yes,resizable=yes,status=no\'); return false;" title="Clique para exibir os dados!">'.$p_etapa.'</a>';
     }
   }
   return $l_string;
@@ -1108,27 +1114,27 @@ function ExibeImagemRestricao($l_tipo,$l_imagem=null,$l_legenda=0) {
   $l_string = '';
   if ($l_legenda) {
     $l_string .= '<tr valign="top">';
-    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgProblem.'" border=0 width=10 height=10 align="center"><td>Problema.';
-    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgRiskHig.'" border=0 width=10 height=10 align="center"><td>Risco de alta criticidade.';
-    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgRiskMed.'" border=0 width=10 height=10 align="center"><td>Risco de moderada ou baixa criticidade. ';
+    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgProblem.'" border=0 width=10 height=10 align="center" alt="img" /><td>Problema.';
+    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgRiskHig.'" border=0 width=10 height=10 align="center" alt="img" /><td>Risco de alta criticidade.';
+    $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgRiskMed.'" border=0 width=10 height=10 align="center" alt="img" /><td>Risco de moderada ou baixa criticidade. ';
   } else {
     if ($l_imagem=='P') {
       if (Nvl($l_tipo,'N')!='N') {
         switch ($l_tipo) {
-          case 'S1': $l_string .= '<img title="Problema de baixa criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';   break;
-          case 'S2': $l_string .= '<img title="Problema de moderada criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';   break;
-          case 'S3': $l_string .= '<img title="Problema de alta criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';    break;
+          case 'S1': $l_string .= '<img title="Problema de baixa criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'S2': $l_string .= '<img title="Problema de moderada criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'S3': $l_string .= '<img title="Problema de alta criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';    break;
         }
       }
     } else {
       if (Nvl($l_tipo,'N')!='N') {
         switch ($l_tipo) {
-          case 'S1': $l_string .= '<img title="Problema de baixa criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';   break;
-          case 'S2': $l_string .= '<img title="Problema de moderada criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';   break;
-          case 'S3': $l_string .= '<img title="Problema de alta criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center">';    break;
-          case 'N1': $l_string .= '<img title="Risco de baixa criticidade" src="'.$conRootSIW.$conImgRiskLow.'" width=10 height=10 border=0 align="center">';   break;
-          case 'N2': $l_string .= '<img title="Risco de moderada criticidade" src="'.$conRootSIW.$conImgRiskMed.'" width=10 height=10 border=0 align="center">';   break;
-          case 'N3': $l_string .= '<img title="Risco de alta criticidade" src="'.$conRootSIW.$conImgRiskHig.'" width=10 height=10 border=0 align="center">';    break;
+          case 'S1': $l_string .= '<img title="Problema de baixa criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'S2': $l_string .= '<img title="Problema de moderada criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'S3': $l_string .= '<img title="Problema de alta criticidade" src="'.$conRootSIW.$conImgProblem.'" width=10 height=10 border=0 align="center" alt="img" />';    break;
+          case 'N1': $l_string .= '<img title="Risco de baixa criticidade" src="'.$conRootSIW.$conImgRiskLow.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'N2': $l_string .= '<img title="Risco de moderada criticidade" src="'.$conRootSIW.$conImgRiskMed.'" width=10 height=10 border=0 align="center" alt="img" />';   break;
+          case 'N3': $l_string .= '<img title="Risco de alta criticidade" src="'.$conRootSIW.$conImgRiskHig.'" width=10 height=10 border=0 align="center" alt="img" />';    break;
         }
       }
     }
@@ -1146,42 +1152,42 @@ function ExibeSmile($l_tipo,$l_andamento,$l_legenda=0) {
   if ($l_legenda) {
     if ($l_tipo=='IDE') {
       $l_string .= '<tr valign="top"><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center"><td>Fora da faixa desejável (abaixo de 70%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center"><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center"><td>Na faixa desejável (de 90% a 120%). ';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Fora da faixa desejável (abaixo de 70%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center" alt="img" /><td>Na faixa desejável (de 90% a 120%). ';
     } elseif ($l_tipo=='IDC') {
       $l_string .= '<tr valign="top"><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center"><td>Fora da faixa desejável (abaixo de 70%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center"><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center"><td>Na faixa desejável (de 90% a 120%). ';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Fora da faixa desejável (abaixo de 70%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center" alt="img" /><td>Na faixa desejável (de 90% a 120%). ';
     } elseif ($l_tipo=='IDCC') {
       $l_string .= '<tr valign="top"><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center"><td>Fora da faixa desejável (abaixo de 70%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center"><td>Próximo da faixa desejável (de 70% a 99,99%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center"><td>Na faixa desejável (acima de 100%). ';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Fora da faixa desejável (abaixo de 70%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center" alt="img" /><td>Próximo da faixa desejável (de 70% a 99,99%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Na faixa desejável (acima de 100%). ';
     } elseif ($l_tipo=='IDEC') {
       $l_string .= '<tr valign="top"><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center"><td>Fora da faixa desejável (abaixo de 70%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center"><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center"><td>Na faixa desejável (acima de 90%). ';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Fora da faixa desejável (abaixo de 70%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmAviso.'" border=0 width=10 height=10 align="center" alt="img" /><td>Próximo da faixa desejável (de 70% a 89,99% ou acima de 120%).';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conRootSIW.$conImgSmNormal.'" border=0 width=10 height=10 align="center" alt="img" /><td>Na faixa desejável (acima de 90%). ';
     }
   } else {
     if ($l_tipo=='IDE') {
-      if ($l_andamento < 70)                           $l_string .= '<img title="IDE fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10">';
-      elseif ($l_andamento < 90 || $l_andamento > 120) $l_string .= '<img title="IDE próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10">';
-      else                                             $l_string .= '<img title="IDE na faixa desejável (de 90% a 120%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10">';
+      if ($l_andamento < 70)                           $l_string .= '<img title="IDE fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10" alt="img" />';
+      elseif ($l_andamento < 90 || $l_andamento > 120) $l_string .= '<img title="IDE próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10" alt="img" />';
+      else                                             $l_string .= '<img title="IDE na faixa desejável (de 90% a 120%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10" alt="img" />';
     } elseif ($l_tipo=='IDC') {
-      if ($l_andamento < 70)                           $l_string .= '<img title="IDC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10">';
-      elseif ($l_andamento < 90 || $l_andamento > 120) $l_string .= '<img title="IDC próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10">';
-      else                                             $l_string .= '<img title="IDC na faixa desejável (de 90% a 120%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10">';
+      if ($l_andamento < 70)                           $l_string .= '<img title="IDC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10" alt="img" />';
+      elseif ($l_andamento < 90 || $l_andamento > 120) $l_string .= '<img title="IDC próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10" alt="img" />';
+      else                                             $l_string .= '<img title="IDC na faixa desejável (de 90% a 120%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10" alt="img" />';
     } elseif ($l_tipo=='IDCC') {
-      if ($l_andamento < 75)                           $l_string .= '<img title="IDCC próximo da faixa desejável (de 70% a 99,99%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10">';
-      elseif ($l_andamento <= 100)                     $l_string .= '<img title="IDCC na faixa desejável (acima de 100%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10">';
-      else                                             $l_string .= '<img title="IDCC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10">';
+      if ($l_andamento < 75)                           $l_string .= '<img title="IDCC próximo da faixa desejável (de 70% a 99,99%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10" alt="img" />';
+      elseif ($l_andamento <= 100)                     $l_string .= '<img title="IDCC na faixa desejável (acima de 100%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10" alt="img" />';
+      else                                             $l_string .= '<img title="IDCC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10" alt="img" />';
     } elseif ($l_tipo=='IDEC') {
-      if ($l_andamento < 70)                           $l_string .= '<img title="IDEC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10">';
-      elseif ($l_andamento < 90)                       $l_string .= '<img title="IDEC próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10">';
-      else                                             $l_string .= '<img title="IDEC na faixa desejável (acima de 90%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10">';
+      if ($l_andamento < 70)                           $l_string .= '<img title="IDEC fora da faixa desejável (abaixo de 70%)." src="'.$conRootSIW.$conImgSmAtraso.'" border=0 width="10" height="10" alt="img" />';
+      elseif ($l_andamento < 90)                       $l_string .= '<img title="IDEC próximo da faixa desejável (de 70% a 89,99% ou acima de 120%)." src="'.$conRootSIW.$conImgSmAviso.'" border=0 width="10" height="10" alt="img" />';
+      else                                             $l_string .= '<img title="IDEC na faixa desejável (acima de 90%)." src="'.$conRootSIW.$conImgSmNormal.'" border=0 width="10" height="10" alt="img" />';
     }
   }
   return $l_string;
@@ -1193,7 +1199,7 @@ function ExibeSmile($l_tipo,$l_andamento,$l_legenda=0) {
 function exibeImagemAnexo($l_exibe=0) {
   extract($GLOBALS);
   $l_string = '';
-  if ($l_exibe>0) $l_string .= '<img title="Há arquivos disponíveis para download." src="'.$conRootSIW.$conImgDownload.'" border=0 width="14" height="14" align="center">';
+  if ($l_exibe>0) $l_string .= '<img title="Há arquivos disponíveis para download." src="'.$conRootSIW.$conImgDownload.'" border=0 width="14" height="14" align="center" alt="img" />';
   return $l_string;
 }
 
@@ -1211,52 +1217,52 @@ function ExibeImagemSolic($l_tipo,$l_inicio,$l_fim,$l_inicio_real,$l_fim_real,$l
       // Etapas de projeto
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Execução não iniciada: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAtraso.'" border=0 width=10 align="center"><td>Fim previsto superado.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto próximo.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center"><td>Prazo final dentro do previsto.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAtraso.'" border=0 width=10 align="center" alt="img" /><td>Fim previsto superado.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto próximo.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Prazo final dentro do previsto.';
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Em execução: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto superado.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAviso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto próximo.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center"><td>Prazo final dentro do previsto.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto superado.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAviso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto próximo.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Prazo final dentro do previsto.';
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Execução concluída: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=10 heigth=10 align="center"><td>Após a data prevista.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center"><td>Antes da data prevista.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center"><td>Na data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Após a data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Antes da data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Na data prevista.';
     } elseif (substr($l_tipo,0,2)=='GD' || substr($l_tipo,0,2)=='SR' || substr($l_tipo,0,2)=='PJ') {
       // Tarefas, demandas eventuais e recursos logísticos
       $l_string .= '<tr valign="top"><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgCancel.'" border=0 width=10 heigth=10 align="center"><td>Registro cancelado.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgCancel.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Registro cancelado.';
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Execução não iniciada: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAtraso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto superado.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto próximo.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center"><td>Prazo final dentro do previsto.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAtraso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto superado.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto próximo.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Prazo final dentro do previsto.';
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Em execução: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=12 align="center"><td>Fim previsto superado.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAviso.'" border=0 width=10 heigth=10 align="center"><td>Fim previsto próximo.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center"><td>Prazo final dentro do previsto.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=12 align="center" alt="img" /><td>Fim previsto superado.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAviso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Fim previsto próximo.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Prazo final dentro do previsto.';
       $l_string .= '<tr valign="top">';
       $l_string .= '<td width="1%" nowrap>Execução concluída: ';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=12 align="center"><td>Após a data prevista.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center"><td>Antes da data prevista.';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center"><td>Na data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=12 align="center" alt="img" /><td>Após a data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Antes da data prevista.';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Na data prevista.';
     } elseif (substr($l_tipo,0,2)=='PD') {
       // Viagens
       $l_string .= '<tr valign="top">';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgCancel.'" border=0 width=10 heigth=10 align="center"><td>Registro cancelado';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center"><td>Início próximo';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center"><td>Não iniciada';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgCancel.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Registro cancelado';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgAviso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Início próximo';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Não iniciada';
       $l_string .= '<tr valign="top">';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=10 heigth=10 align="center"><td>Tramitação em atraso';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStAtraso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Tramitação em atraso';
       $l_string .= '<td><td>';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center"><td>Em andamento';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgStNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Em andamento';
       $l_string .= '<tr valign="top">';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=10 heigth=10 align="center"><td>Tramitação em atraso';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center"><td>Pendente prestação de contas';
-      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center"><td>Encerrada';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAtraso.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Tramitação em atraso';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkAcima.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Pendente prestação de contas';
+      $l_string .= '<td width="1%" nowrap><img src="'.$conImgOkNormal.'" border=0 width=10 heigth=10 align="center" alt="img" /><td>Encerrada';
     }
   } else {
     if ($l_tipo=='ETAPA') {
@@ -1620,7 +1626,7 @@ function ExibeImagemSolic($l_tipo,$l_inicio,$l_fim,$l_inicio_real,$l_fim_real,$l
     }
 
     if ($l_imagem!='') {
-      $l_string = '           <img src="'.$conRootSIW.$l_imagem.'" title="'.$l_title.'" border=0 width=10 heigth=10>';
+      $l_string = '           <img src="'.$conRootSIW.$l_imagem.'" title="'.$l_title.'" border=0 width=10 heigth=10 hspace="1" align="absmiddle" alt="img" />';
     }
   }
 
@@ -1983,7 +1989,7 @@ function lower ($str) {
 }
 
 // =========================================================================
-// Converte CFLF para <BR>
+// Converte CFLF para <br />
 // -------------------------------------------------------------------------
 function CRLF2BR($expressao) {
   $result = '';
@@ -1991,12 +1997,12 @@ function CRLF2BR($expressao) {
     return '';
   } else {
     $result = $expressao;
-    if (false!==strpos($result,chr(10).chr(13))) $result = str_replace(chr(10).chr(13),'<br>',$result);
-    if (false!==strpos($result,chr(13).chr(10))) $result = str_replace(chr(13).chr(10),'<br>',$result);
-    if (false!==strpos($result,chr(13)))         $result = str_replace(chr(13),'<br>',$result);
-    if (false!==strpos($result,chr(10)))         $result = str_replace(chr(10),'<br>',$result);
-    //return str_replace('<br><br>','<br>',htmlentities($result));
-    return str_replace('  ','&nbsp;&nbsp;',str_replace('<br><br>','<br>',$result));
+    if (false!==strpos($result,chr(10).chr(13))) $result = str_replace(chr(10).chr(13),'<br />',$result);
+    if (false!==strpos($result,chr(13).chr(10))) $result = str_replace(chr(13).chr(10),'<br />',$result);
+    if (false!==strpos($result,chr(13)))         $result = str_replace(chr(13),'<br />',$result);
+    if (false!==strpos($result,chr(10)))         $result = str_replace(chr(10),'<br />',$result);
+    //return str_replace('<br /><br />','<br />',htmlentities($result));
+    return str_replace('  ','&nbsp;&nbsp;',str_replace('<br /><br />','<br />',$result));
   }
 }
 
@@ -2079,7 +2085,7 @@ function MontaURL($p_sigla) {
     } else {
       $l_Imagem=$l_ImagemPadrao;
     }
-    return f($RS_MontaURL,'link')."&P1=".f($RS_MontaURL,'p1')."&P2=".f($RS_MontaURL,'p2')."&P3=".f($RS_MontaURL,'p3')."&P4=".f($RS_MontaURL,'p4')."&TP=<img src=".$l_Imagem." BORDER=0>".f($RS_MontaURL,'nome')."&SG=".f($RS_MontaURL,'sigla');
+    return f($RS_MontaURL,'link').'&P1='.f($RS_MontaURL,'p1').'&P2='.f($RS_MontaURL,'p2').'&P3='.f($RS_MontaURL,'p3').'&P4='.f($RS_MontaURL,'p4').'&TP=<img src='.$l_Imagem.' BORDER=0 alt=img />'.f($RS_MontaURL,'nome').'&SG='.f($RS_MontaURL,'sigla');
   }
 }
 
@@ -2087,12 +2093,7 @@ function MontaURL($p_sigla) {
 // Montagem de cabeçalho padrão de formulário
 // -------------------------------------------------------------------------
 function AbreForm($p_Name,$p_Action,$p_Method,$p_onSubmit,$p_Target,$p_P1,$p_P2,$p_P3,$p_P4,$p_TP,$p_SG,$p_R,$p_O, $p_retorno=null) {
-  $l_html = '';
-  if (!isset($p_Target)) {
-     $l_html .= '<FORM action="'.$p_Action.'" method="'.$p_Method.'" NAME="'.$p_Name.'" onSubmit="'.$p_onSubmit.'">';
-  } else {
-     $l_html .= '<FORM action="'.$p_Action.'" method="'.$p_Method.'" NAME="'.$p_Name.'" onSubmit="'.$p_onSubmit.'" target="'.$p_Target.'">';
-  }
+  $l_html = '<form action="'.$p_Action.'" method="'.$p_Method.'" NAME="'.$p_Name.'"'.((nvl($p_onSubmit,'')=='') ? '' : ' onSubmit="'.$p_onSubmit.'"').((nvl($p_Target,'')=='') ? '' : '" target="'.$p_Target.'"').'>';
   if (nvl($p_P1,'')!='') $l_html .= chr(13).'<INPUT TYPE="hidden" NAME="P1" VALUE="'.$p_P1.'">';
   if (nvl($p_P2,'')!='') $l_html .= chr(13).'<INPUT TYPE="hidden" NAME="P2" VALUE="'.$p_P2.'">';
   if (nvl($p_P3,'')!='') $l_html .= chr(13).'<INPUT TYPE="hidden" NAME="P3" VALUE="'.$p_P3.'">';
@@ -2108,23 +2109,23 @@ function AbreForm($p_Name,$p_Action,$p_Method,$p_onSubmit,$p_Target,$p_P1,$p_P2,
 // =========================================================================
 // Montagem de campo do tipo radio com padrão Não
 // -------------------------------------------------------------------------
-function MontaRadioNS($label,$chave,$campo,$hint=null,$restricao=null,$atributo=null,$colspan=1,$separador='<BR />') {
+function MontaRadioNS($label,$chave,$campo,$hint=null,$restricao=null,$atributo=null,$colspan=1,$separador='<bR />') {
   extract($GLOBALS);
   print('          <td colspan="'.$colspan.'"'.((nvl($hint,'')!='') ? ' TITLE="'.$hint.'"': '').'>');
-  if (Nvl($label,'')>'') { ShowHTML($label.'</b>'.$separador); }
+  if (Nvl($label,'')>'') { ShowHTML($label.'<b>'.$separador); }
   ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="S" '.(($chave=='S') ? 'checked' : '').' '.$atributo.'> Sim</label>');
-  ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="N" '.(($chave!='S') ? 'checked' : '').' '.$atributo.'> Não</label>');
+  ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="N" '.(($chave!='S') ? 'checked' : '').' '.$atributo.'> Não</label></b></td>');
 }
 
 // =========================================================================
 // Montagem de campo do tipo radio com padrão Sim
 // -------------------------------------------------------------------------
-function MontaRadioSN($label,$chave,$campo,$hint=null,$restricao=null,$atributo=null,$colspan=1,$separador='<BR />') {
+function MontaRadioSN($label,$chave,$campo,$hint=null,$restricao=null,$atributo=null,$colspan=1,$separador='<bR />') {
   extract($GLOBALS);
   print('          <td colspan="'.$colspan.'"'.((nvl($hint,'')!='') ? ' TITLE="'.$hint.'"': '').'>');
-  if (Nvl($label,'')>'') { ShowHTML($label.'</b>'.$separador); }
+  if (Nvl($label,'')>'') { ShowHTML($label.'<b>'.$separador); }
   ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="S" '.(($chave!='N') ? 'checked' : '').' '.$atributo.'> Sim</label>');
-  ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="N" '.(($chave=='N') ? 'checked' : '').' '.$atributo.'> Não</label>');
+  ShowHTML('              <label><input '.$w_Disabled.' type="radio" name="'.$campo.'" value="N" '.(($chave=='N') ? 'checked' : '').' '.$atributo.'> Não</label></b></td>');
 }
 
 // =========================================================================
@@ -2304,11 +2305,43 @@ function RetornaModMaster($p_cliente, $p_usuario, $p_menu) {
 // -------------------------------------------------------------------------
 function EncerraSessao() {
   extract($GLOBALS);
-  ScriptOpen('JavaScript');
-  ShowHTML(' alert("Tempo máximo de inatividade atingido! Autentique-se novamente."); ');
-  ShowHTML(' top.location.href=\'' . $conDefaultPath . '\';');
-  ScriptClose();
-  exit();
+  if (nvl($_REQUEST['w_client'],'')!='' && nvl($_REQUEST['w_user'],'')!='' && nvl($_REQUEST['w_rdbms'],'')!='') {
+    // =========================================================================
+    // Montagem de formulário para renovação de login
+    // -------------------------------------------------------------------------
+    $l_form = '';
+    // Os parâmetros informados prevalecem sobre os valores default
+    $l_form = '<form action="'.$conRootSIW.'default.php'.(($optsess) ? '' : '?optsess=false').'" method="POST" NAME="logon">';
+    foreach ($_GET as $l_Item => $l_valor) {
+      if (is_array($_GET[$l_Item])) {
+        $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'[]" VALUE="'.explodeArray($_GET[$l_Item]).'">';
+      } else {
+        $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+      }
+    }
+    foreach ($_POST as $l_Item => $l_valor) {
+      if (strpos($l_form,'NAME="'.$l_Item.'"')===false && strpos('Password,Password1,optsess',$l_Item)===false) {
+        if (is_array($_POST[$l_Item])) {
+          foreach($_POST[$l_Item] as $k => $v) $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'['.$k.']" VALUE="'.$v.'">';
+        } else {
+          $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+        }
+      }
+    }
+    if (strpos($l_form,'w_dir')===false) $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="w_dir" VALUE="'.$w_dir.'">';
+    if (strpos($l_form,'w_pagina')===false) $l_form .= chr(13).'<INPUT TYPE="HIDDEN" NAME="w_pagina" VALUE="'.$w_pagina.'">';
+    $l_form .= $crlf.'</form>';
+    ShowHTML($l_form);
+    ScriptOpen('JavaScript');
+    ShowHTML('  document.forms["logon"].submit();');
+    ScriptClose();
+  } else {
+    ScriptOpen('JavaScript');
+    ShowHTML(' alert("Tempo máximo de inatividade atingido! Autentique-se novamente."); ');
+    ShowHTML(' top.location.href=\'' . $conDefaultPath . '\';');
+    ScriptClose();
+    exit();
+  }
 }
 
 // =========================================================================
@@ -2487,6 +2520,14 @@ function EnviaMail($w_subject,$w_mensagem,$w_recipients,$w_attachments=null) {
    * case, set this variable with that sub-domain address. */
   $email_message->smtp_exclude_address="";
 
+  /* If you use the direct delivery mode and the GetMXRR is not functional,
+   * you need to use a replacement function. */
+  /*
+  $_NAMESERVERS=array();
+  include("rrcompat.php");
+  $email_message->smtp_getmxrr="_getmxrr";
+  */
+
   if (strpos($w_recipients,';')===false) $w_recipients .= ';';
   $l_recipients = explode(';',$w_recipients);
   $l_cont = 0;
@@ -2603,7 +2644,7 @@ function EnviaMailAlternative($w_subject,$w_mensagem,$w_recipients,$from,$w_atta
   $mail->Subject    = $w_subject;
 
 
-  //$mail->Body       = "Hi,<br>This is the HTML BODY<br>";                      //HTML Body
+  //$mail->Body       = "Hi,<br />This is the HTML BODY<br />";                      //HTML Body
   //$mail->AltBody    = "To view the message, please use an HTML compatible email viewer!"; // optional, comment out and test
   //$mail->WordWrap   = 50; // set word wrap
   $mail->MsgHTML($body);
@@ -2843,27 +2884,27 @@ function TrataErro($sp, $Err, $params, $file, $line, $object) {
   } else {
     $w_html='<html>';
     $w_html .= chr(10).'<head>';
-    $w_html .= chr(10).'<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">';
-    $w_html .= chr(10).'<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">';
-    $w_html .= chr(10).'<META NAME="author" CONTENT="SBPI Consultoria Ltda">';
-    $w_html .= chr(10).'<META NAME="robots" CONTENT="noindex,nofollow">';
-    $w_html .= chr(10).'<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR">';
-    $w_html .= chr(10).'<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1">';
-    $w_html .= chr(10).'  <BASEFONT FACE="Arial" SIZE="2">';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">';
+    $w_html .= chr(10).'<meta NAME="author" CONTENT="SBPI Consultoria Ltda">';
+    $w_html .= chr(10).'<meta NAME="robots" CONTENT="noindex,nofollow">';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR">';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1">';
+    $w_html .= chr(10).'  <baseFONT FACE="Arial" SIZE="2">';
     $w_html .= chr(10).'</head>';
     $w_html .= chr(10).'<body BGCOLOR="#FF5555">';
-    $w_html .= chr(10).'<CENTER><H2>ATENÇÃO</H2></CENTER>';
-    $w_html .= chr(10).'<BLOCKQUOTE>';
-    $w_html .= chr(10).'<P ALIGN="JUSTIFY">Erro não previsto. <b>Uma cópia desta tela foi enviada por e-mail para os responsáveis pela correção. Favor tentar novamente mais tarde.</P>';
-    $w_html .= chr(10).'<TABLE BORDER="2" BGCOLOR="#FFCCCC" CELLPADDING="5"><TR><TD><FONT COLOR="#000000">';
-    $w_html .= chr(10).'<DL><DT><b>Data e hora da ocorrência:</b> <FONT FACE="courier">'.date('d/m/Y, h:i:s').'<br><br></font></DT>';
-    $w_html .= chr(10).'<DT><b>Descrição:</b><DD><FONT FACE="courier">'.crlf2br($Err['message']).'<br><br></font>';
-    $w_html .= chr(10).'<DT><b>Arquivo:</b><DD><FONT FACE="courier">'.$file.', linha: '.$line.'<br><br></font>';
-    //$w_html .= chr(10).'<DT>Objeto:<DD><FONT FACE="courier">'.$object.'<br><br></font>';
+    $w_html .= chr(10).'<center><h2>ATENÇÃO</h2></center>';
+    $w_html .= chr(10).'<blockquote>';
+    $w_html .= chr(10).'<p ALIGN="JUSTIFY">Erro não previsto. <b>Uma cópia desta tela foi enviada por e-mail para os responsáveis pela correção. Favor tentar novamente mais tarde.</b></p>';
+    $w_html .= chr(10).'<table BORDER="2" BGCOLOR="#FFCCCC" CELLPADDING="5"><tr><td><font COLOR="#000000">';
+    $w_html .= chr(10).'<dl><dt><b>Data e hora da ocorrência:</b> <font FACE="courier">'.date('d/m/Y, h:i:s').'<br /><br /></font></dt>';
+    $w_html .= chr(10).'<dt><b>Descrição:</b><DD><font FACE="courier">'.crlf2br($Err['message']).'<br /><br /></font>';
+    $w_html .= chr(10).'<dt><b>Arquivo:</b><DD><font FACE="courier">'.$file.', linha: '.$line.'<br /><br /></font>';
+    //$w_html .= chr(10).'<dt>Objeto:<DD><font FACE="courier">'.$object.'<br /><br /></font>';
 
-    $w_html .= chr(10).'<DT><b>Comando em execução:</b><blockquote>'.nvl($Err['sqltext'],'nenhum').'</blockquote></font></DT>';
+    $w_html .= chr(10).'<dt><b>Comando em execução:</b><blockquote>'.nvl($Err['sqltext'],'nenhum').'</blockquote></font></dt>';
     if (is_array($params)) {
-      $w_html .= "<DT><b>Valores dos parâmetros:<table border=0>";
+      $w_html .= "<dt><b>Valores dos parâmetros:<table border=0>";
       foreach ($params as $w_chave => $w_valor) {
         if ($_SESSION['DBMS']==2 && $w_valor[1]==B_DATE) {
           $w_html .= chr(10).'<tr valign="top"><td align="right">'.$w_chave.'=><td>['.toSQLDate($w_valor[0]).']';
@@ -2871,31 +2912,31 @@ function TrataErro($sp, $Err, $params, $file, $line, $object) {
           $w_html .= chr(10).'<tr valign="top"><td align="right">'.$w_chave.'=><td>['.$w_valor[0].']';
         }
       }
-      $w_html .= chr(10).'</table></DT><br>';
+      $w_html .= chr(10).'</table></dt><br />';
     }
     
-    $w_html .= chr(10).'<DT>Variáveis de servidor:<table border=0>';
+    $w_html .= chr(10).'<dt>Variáveis de servidor:<table border=0>';
     $w_html .= chr(10).'<tr valign="top"><td align="right">SCRIPT_NAME=><td>['.$_SERVER['SCRIPT_NAME'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">SERVER_NAME=><td>['.$_SERVER['SERVER_NAME'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">SERVER_PORT=><td>['.$_SERVER['SERVER_PORT'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">SERVER_PROTOCOL=><td>['.$_SERVER['SERVER_PROTOCOL'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">HTTP_ACCEPT_LANGUAGE=><td>['.$_SERVER['HTTP_ACCEPT_LANGUAGE'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">HTTP_USER_AGENT=><td>['.$_SERVER['HTTP_USER_AGENT'].']';
-    $w_html .= chr(10).'</table></DT><br>';
+    $w_html .= chr(10).'</table></dt><br />';
 
-    $w_html .= chr(10).'<DT>Dados da querystring:<table border=0>';
+    $w_html .= chr(10).'<dt>Dados da querystring:<table border=0>';
     foreach($_GET as $chv => $vlr) { $w_html .= chr(10).'<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'; }
-    $w_html .= chr(10).'</table></DT><br>';
+    $w_html .= chr(10).'</table></dt><br />';
 
-    $w_html .= chr(10).'<DT>Dados do formulário:<table border=0>';
+    $w_html .= chr(10).'<dt>Dados do formulário:<table border=0>';
     foreach($_POST as $chv => $vlr) { if (lower($chv)!='w_assinatura' && lower($chv)!='password') $w_html .= chr(10).'<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'; }
-    $w_html .= chr(10).'</table></DT><br>';
+    $w_html .= chr(10).'</table></dt><br />';
 
-    $w_html .= chr(10).'<DT>Variáveis de sessão:<table border=0>';
+    $w_html .= chr(10).'<dt>Variáveis de sessão:<table border=0>';
     foreach($_SESSION as $chv => $vlr) { if (strpos(upper($chv),'SENHA')===false && strpos(upper($chv),'PASSWORD')===false) { $w_html .= chr(10).'<tr valign="top"><td align="right">'.$chv.'=><td>['.$vlr.']'; } }
-    $w_html .= chr(10).'</table></DT>';
+    $w_html .= chr(10).'</table></dt>';
     
-    $w_html .= chr(10).'</FONT></TD></TR></TABLE><BLOCKQUOTE>';
+    $w_html .= chr(10).'</font></td></tr></table><blockquote>';
     $w_html .= '</body></html>';
 
     ShowHTML($w_html);
@@ -2918,7 +2959,7 @@ function TrataErro($sp, $Err, $params, $file, $line, $object) {
 // -------------------------------------------------------------------------
 function Cabecalho() {
   ShowHTML('<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">');
-  ShowHTML('<HTML xmlns="http://www.w3.org/1999/xhtml">');
+  ShowHTML('<html xmlns="http://www.w3.org/1999/xhtml">');
 }
 
 // =========================================================================
@@ -2926,13 +2967,13 @@ function Cabecalho() {
 // -------------------------------------------------------------------------
 function head() {
   extract($GLOBALS);
-  ShowHTML('<HEAD>');
-  ShowHTML('<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE" />');
-  ShowHTML('<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />');
-  ShowHTML('<META NAME="author" CONTENT="SBPI Consultoria Ltda" />');
-  ShowHTML('<META NAME="robots" CONTENT="noindex,nofollow" />');
-  ShowHTML('<META HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR" />');
-  ShowHTML('<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1" />');
+  ShowHTML('<head>');
+  ShowHTML('<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE" />');
+  ShowHTML('<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />');
+  ShowHTML('<meta NAME="author" CONTENT="SBPI Consultoria Ltda" />');
+  ShowHTML('<meta NAME="robots" CONTENT="noindex,nofollow" />');
+  ShowHTML('<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR" />');
+  ShowHTML('<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1" />');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.fancybox-1.3.4.pack.js"></script>');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/tooltip.js"></script>');
@@ -2942,22 +2983,9 @@ function head() {
 // Rotina de rodapé
 // -------------------------------------------------------------------------
 function Rodape() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-    ShowHTML('</center>');
-    ShowHTML('<center>');
-    ShowHTML('<DIV id=rodape>');
-    ShowHTML('  <DIV id=endereco>');
-    ShowHTML('    <P>Setor Comercial Sul, Ed. Denasa - Salas 901/902 - Brasília-DF <BR>Tel : (61) 225 6302 (61) 321 8938 | Fax (61) 225 7599| email: <A href="mailto:pbf@cespe.unb.br">bresil2005@minc.gov.br</A>');
-    ShowHTML('    </P>');
-    ShowHTML('  </DIV>');
-    ShowHTML('</DIV>');
-    ShowHTML('</center>');
-  }
-  else { ShowHTML('<HR>'); }
-  ShowHTML('</BODY>');
-  ShowHTML('</HTML>');
-
+  ShowHTML('<hr />');
+  ShowHTML('</body>');
+  ShowHTML('</html>');
 }
 
 // =========================================================================
@@ -2966,21 +2994,9 @@ function Rodape() {
 function RodapePDF() {
   extract($GLOBALS);
   $p_orientation = $_GET["orientacao"];
-  if ($_SESSION['P_CLIENTE']==6761) {
-    ShowHTML('</center>');
-    ShowHTML('<center>');
-    ShowHTML('<DIV id=rodape>');
-    ShowHTML('  <DIV id=endereco>');
-    ShowHTML('    <P>Setor Comercial Sul, Ed. Denasa - Salas 901/902 - Brasília-DF <BR>Tel : (61) 225 6302 (61) 321 8938 | Fax (61) 225 7599| email: <A href="mailto:pbf@cespe.unb.br">bresil2005@minc.gov.br</A>');
-    ShowHTML('    </P>');
-    ShowHTML('  </DIV>');
-    ShowHTML('</DIV>');
-    ShowHTML('</center>');
-  } else {
-    ShowHTML('<HR>');
-  }
-  ShowHTML('</BODY>');
-  ShowHTML('</HTML>');
+  ShowHTML('<hr />');
+  ShowHTML('</body>');
+  ShowHTML('</html>');
 
   $shtml = ob_get_contents();
   ob_end_clean();
@@ -3023,24 +3039,14 @@ function RodapePDF() {
 // Montagem da estrutura do documento
 // -------------------------------------------------------------------------
 function Estrutura_Topo() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-    ShowHTML('<DIV id=container>');
-    ShowHTML('  <DIV id=cab>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Definição dos arquivos de CSS
 // -------------------------------------------------------------------------
 function Estrutura_CSS($l_cliente) {
-  extract($GLOBALS);
-  if ($l_cliente==6761) {
-    ShowHTML('<LINK  media=screen href="'.$conFileVirtual.$l_cliente.'/css/estilo.css" type=text/css rel=stylesheet>');
-    ShowHTML('<LINK media=print href="'.$conFileVirtual.$l_cliente.'/css/print.css" type=text/css rel=stylesheet>');
-    ShowHTML('<SCRIPT language=javascript src="'.$conFileVirtual.$l_cliente.'/js/scripts.js" type=text/javascript> ');
-    ShowHTML('</SCRIPT>');
-  }
+  return '';
 }
 
 // =========================================================================
@@ -3048,32 +3054,21 @@ function Estrutura_CSS($l_cliente) {
 // -------------------------------------------------------------------------
 
 function Estrutura_Topo_Limpo() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('<center>');
-     ShowHTML('<DIV id=container_limpo>');
-     ShowHTML('  <DIV id=cab>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do corpo do documento
 // -------------------------------------------------------------------------
 function Estrutura_Fecha() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('  </DIV>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do corpo do documento
 // -------------------------------------------------------------------------
 function Estrutura_Corpo_Abre() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('  <DIV id=corpo>');
-  }
+  return '';
 }
 
 // =========================================================================
@@ -3081,14 +3076,9 @@ function Estrutura_Corpo_Abre() {
 // -------------------------------------------------------------------------
 function Estrutura_Texto_Abre() {
   extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('    <DIV id=texto>');
-     ShowHTML('        <DIV class=retranca>'.$TP.'</DIV>');
-  } else {
-     ShowHTML('<B><FONT COLOR="#000000">'.$w_TP.'</FONT></B>');
-     ShowHTML('<HR>');
-     ShowHTML('<div align=center><center>');
-  }
+  ShowHTML('<b><font COLOR="#000000">'.$w_TP.'</font></b>');
+  ShowHTML('<hr />');
+  ShowHTML('<div align=center>');
 }
 
 // =========================================================================
@@ -3096,88 +3086,63 @@ function Estrutura_Texto_Abre() {
 // -------------------------------------------------------------------------
 function Estrutura_Texto_Fecha() {
   ShowHTML('    </center>');
-  ShowHTML('    </DIV>');
+  ShowHTML('    </div>');
 }
 
 // =========================================================================
 // Montagem da estrutura do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Esquerda() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('    <DIV id=menuesq>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem da estrutura do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Direita() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('    <DIV id=menudir>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Separador() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('      <DIV id=menusep><HR></DIV>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Gov_Abre() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     Estrutura_Menu_Separador();
-     ShowHTML('      <UL id=menugov>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Nav_Abre() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     Estrutura_Menu_Separador();
-     ShowHTML('      <DIV id=menunav>');
-     ShowHTML('        <UL>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do menu à esquerda
 // -------------------------------------------------------------------------
 function Estrutura_Menu_Fecha() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('      </UL>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem do sub-menu à esquerda alternativo
 // -------------------------------------------------------------------------
 function Estrutura_Corpo_Menu_Esquerda() {
-  extract($GLOBALS);
-  if ($_SESSION['P_CLIENTE']==6761) {
-     ShowHTML('    <DIV id=menuesq>');
-     ShowHTML('      <DIV id=logomenuesq><H3>BresilBresils</H3></DIV>');
-  }
+  return '';
 }
 
 // =========================================================================
 // Montagem da estrutura do documento
 // -------------------------------------------------------------------------
 function Estrutura_Menu() {
-  extract($GLOBALS);
+  return '';
 }
 
 // =========================================================================
@@ -3263,15 +3228,16 @@ function FormataDataEdicao($w_dt_grade, $w_formato=1) {
   if (nvl($w_dt_grade,'')>'') {
     if (is_numeric($w_dt_grade)) {
       switch ($w_formato){
-        case 1: return date('d/m/Y',$w_dt_grade);                         break;
-        case 2: return date('H:i:s',$w_dt_grade);                         break;
-        case 3: return date('d/m/Y, H:i:s',$w_dt_grade);                  break;
-        case 4: return diaSemana(date('l, d/m/y, H:i:s',$w_dt_grade));    break;
-        case 5: return date('d/m/y',$w_dt_grade);                         break;
-        case 6: return date('d/m/y, H:i:s',$w_dt_grade);                  break;
-        case 7: return date('m/d/Y',$w_dt_grade);                         break;
-        case 8: return date('Y-m-d H:i:s',$w_dt_grade);                   break;
-        case 9: return date('m/Y',$w_dt_grade);                           break;
+        case 1:  return date('d/m/Y',$w_dt_grade);                         break;
+        case 2:  return date('H:i:s',$w_dt_grade);                         break;
+        case 3:  return date('d/m/Y, H:i:s',$w_dt_grade);                  break;
+        case 4:  return diaSemana(date('l, d/m/y, H:i:s',$w_dt_grade));    break;
+        case 5:  return date('d/m/y',$w_dt_grade);                         break;
+        case 6:  return date('d/m/y, H:i:s',$w_dt_grade);                  break;
+        case 7:  return date('m/d/Y',$w_dt_grade);                         break;
+        case 8:  return date('Y-m-d H:i:s',$w_dt_grade);                   break;
+        case 9:  return date('m/Y',$w_dt_grade);                           break;
+        case 10: return date('d/m/y H:i',$w_dt_grade);                     break;
       }
     } else {
       return $w_dt_grade;
@@ -3490,12 +3456,12 @@ function montaCalendario($p_base, $p_mes, $p_datas, $p_cores, $p_detalhe=FALSE, 
 
   $l_html  = '<table border=0 cellspacing=1 cellpadding=1>'.$crlf;
   if(!$p_form){
-    $l_html .= '  <tr><td colspan=7 align="center" bgcolor="'.$l_cor_padrao.'"><b>'.$l_meses[intVal($l_mes)].'/'.$l_ano.'</td></tr>'.$crlf;  
+    $l_html .= '  <tr><td colspan=7 align="center" bgcolor="'.$l_cor_padrao.'"><b>'.$l_meses[intVal($l_mes)].'/'.$l_ano.'</b></td></tr>'.$crlf;
   }
   $l_html .= '  <tr align="center">'.$crlf;
 
   // Monta a linha com a sigla para os dias das semanas
-  for ($i = 1; $i <= 7; $i++) $l_html .= '    <td bgcolor="'.$l_cor_padrao.'"><b>'.$l_dias[$i].'</td>'.$crlf;
+  for ($i = 1; $i <= 7; $i++) $l_html .= '    <td bgcolor="'.$l_cor_padrao.'"><b>'.$l_dias[$i].'</b></td>'.$crlf;
   $l_html .= '  </tr>'.$crlf;
 
   // Carrega os dias do mês num array que será usado para montagem do calendário, colocando
@@ -3645,7 +3611,7 @@ function retornaSimNao($chave,$formato=null) {
   extract($GLOBALS);
   if(upper($formato)=='IMAGEM') {
     switch ($chave) {
-      case 'S': return '<img src="'.$conImgOkNormal.'" border=0 width=15 height=15 align="center">';  break;
+      case 'S': return '<img src="'.$conImgOkNormal.'" border=0 width=15 height=15 align="center" alt="img" />';  break;
       default:  return '&nbsp;';
     }
   } else {
@@ -3684,20 +3650,17 @@ function BodyOpen($cProperties) {
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax.js"></script>');
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax-dynamic-content.js"></script> ');
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/modal-message.js"></script> ');
-   ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen" />');
+   ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen"/>');
    ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/funcoes.js"></script>');
 //   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>');
-   ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
+   ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
 
 
-   if ($_SESSION['P_CLIENTE']=='6761') { ShowHTML('<body Text="'.$conBodyText.'" '.$wProperties.'> '); }
-   else {
-     ShowHTML('<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
+   ShowHTML('<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
             'Vlink="'.$conBodyVLink.'" Bgcolor="'.$conBodyBgColor.'" Background="'.$conBodyBackground.'" ' .
             'Bgproperties="'.$conBodyBgproperties.'" Topmargin="'.$conBodyTopmargin .'" ' .
             'Leftmargin="'.$conBodyLeftmargin.'" '.$wProperties.'> ');
-   }
-  flush();
+   flush();
 }
 
 function BodyOpenImage($cProperties, $cImage, $cFixed) {
@@ -3706,22 +3669,22 @@ function BodyOpenImage($cProperties, $cImage, $cFixed) {
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax.js"></script>');
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax-dynamic-content.js"></script> ');
    ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/modal-message.js"></script> ');
-   ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen" />');
+   ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen"/>');
 
    ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/funcoes.js"></script>');
 //   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>');
-   ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
-   if ($_SESSION['P_CLIENTE']=='6761') { ShowHTML('<body Text="'.$conBodyText.'" '.$cProperties.'> '); }
-   else {
-      ShowHTML('<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
-            'Vlink="'.$conBodyVLink.'" Bgcolor="'.$conBodyBgcolor.'" Background="'.$cImage.'" ' .
-            'Bgproperties="'.$cFixed.'" Topmargin="'.$conBodyTopmargin .'" ' .
-            'Leftmargin="'.$conBodyLeftmargin.'" '.$cProperties.'> ');
-   }
+   ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
+   ShowHTML('<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
+        'Vlink="'.$conBodyVLink.'" Bgcolor="'.$conBodyBgcolor.'" Background="'.$cImage.'" ' .
+        'Bgproperties="'.$cFixed.'" Topmargin="'.$conBodyTopmargin .'" ' .
+        'Leftmargin="'.$conBodyLeftmargin.'" '.$cProperties.'> ');
 }
 
 // Imprime uma linha HTML
-function ShowHtml($Line) { print $Line.chr(13).chr(10); }
+function ShowHtml($Line) { 
+  $line =  preg_replace("/(<\/?)(\w+)( |>|\/)/e", "'\\1'.strtolower('\\2').'\\3'", $Line).chr(13).chr(10);
+  print $line;
+}
 
 // Cria a tag Body
 function BodyOpenClean($cProperties) {
@@ -3732,18 +3695,18 @@ function BodyOpenClean($cProperties) {
     $wProperties = str_replace('document.', 'required(); document.', $wProperties);
     if (strpos($wProperties,'required()')===false) $wProperties = str_replace('this.focus', 'required(); this.focus', $wProperties);
   } else {
-    $wProperties = ' onLoad=\'required();\' ';
+    $wProperties = ' onLoad="required();" ';
   }
 
   ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax.js"></script>');
   ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/ajax-dynamic-content.js"></script> ');
   ShowHTML('<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/modal-message.js"></script> ');
-  ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen" />');
+  ShowHTML('<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen"/>');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/funcoes.js"></script>');
 //  ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/swfobject.js"></script>');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.uploadify.v2.1.0.min.js"></script>');
-  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
   ShowHTML('<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
   'Vlink="'.$conBodyVLink.'" Background="'.$conBodyBackground.'" '.
   'Bgproperties="'.$conBodyBgproperties.'" Topmargin="'.$conBodyTopmargin.'" '.
@@ -3755,7 +3718,7 @@ function BodyOpenClean($cProperties) {
 function BodyOpenMail($cProperties=null) {
   extract($GLOBALS);
   $l_html='';
-  $l_html.='<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">'.chr(13);
+  $l_html.='<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>'.chr(13);
   $l_html.='<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
     'Vlink="'.$conBodyVLink.'" Bgcolor="'.$conBodyBgcolor.'" Background="'.$conBodyBackground.'" '.
     'Bgproperties="'.$conBodyBgproperties.'" Topmargin="'.$conBodyTopmargin.'" '.
@@ -3768,10 +3731,10 @@ function BodyOpenWord($cProperties=null) {
   extract($GLOBALS);
   $l_html='';
   $l_html.='<script type="text/javascript" src="'.$conRootSIW.'js/modal/js/modal-message.js"></script> ';
-  $l_html.='<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen" />';
+  $l_html.='<link rel="stylesheet" href="'.$conRootSIW.'js/modal/css/modal-message.css" type="text/css" media="screen"/>';
   $l_html.='<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/funcoes.js"></script>';
 //  $l_html.='<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>';
-  $l_html.='<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandPrint.css">'.chr(13);
+  $l_html.='<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandPrint.css"/>'.chr(13);
   $l_html.='<body Text="'.$conBodyText.'" Link="'.$conBodyLink.'" Alink="'.$conBodyALink.'" '.
     'Vlink="'.$conBodyVLink.'" Bgcolor="'.$conBodyBgcolor.'" Background="'.$conBodyBackground.'" '.
     'Bgproperties="'.$conBodyBgproperties.'" Topmargin="'.$conBodyTopmargin.'" '.
