@@ -57,10 +57,11 @@ $w_Disabled     = 'ENABLED';
 $w_dir          = 'mod_pr/';
 
 // Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+if ($_SESSION['LOGON']!='Sim') EncerraSessao();
 
 // Declaração de variáveis
-$dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
+$dbms = new abreSessao; 
+$dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
 if ($O=='') $O='P';
 switch ($O) {

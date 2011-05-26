@@ -71,7 +71,7 @@ $w_troca        = $_REQUEST['w_troca'];
 $p_ordena       = lower($_REQUEST['p_ordena']);
 
 // Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+if ($_SESSION['LOGON']!='Sim') EncerraSessao();
 
 // Declaração de variáveis
 $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
@@ -263,7 +263,7 @@ function Inicial() {
     ShowHTML('        <a accesskey="I" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_sq_esquema='.$w_sq_esquema.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('        <a accesskey="G" class="SS" href="'.$w_dir.$w_pagina.'Grava&R='.$w_pagina.$par.'&O=O&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG=GERAARQ" target="geracao" title="Gera arquivo de configuração para os esquemas ativos." onClick="return(confirm(\'Confirma geração dos arquivos de configuração?\'))"><u>G</u>erar configuração</a>&nbsp;');
     ShowHTML('        <a accesskey="O" class="SS" href="'.$w_dir.$w_pagina.'Help&R='.$w_pagina.$par.'&O=L&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" target="help"><u>O</u>rientações</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
@@ -274,7 +274,7 @@ function Inicial() {
     ShowHTML('          <td rowspan=2><b>'.LinkOrdena('Tabelas','qtd_tabela').'</font></td>');
     ShowHTML('          <td colspan=2><b>Data</font></td>');
     ShowHTML('          <td colspan=3><b>Registros</font></td>');
-    ShowHTML('          <td rowspan=2><b>Operações</font></td>');
+    ShowHTML('          <td class="remover" rowspan=2><b>Operações</font></td>');
     ShowHTML('        </tr>');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td title="Ocorrência"><b>'.LinkOrdena('Ocorr.','data_ocorrencia').'</font></td>');
@@ -306,7 +306,7 @@ function Inicial() {
         ShowHTML('        <td align="right">'.(Nvl(f($row,'processados'),0)-Nvl(f($row,'rejeitados'),0)).'&nbsp;</td>');
         if (Nvl(f($row,'rejeitados'),0)>0)          ShowHTML('        <td align="right">'.LinkArquivo('HL',$w_cliente,f($row,'chave_result'),'_blank','Exibe o registro da importação.',Nvl(f($row,'rejeitados'),0),null).'&nbsp;</td>');
         else                                        ShowHTML('        <td align="right">'.Nvl(f($row,'rejeitados'),0).'&nbsp;</td>');
-        ShowHTML('        <td align="top" nowrap>');
+        ShowHTML('        <td class="remover" align="top" nowrap>');
         ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_esquema='.f($row,'sq_esquema').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Altera as informações gerais do esquema">AL</A>&nbsp');
         if (Nvl(f($row,'sq_ocorrencia'),'')>'')     ShowHTML('          <A class="hl" onClick="alert(\'Este esquema possui ocorrências, para desabilita-lo, inative-o!\');"title="Exclui o esquema">EX</A>&nbsp');
         else                                        ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=E&w_sq_esquema='.f($row,'sq_esquema').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Exclui o esquema">EX</A>&nbsp');
@@ -609,13 +609,13 @@ function Tabela() {
     ShowHTML('<tr><td>');
     ShowHTML('        <a accesskey="I" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&w_sq_esquema='.$w_sq_esquema.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('        <a accesskey="F" class="ss" href="javascript:window.close(); opener.location.reload(); opener.focus();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td rowspan="1" colspan="2"><b>Tabelas</font></td>');
     ShowHTML('          <td rowspan="1" colspan="2"><b>Campos</font></td>');
-    ShowHTML('          <td rowspan="2"><b>Operações</font></td>');
+    ShowHTML('          <td class="remover" rowspan="2"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>'.LinkOrdena('Ordem','ordem').'</font></td>');
@@ -638,7 +638,7 @@ function Tabela() {
         ShowHTML('        <td align="center">'.Nvl(f($row,'or_coluna'),'---').'</td>');
         ShowHTML('        <td>'.Nvl(f($row,'campo_externo'),'---').'</td>');
         if ($w_atual!=f($row,'nm_tabela')) {
-          ShowHTML('        <td rowspan="'.f($row,'qtd_coluna').'">');
+          ShowHTML('        <td class="remover" rowspan="'.f($row,'qtd_coluna').'">');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_esquema='.f($row,'sq_esquema').'&w_sq_esquema_tabela='.f($row,'sq_esquema_tabela').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.MontaFiltro('GET').'" title="Altera a os dados da tabela deste esquema">AL</A>&nbsp');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.'Grava'.'&R='.$w_pagina.$par.'&O=E&w_sq_esquema='.f($row,'sq_esquema').'&w_sq_esquema_tabela='.f($row,'sq_esquema_tabela').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.MontaFiltro('GET').'" title="Exclui a tabela deste esquema" onClick="return confirm(\'Confirma a exclusão do registro?\');">EX</A>&nbsp');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.'MAPEAMENTO&R='.$w_pagina.$par.'&O=I&w_sq_esquema='.f($row,'sq_esquema').'&w_sq_esquema_tabela='.f($row,'sq_esquema_tabela').'&w_sq_tabela='.f($row,'sq_tabela').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.MontaFiltro('GET').'" title="Relaciona os campos da tabela">Mapear</A>&nbsp');
@@ -1233,13 +1233,13 @@ function Registro() {
     ShowHTML('<tr><td>');
     ShowHTML('        <a accesskey="I" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_sq_esquema='.$w_sq_esquema.'&w_sq_esquema_tabela='.$w_sq_esquema_tabela.'&w_sq_tabela='.$w_sq_tabela.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.'"><u>I</u>ncluir</a>&nbsp;');
     ShowHTML('        <a accesskey="F" class="ss" href="javascript:window.close(); opener.location.reload(); opener.focus();"><u>F</u>echar</a>&nbsp;');
-    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
+    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td rowspan="2"><b>Registro</font></td>');
     ShowHTML('          <td rowspan="1" colspan="3"><b>Campos</font></td>');
-    ShowHTML('          <td rowspan="2"><b>Operações</font></td>');
+    ShowHTML('          <td class="remover" rowspan="2"><b>Operações</font></td>');
     ShowHTML('        </tr>');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td><b>Nome</font></td>');
@@ -1262,7 +1262,7 @@ function Registro() {
         ShowHTML('        <td align="center">'.Nvl(f($row,'or_coluna'),'---').'</td>');
         ShowHTML('        <td>'.Nvl(f($row,'valor'),'---').'</td>');
         if ($w_atual!=f($row,'registro')) {
-          ShowHTML('        <td rowspan="'.f($row,'qtd_coluna').'">');
+          ShowHTML('        <td class="remover" rowspan="'.f($row,'qtd_coluna').'">');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_sq_esquema='.f($row,'sq_esquema').'&w_sq_esquema_tabela='.f($row,'sq_esquema_tabela').'&w_registro='.f($row,'registro').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.MontaFiltro('GET').'" title="Altera a os dados da tabela deste esquema">AL</A>&nbsp');
           ShowHTML('          <A class="hl" HREF="'.$w_dir.$w_pagina.'Grava'.'&R='.$w_pagina.$par.'&O=E&w_sq_esquema='.f($row,'sq_esquema').'&w_sq_esquema_tabela='.f($row,'sq_esquema_tabela').'&w_registro='.f($row,'registro').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'&w_menu='.$w_menu.MontaFiltro('GET').'" title="Exclui a tabela deste esquema" onClick="return confirm(\'Confirma a exclusão do registro?\');">EX</A>&nbsp');
         } 
@@ -1424,7 +1424,7 @@ function Script() {
     ShowHTML('          <td><b>Tipo</td>');
     ShowHTML('          <td><b>Ordem</td>');
     ShowHTML('          <td><b>KB</td>');
-    ShowHTML('          <td ><b>Operações</td>');
+    ShowHTML('          <td><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       // Se não foram selecionados registros, exibe mensagem 

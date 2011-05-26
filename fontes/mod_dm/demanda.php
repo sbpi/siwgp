@@ -93,7 +93,7 @@ $w_dir          = 'mod_dm/';
 $w_troca        = $_REQUEST['w_troca'];
 
 // Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+if ($_SESSION['LOGON']!='Sim') EncerraSessao();
 
 // Declaração de variáveis
 $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
@@ -287,12 +287,20 @@ function Inicial() {
       if ($P1!=1 || $O=='C') {
         // Se não for cadastramento ou se for cópia
         if(nvl($p_sq_menu_relac,'')>'' && $SG!='PROJETO') {
-          ShowHTML('  if (theForm.p_chave_pai.selectedIndex==0) {');
-          ShowHTML('    alert(\'Você deve indicar a vinculação!\');');
-          ShowHTML('    theForm.p_chave_pai.focus();');
-          ShowHTML('    return false;');
-          ShowHTML('  }');
-        }      
+          if ($p_sq_menu_relac=='CLASSIF') {
+            ShowHTML('  if (theForm.p_sqcc.selectedIndex==0) {');
+            ShowHTML('    alert(\'Você deve indicar a classificação!\');');
+            ShowHTML('    theForm.p_sqcc.focus();');
+            ShowHTML('    return false;');
+            ShowHTML('  }');
+          } else {
+            ShowHTML('  if (theForm.p_chave_pai.selectedIndex==0) {');
+            ShowHTML('    alert(\'Você deve indicar a vinculação!\');');
+            ShowHTML('    theForm.p_chave_pai.focus();');
+            ShowHTML('    return false;');
+            ShowHTML('  }');
+          }
+        }       
         Validate('p_chave','Número da demanda','','','1','18','','0123456789');
         Validate('p_prazo','Dias para a data limite','','','1','2','','0123456789');
         Validate('p_proponente','Proponente externo','','','2','90','1','');
@@ -372,21 +380,24 @@ function Inicial() {
     if ((strpos(upper($R),'GR_')===false) && $P1!=6 && $w_tipo!='WORD') {
       if ($w_copia>'') {
         // Se for cópia
-        if (MontaFiltro('GET')>'') {
+    if ((strpos(upper($R),'GR_')===false) && $P1!=6 && $w_tipo!='WORD') {
+      if ($w_copia>'') {
+        // Se for cópia
+        if (strpos(str_replace('p_ordena','w_ordena',MontaFiltro('GET')),'p_')) {
           ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=C&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u><font color="#BC5100">F</u>iltrar (Ativo)</font></a>');
         } else {
           ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=C&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u>F</u>iltrar (Inativo)</a>');
         } 
       } else {
-        if (MontaFiltro('GET')>'') {
+        if (strpos(str_replace('p_ordena','w_ordena',MontaFiltro('GET')),'p_')) {
           ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u><font color="#BC5100">F</u>iltrar (Ativo)</font></a>');
         } else {
           ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u>F</u>iltrar (Inativo)</a>');
         } 
       } 
-    } 
+    }
     ShowHTML('    <td align="right">');
-    ShowHTML('    <b>Registros: '.count($RS));
+    ShowHTML('    '.exportaOffice().'<b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
@@ -526,7 +537,7 @@ function Inicial() {
                   Nvl(f($row,'titular'),0)==$w_usuario || 
                   Nvl(f($row,'substituto'),0)==$w_usuario
                  ) {
-                ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.'envio&R='.$w_pagina.$par.'&O=V&w_chave='.f($row,'sq_siw_solicitacao').'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Envia a demanda para outro responsável.">EN</A>&nbsp');
+                 ShowHTML('          <A class="HL" HREF="'.$w_dir.$w_pagina.'envio&R='.$w_pagina.$par.'&O=V&w_chave='.f($row,'sq_siw_solicitacao').'&w_tramite='.f($row,'sq_siw_tramite').'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Envia a demanda para outro responsável.">EN</A>&nbsp');
               } else {
                 ShowHTML('          ---&nbsp');
               } 
@@ -1109,7 +1120,7 @@ function Anexos() {
   if ($O=='L') {
     // Exibe a quantidade de registros apresentados na listagem e o cabeçalho da tabela de listagem 
     ShowHTML('<tr><td><a accesskey="I" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_chave='.$w_chave.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
-    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
@@ -1117,7 +1128,7 @@ function Anexos() {
     ShowHTML('          <td><b>Descrição</td>');
     ShowHTML('          <td><b>Tipo</td>');
     ShowHTML('          <td><b>KB</td>');
-    ShowHTML('          <td class="remover"><b>Operações</td>');
+    ShowHTML('          <td><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       // Se não foram selecionados registros, exibe mensagem 

@@ -67,7 +67,7 @@ $w_dir          = 'cl_pitce/';
 $w_troca        = upper($_REQUEST['w_troca']);
 
 // Verifica se o usuário está autenticado
-if ($_SESSION['LOGON']!='Sim') { EncerraSessao(); }
+if ($_SESSION['LOGON']!='Sim') EncerraSessao();
 
 // Declaração de variáveis
 $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
@@ -365,7 +365,7 @@ function Gerencial() {
     if ($O=='L' && $w_embed != 'WORD') {
       ShowHTML('<tr><td><table border=0 cellpadding=0 cellspacing=0 width="100%"><tr valign="bottom">');
       ShowHTML('    <td>');
-      if (MontaFiltro('GET')>'') {
+      if (strpos(str_replace('p_ordena','w_ordena',MontaFiltro('GET')),'p_')) {
         ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u><font color="#BC5100">F</u>iltrar (Ativo)</a></font>');
       } else {
         ShowHTML('                         <a accesskey="F" class="SS" href="'.$w_dir.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=P&P1='.$P1.'&P2='.$P2.'&P3=1&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'"><u>F</u>iltrar (Inativo)</a>');
