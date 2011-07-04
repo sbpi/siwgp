@@ -243,6 +243,9 @@ function Rel_Executivo() {
                   f($row1,'sq_siw_solicitacao'), $p_objeto, $p_pais, $p_regiao, $p_uf, $p_cidade, $p_usu_resp,
                   $p_uorg_resp, $p_internas, $p_prazo, $p_fase, $p_sqcc, f($row1,'sq_siw_solicitacao'), $p_atividade, 
                   null, null, $p_empenho, $p_processo);
+              
+              $RS3 = SortArray($RS3,'codigo_interno','asc','nm_solic','asc');              
+              
               if (count($RS3)==0) {
                 if ($p_projeto=='S') ShowHTML('          <tr><td colspan="15" align="center"><b>Nenhum projeto cadastrado neste programa</b></td></tr>');
               } else {
