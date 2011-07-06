@@ -750,42 +750,44 @@ function corrigeCar($str) {
 // =========================================================================
 // Montagem da URL com os parâmetros de filtragem
 // -------------------------------------------------------------------------
-function MontaFiltro($p_method) {
+function MontaFiltro($p_method,$p_session=false) {
   extract($GLOBALS);
-  if (upper($p_method)=='GET' || upper($p_method)=='POST') {
-    $l_string='';
-    foreach ($_POST as $l_Item => $l_valor) {
-      if (substr($l_Item,0,2)=='p_' && $l_valor>'') {
-        if (upper($p_method)=='GET') {
-          if (is_array($_POST[$l_Item])) {
-            $l_string .= '&'.$l_Item.'='.explodeArray($_POST[$l_Item]);
-          } else {
-            $l_string .= '&'.$l_Item.'='.$l_valor;
+  if (!$p_session) {
+    if (upper($p_method)=='GET' || upper($p_method)=='POST') {
+      $l_string='';
+      foreach ($_POST as $l_Item => $l_valor) {
+        if (substr($l_Item,0,2)=='p_' && $l_valor>'') {
+          if (upper($p_method)=='GET') {
+            if (is_array($_POST[$l_Item])) {
+              $l_string .= '&'.$l_Item.'='.explodeArray($_POST[$l_Item]);
+            } else {
+              $l_string .= '&'.$l_Item.'='.$l_valor;
+            }
           }
-        }
-        elseif (upper($p_method)=='POST') {
-          if (is_array($_POST[$l_Item])) {
-            $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.explodeArray($_POST[$l_Item]).'">';
-          } else {
-            $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+          elseif (upper($p_method)=='POST') {
+            if (is_array($_POST[$l_Item])) {
+              $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.explodeArray($_POST[$l_Item]).'">';
+            } else {
+              $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+            }
           }
         }
       }
-    }
-    foreach ($_GET as $l_Item => $l_valor) {
-      if (substr($l_Item,0,2)=='p_' && $l_valor>'') {
-        if (upper($p_method)=='GET') {
-          if (is_array($_GET[$l_Item])) {
-            $l_string .= '&'.$l_Item.'='.explodeArray($_GET[$l_Item]);
-          } else {
-            $l_string .= '&'.$l_Item.'='.$l_valor;
+      foreach ($_GET as $l_Item => $l_valor) {
+        if (substr($l_Item,0,2)=='p_' && $l_valor>'') {
+          if (upper($p_method)=='GET') {
+            if (is_array($_GET[$l_Item])) {
+              $l_string .= '&'.$l_Item.'='.explodeArray($_GET[$l_Item]);
+            } else {
+              $l_string .= '&'.$l_Item.'='.$l_valor;
+            }
           }
-        }
-        elseif (upper($p_method)=='POST') {
-          if (is_array($_GET[$l_Item])) {
-            $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.explodeArray($_GET[$l_Item]).'">';
-          } else {
-            $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+          elseif (upper($p_method)=='POST') {
+            if (is_array($_GET[$l_Item])) {
+              $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.explodeArray($_GET[$l_Item]).'">';
+            } else {
+              $l_string .= '<INPUT TYPE="HIDDEN" NAME="'.$l_Item.'" VALUE="'.$l_valor.'">';
+            }
           }
         }
       }

@@ -286,6 +286,7 @@ function Usuarios() {
   } elseif ($O=='P') {
     if($P2==1) AbreForm('Form','mod_sg/relatorios.php?par=Rel_Permissao','POST',"return(Validacao(this));",'Relatorio Permissao',$P1,$P2,$P3,$P4,$TP,$SG,$R,'L');
     else       AbreForm('Form',$w_pagina.$par,'POST',"return(Validacao(this));",null,$P1,$P2,1,$P4,$TP,$SG,$R,'L');
+    ShowHTML(montaFiltro('POST',true));
     ShowHTML('<INPUT type="hidden" name="w_cliente" value="'.$w_cliente.'">');
 
     ShowHTML('<tr bgcolor="'.$conTrBgColor.'"><td align="center"><div align="justify"><font size=2>Informe nos campos abaixo os valores que deseja filtrar e clique sobre o botão <i>Aplicar filtro</i>. Clicando sobre o botão <i>Remover filtro</i>, o filtro existente será apagado.</div><hr>');
@@ -1325,6 +1326,7 @@ function Menu() {
   } elseif ($O=='P') {
 
     AbreForm('Form',$w_pagina.$par,'POST',"return(Validacao(this));",null,$P1,$P2,$P3,$P4,$TP,$SG,$R,'L');
+    ShowHTML(montaFiltro('POST',true));
     ShowHTML('<INPUT type="hidden" name="w_cliente" value="'.$w_cliente.'">');
 
     ShowHTML('<tr bgcolor="'.$conTrBgColor.'"><td><div align="justify"><font size=2>Informe nos campos abaixo os valores que deseja filtrar e clique sobre o botão <i>Aplicar filtro</i>. Clicando sobre o botão <i>Remover filtro</i>, o filtro existente será apagado.</div><hr>');

@@ -15,7 +15,7 @@ function montaRelatorioXLS($conteudo = null){
   $conteudo = str_ireplace ('<img', '<x', str_replace ('</img', '</x', $conteudo));
   
   $conteudo = preg_replace("(<td(.class=(\"?)remover(\"?).*?)>(.*?)</td>)Ssi","",$conteudo);
-  $body .= headerWord();
+  $body .= headerWord('PORTRAIT');
   $body.=$conteudo."\r\n";
   
   

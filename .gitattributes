@@ -101,8 +101,15 @@ fontes/classes/jpgraph/jpgraph_regstat.php -text
 fontes/classes/jpgraph/jpgraph_scatter.php -text
 fontes/classes/jpgraph/jpgraph_stock.php -text
 fontes/classes/ldap/ldap.php -text
+fontes/classes/mail/basic_sasl_client.php -text
+fontes/classes/mail/cram_md5_sasl_client.php -text
+fontes/classes/mail/digest_sasl_client.php -text
 fontes/classes/mail/email_message.php -text
 fontes/classes/mail/inc_cPHPezMail.php -text
+fontes/classes/mail/login_sasl_client.php -text
+fontes/classes/mail/ntlm_sasl_client.php -text
+fontes/classes/mail/plain_sasl_client.php -text
+fontes/classes/mail/sasl.php -text
 fontes/classes/mail/smtp.php -text
 fontes/classes/mail/smtp_message.php -text
 fontes/classes/mailAlternative/ChangeLog.txt -text

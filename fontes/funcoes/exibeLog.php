@@ -2,53 +2,55 @@
 function exibeLog($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
   extract($GLOBALS,EXTR_PREFIX_SAME,'local');
 
-  $l_html.=chr(13). "<script language='JavaScript'>";
-  $l_html.=chr(13). "$(function(){";
-  $l_html.=chr(13). "  $('#enclista').css('display','none');";
-  $l_html.=chr(13). '  $(\'#colxenc\').html(\'<img src="images/expandir.gif">\');';      
-  $l_html.=chr(13). "  $('#encanot').css('display','none');";
-  $l_html.=chr(13). '  $(\'#colxanot\').html(\'<img src="images/expandir.gif">\');';      
-  $l_html.=chr(13). "  $('#encver').css('display','none');";
-  $l_html.=chr(13). '  $(\'#colxver\').html(\'<img src="images/expandir.gif">\');';      
+  if ($l_formato=='HTML') {
+    $l_html.=chr(13). "<script type=\"text/javascript\" language=\"JavaScript\">";
+    $l_html.=chr(13). "$(function(){";
+    $l_html.=chr(13). "  $('#enclista').css('display','none');";
+    $l_html.=chr(13). '  $(\'#colxenc\').html(\'<img src="images/expandir.gif">\');';
+    $l_html.=chr(13). "  $('#encanot').css('display','none');";
+    $l_html.=chr(13). '  $(\'#colxanot\').html(\'<img src="images/expandir.gif">\');';
+    $l_html.=chr(13). "  $('#encver').css('display','none');";
+    $l_html.=chr(13). '  $(\'#colxver\').html(\'<img src="images/expandir.gif">\');';
 
-  $l_html.=chr(13). "  $('#encaminhamentos').click(function(event) {";
-  $l_html.=chr(13). "    event.preventDefault();";
-  $l_html.=chr(13). "    $('#enclista').slideToggle('slow');";
-  $l_html.=chr(13). '    if($("#colxenc").html().indexOf("expandir")>-1) {';
-  $l_html.=chr(13). '      $(\'#colxenc\').html(\'<img src="images/colapsar.gif">\');';
-  $l_html.=chr(13). '    }else{';
-  $l_html.=chr(13). '      $(\'#colxenc\').html(\'<img src="images/expandir.gif">\');';
-  $l_html.=chr(13). '    }';
-  $l_html.=chr(13). '  });';
+    $l_html.=chr(13). "  $('#encaminhamentos').click(function(event) {";
+    $l_html.=chr(13). "    event.preventDefault();";
+    $l_html.=chr(13). "    $('#enclista').slideToggle('slow');";
+    $l_html.=chr(13). '    if($("#colxenc").html().indexOf("expandir")>-1) {';
+    $l_html.=chr(13). '      $(\'#colxenc\').html(\'<img src="images/colapsar.gif">\');';
+    $l_html.=chr(13). '    }else{';
+    $l_html.=chr(13). '      $(\'#colxenc\').html(\'<img src="images/expandir.gif">\');';
+    $l_html.=chr(13). '    }';
+    $l_html.=chr(13). '  });';
 
-  $l_html.=chr(13). "  $('#anotacoes').click(function(event) {";
-  $l_html.=chr(13). "    event.preventDefault();";
-  $l_html.=chr(13). "    $('#encanot').slideToggle('slow');";
-  $l_html.=chr(13). '    if($("#colxanot").html().indexOf("expandir")>-1) {';
-  $l_html.=chr(13). '      $(\'#colxanot\').html(\'<img src="images/colapsar.gif">\');';
-  $l_html.=chr(13). '    }else{';
-  $l_html.=chr(13). '      $(\'#colxanot\').html(\'<img src="images/expandir.gif">\');';
-  $l_html.=chr(13). '    }';
-  $l_html.=chr(13). '  });';
+    $l_html.=chr(13). "  $('#anotacoes').click(function(event) {";
+    $l_html.=chr(13). "    event.preventDefault();";
+    $l_html.=chr(13). "    $('#encanot').slideToggle('slow');";
+    $l_html.=chr(13). '    if($("#colxanot").html().indexOf("expandir")>-1) {';
+    $l_html.=chr(13). '      $(\'#colxanot\').html(\'<img src="images/colapsar.gif">\');';
+    $l_html.=chr(13). '    }else{';
+    $l_html.=chr(13). '      $(\'#colxanot\').html(\'<img src="images/expandir.gif">\');';
+    $l_html.=chr(13). '    }';
+    $l_html.=chr(13). '  });';
 
-  $l_html.=chr(13). "  $('#versoes').click(function(event) {";
-  $l_html.=chr(13). "    event.preventDefault();";
-  $l_html.=chr(13). "    $('#encver').slideToggle('slow');";
-  $l_html.=chr(13). '    if($("#colxver").html().indexOf("expandir")>-1) {';
-  $l_html.=chr(13). '      $(\'#colxver\').html(\'<img src="images/colapsar.gif">\');';
-  $l_html.=chr(13). '    }else{';
-  $l_html.=chr(13). '      $(\'#colxver\').html(\'<img src="images/expandir.gif">\');';
-  $l_html.=chr(13). '    }';
-  $l_html.=chr(13). '  });';
+    $l_html.=chr(13). "  $('#versoes').click(function(event) {";
+    $l_html.=chr(13). "    event.preventDefault();";
+    $l_html.=chr(13). "    $('#encver').slideToggle('slow');";
+    $l_html.=chr(13). '    if($("#colxver").html().indexOf("expandir")>-1) {';
+    $l_html.=chr(13). '      $(\'#colxver\').html(\'<img src="images/colapsar.gif">\');';
+    $l_html.=chr(13). '    }else{';
+    $l_html.=chr(13). '      $(\'#colxver\').html(\'<img src="images/expandir.gif">\');';
+    $l_html.=chr(13). '    }';
+    $l_html.=chr(13). '  });';
 
-  $l_html.=chr(13). '});';
-  $l_html.=chr(13). '</script>';
+    $l_html.=chr(13). '});';
+    $l_html.=chr(13). '</script>';
+  }
   
   // Anotações
   $SQL = new db_getSolicLog; $RS_Log = $SQL->getInstanceOf($dbms,$l_chave,null,1,'LISTA');
   $RS_Log = SortArray($RS_Log,'phpdt_data','desc','sq_siw_solic_log','desc');
   if (count($RS_Log)>0) {
-    $l_html.=chr(13).'      <tr id="anotacoes"><td colspan="2"><br><span id="colxanot"></span><font size="2"><b>ANOTAÇÕES<hr NOSHADE color=#000000 SIZE=1></b></font></td></tr>';
+    $l_html.=chr(13).'      <tr id="anotacoes"><td colspan="2"><br><span id="colxanot"></span><font size="2"><b>ANOTAÇÕES</b></font><hr NOSHADE color=#000000 SIZE=1 /></td></tr>';
     $l_html.=chr(13).'      <tr><td colspan="2" align="center">';
     $l_html.=chr(13).'        <table id="encanot" width="100%"  border="1" bordercolor="#00000">';    
     $l_html.=chr(13).'          <tr align="center">';
@@ -90,7 +92,7 @@ function exibeLog($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
   $SQL = new db_getSolicLog; $RS_Log = $SQL->getInstanceOf($dbms,$l_chave,null,2,'LISTA');
   $RS_Log = SortArray($RS_Log,'phpdt_data','desc','sq_siw_solic_log','desc');
   if (count($RS_Log)>0) {
-      $l_html.=chr(13).'      <tr id="versoes"><td colspan="2"><br><span id="colxver"></span><font size="2"><b>VERSÕES<hr NOSHADE color=#000000 SIZE=1></b></font></td></tr>';
+      $l_html.=chr(13).'      <tr id="versoes"><td colspan="2"><br><span id="colxver"></span><font size="2"><b>VERSÕES</b></font><hr NOSHADE color=#000000 SIZE=1 /></td></tr>';
     $l_html.=chr(13).'      <tr><td colspan="2" align="center">';
     $l_html.=chr(13).'        <table id="encver" width="100%"  border="1" bordercolor="#00000">';    
     $l_html.=chr(13).'          <tr align="center">';
@@ -118,7 +120,7 @@ function exibeLog($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
   // Encaminhamentos
   $SQL = new db_getSolicLog; $RS_Log = $SQL->getInstanceOf($dbms,$l_chave,null,0,'LISTA');
   $RS_Log = SortArray($RS_Log,'phpdt_data','desc','sq_siw_solic_log','desc');
-  $l_html.=chr(13).'      <tr id="encaminhamentos"><td colspan="2"><br><span id="colxenc"></span><font size="2"><b>ENCAMINHAMENTOS<hr NOSHADE color=#000000 SIZE=1></b></font></td></tr>';
+  $l_html.=chr(13).'      <tr id="encaminhamentos"><td colspan="2"><br><span id="colxenc"></span><font size="2"><b>ENCAMINHAMENTOS</b></font><hr NOSHADE color=#000000 SIZE=1 /></td></tr>';
   $l_html.=chr(13).'      <tr><td colspan="2" align="center">';
   $l_html.=chr(13).'        <table id="enclista" width="100%"  border="1" bordercolor="#00000">';    
   $l_html.=chr(13).'          <tr align="center">';
@@ -149,12 +151,12 @@ function exibeLog($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
               if ($j==0) {
                 $w_tramite_resp = f($row2,'nome_resumido');
                 if ($l_formato=='HTML') $l_html .= chr(13).ExibePessoa($w_dir_volta,$w_cliente,f($row2,'sq_pessoa'),$TP,f($row2,'nome_resumido'));
-                else                    $l_html.=chr(13).f($row2,'nome_resumido').'</td>';
+                else                    $l_html.=chr(13).f($row2,'nome_resumido');
                 $j = 1;
               } else {
                 if (strpos($w_tramite_resp,f($row_log,'nome_resumido'))===false) {
                   if ($l_formato=='HTML') $l_html .= chr(13).', '.ExibePessoa($w_dir_volta,$w_cliente,f($row2,'sq_pessoa'),$TP,f($row2,'nome_resumido'));
-                  else                    $l_html.=chr(13).', '.f($row2,'nome_resumido').'</td>';
+                  else                    $l_html.=chr(13).', '.f($row2,'nome_resumido');
                 }
               }
             } 

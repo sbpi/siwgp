@@ -80,12 +80,17 @@ function geraGraficoGoogle($l_titulo, $l_sigla, $l_grafico, $l_x, $l_y, $l_encod
   
   // Verifica se deve ser exibido rótulo com valor de cada barra
   $l_rotulo = true;
+  $cols = 0;
   foreach($l_data as $k => $v) {
-    if (strlen($v) > 7) { 
-      // Se valor tiver mais que seis posições, não mostra o valor da barra pois "encavala"
-      $l_rotulo = false; 
-      break; 
-    }
+    $cols++;
+  }
+  $lim = 19 - (2 * $cols);
+  foreach ($l_data as $k => $v) {
+      if (strlen(strval($v)) > $lim) {
+        // Se valor tiver mais que seis posições, não mostra o valor da barra pois "encavala"
+        $l_rotulo = false;
+        break;
+      }
   }
   
     $graph->Data->addData($l_data);

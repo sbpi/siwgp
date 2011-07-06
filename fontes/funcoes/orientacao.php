@@ -62,6 +62,8 @@ ShowHTML('<script src="'.$conRootSIW.'js/funcoes.js"></script>');
        
         if (document.temp.opcao.value=='W') {
           window.location.href =  $("#word").val()+"&orientacao=" + orientacao;
+        } else if (document.temp.opcao.value=='E') {
+          window.location.href =  $("#excel").val()+"&orientacao=" + orientacao;
         } else {
           window.open( $("#pdf").val()+"&orientacao=" + orientacao ,'pdf','resizable=yes,width=700,height=500');
         }
