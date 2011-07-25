@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      ORACLE Version 9i                            */
-/* Created on:     19/04/2011 09:48:08                          */
+/* Created on:     25/07/2011 14:15:58                          */
 /*==============================================================*/
 
 
@@ -193,6 +193,8 @@ create sequence SQ_SOLIC_RECURSO;
 create sequence SQ_SOLIC_RECURSO_ALOCACAO;
 
 create sequence SQ_SOLIC_RECURSO_LOG;
+
+create sequence SQ_SOLIC_SITUACAO;
 
 create sequence SQ_SP_PARAM;
 
@@ -9988,6 +9990,92 @@ create index IN_SIWSOLRECLOG_PESSOA on SIW_SOLIC_RECURSO_LOG (
 );
 
 /*==============================================================*/
+/* Table: SIW_SOLIC_SITUACAO                                    */
+/*==============================================================*/
+create table SIW_SOLIC_SITUACAO  (
+   SQ_SOLIC_SITUACAO    NUMBER(18)                      not null,
+   SQ_SIW_SOLICITACAO   NUMBER(18)                      not null,
+   SQ_PESSOA            NUMBER(18)                      not null,
+   INICIO               DATE                            not null,
+   FIM                  DATE                            not null,
+   SITUACAO             VARCHAR2(1000)                  not null,
+   PROGRESSOS           VARCHAR2(1000),
+   PASSOS               VARCHAR2(1000),
+   ULTIMA_ALTERACAO     DATE                           default sysdate not null,
+   constraint PK_SIW_SOLIC_SITUACAO primary key (SQ_SOLIC_SITUACAO)
+);
+
+comment on table SIW_SOLIC_SITUACAO is
+'Registra reportes periódicos sobre a situação da solicitação.';
+
+comment on column SIW_SOLIC_SITUACAO.SQ_SOLIC_SITUACAO is
+'Chave de SIW_SOLIC_SITUACAO.';
+
+comment on column SIW_SOLIC_SITUACAO.SQ_SIW_SOLICITACAO is
+'Chave de SIW_SOLICITACAO indicando a que solicitação o registro está ligado.';
+
+comment on column SIW_SOLIC_SITUACAO.SQ_PESSOA is
+'Chave de CO_PESSOA. Usuário responsável pela última alteração no registro.';
+
+comment on column SIW_SOLIC_SITUACAO.INICIO is
+'Início do período de reporte.';
+
+comment on column SIW_SOLIC_SITUACAO.FIM is
+'Término do período de reporte.';
+
+comment on column SIW_SOLIC_SITUACAO.SITUACAO is
+'Comentários gerais e pontos de atenção.';
+
+comment on column SIW_SOLIC_SITUACAO.PROGRESSOS is
+'Principais progressos.';
+
+comment on column SIW_SOLIC_SITUACAO.PASSOS is
+'Próximos passos.';
+
+comment on column SIW_SOLIC_SITUACAO.ULTIMA_ALTERACAO is
+'Data de última alteração do registro.';
+
+/*==============================================================*/
+/* Index: IN_SIWSOLSIT_INICIO                                   */
+/*==============================================================*/
+create index IN_SIWSOLSIT_INICIO on SIW_SOLIC_SITUACAO (
+   INICIO ASC,
+   SQ_SOLIC_SITUACAO ASC
+);
+
+/*==============================================================*/
+/* Index: IN_SIWSOLSIT_FIM                                      */
+/*==============================================================*/
+create index IN_SIWSOLSIT_FIM on SIW_SOLIC_SITUACAO (
+   FIM ASC,
+   SQ_SOLIC_SITUACAO ASC
+);
+
+/*==============================================================*/
+/* Index: IN_SIWSOLSIT_ALTER                                    */
+/*==============================================================*/
+create index IN_SIWSOLSIT_ALTER on SIW_SOLIC_SITUACAO (
+   ULTIMA_ALTERACAO ASC,
+   SQ_SOLIC_SITUACAO ASC
+);
+
+/*==============================================================*/
+/* Index: IN_SIWSOLSIT_PESSOA                                   */
+/*==============================================================*/
+create index IN_SIWSOLSIT_PESSOA on SIW_SOLIC_SITUACAO (
+   SQ_PESSOA ASC,
+   SQ_SOLIC_SITUACAO ASC
+);
+
+/*==============================================================*/
+/* Index: IN_SIWSOLSIT_SOLIC                                    */
+/*==============================================================*/
+create index IN_SIWSOLSIT_SOLIC on SIW_SOLIC_SITUACAO (
+   SQ_SIW_SOLICITACAO ASC,
+   SQ_SOLIC_SITUACAO ASC
+);
+
+/*==============================================================*/
 /* Table: SIW_SOLIC_VINCULO                                     */
 /*==============================================================*/
 create table SIW_SOLIC_VINCULO  (
@@ -11854,6 +11942,14 @@ alter table SIW_SOLIC_RECURSO_LOG
 alter table SIW_SOLIC_RECURSO_LOG
    add constraint FK_SIWSOLRECLOG_SIWSOLREC foreign key (SQ_SOLIC_RECURSO)
       references SIW_SOLIC_RECURSO (SQ_SOLIC_RECURSO);
+
+alter table SIW_SOLIC_SITUACAO
+   add constraint FK_SIWSOLSIT_COPES foreign key (SQ_PESSOA)
+      references CO_PESSOA (SQ_PESSOA);
+
+alter table SIW_SOLIC_SITUACAO
+   add constraint FK_SIWSOLSIT_SIWSOL foreign key (SQ_SIW_SOLICITACAO)
+      references SIW_SOLICITACAO (SQ_SIW_SOLICITACAO);
 
 alter table SIW_SOLIC_VINCULO
    add constraint FK_SIWSOLVIN_SIWMEN foreign key (SQ_MENU)
