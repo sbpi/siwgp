@@ -1358,8 +1358,8 @@ function Rel_Projeto() {
           $w_Disabled = ' DISABLED ';
           ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_risco" value="S" onclick="javascript:marcaRisco();"> Restrições</td>');
         }
-        if ($_REQUEST['p_cf']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_cf" value="S"> Pacotes impactados</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_cf" value="S"> Pacotes impactados</td>');
-        if ($_REQUEST['p_tf']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_tf" value="S"> Tarefas vinculadas</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_tf" value="S"> Tarefas vinculadas</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_cf" value="S"'.(($_REQUEST['p_cf']) ? ' checked' : '').'> Pacotes impactados</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_tf" value="S"'.(($_REQUEST['p_tf']) ? ' checked' : '').'> Tarefas vinculadas</td>');
       }
       elseif (strpos(f($row,'sigla'),'INTERES')!==false)   ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_interes" value="S"'.(($_REQUEST['p_interes']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
       elseif (strpos(f($row,'sigla'),'RESP')!==false)      ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_resp" value="S"'.(($_REQUEST['p_resp']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
@@ -1378,7 +1378,7 @@ function Rel_Projeto() {
       $w_Disabled = ' DISABLED ';
       ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_sinal" value="S" onclick="javascript:marcaSinal();"> Sinalizadores </td>');
     }
-    ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_legenda" value="S"'.((($_REQUEST['p_legenda'])) ? 'checked' : '').'> Legenda dos sinalizadores </td>');
+    ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_legenda" value="S"'.((($_REQUEST['p_legenda'])) ? ' checked' : '').'> Legenda dos sinalizadores </td>');
     ShowHTML('      <tr><td align="center" colspan=2><hr>');
     ShowHTML('            <input class="STB" type="submit" name="Botao" value="Exibir">');
     ShowHTML('          </td>');
@@ -1490,11 +1490,13 @@ function Rel_Atualizacao() {
       if (nvl($_REQUEST['p_risco'],'')!='')     $w_cont += 1;
       if (nvl($_REQUEST['p_problema'],'')!='')  $w_cont += 1;
       if (nvl($_REQUEST['p_meta'],'')!='')      $w_cont += 1;
+      if (nvl($_REQUEST['p_ra'],'')!='')        $w_cont += 1;
       foreach ($RS as $row) {
         if ((strpos(f($row,'bloco'),'ETAPA')!==false && nvl($_REQUEST['p_etapa'],'')!='') ||
             (strpos(f($row,'bloco'),'RISCO')!==false && nvl($_REQUEST['p_risco'],'')!='') ||
             (strpos(f($row,'bloco'),'PROBLEMA')!==false && nvl($_REQUEST['p_problema'],'')!='') ||
-            (strpos(f($row,'bloco'),'META')!==false && nvl($_REQUEST['p_meta'],'')!='')
+            (strpos(f($row,'bloco'),'META')!==false && nvl($_REQUEST['p_meta'],'')!='') ||
+            (strpos(f($row,'bloco'),'REPORTE')!==false && nvl($_REQUEST['p_ra'],'')!='')
            ) {
           if ($w_atual!=f($row,'nm_projeto')) {
             $w_cor = ($w_cor==$conTrBgColor || $w_cor=='') ? $w_cor=$conTrAlternateBgColor : $w_cor=$conTrBgColor;
@@ -1507,6 +1509,7 @@ function Rel_Atualizacao() {
           if (substr(f($row,'bloco'),2)=='ETAPA') $w_label = $_REQUEST['p_etapa'];
           elseif (substr(f($row,'bloco'),2)=='RISCO') $w_label = $_REQUEST['p_risco'];
           elseif (substr(f($row,'bloco'),2)=='META') $w_label = $_REQUEST['p_meta'];
+          elseif (substr(f($row,'bloco'),2)=='REPORTE') $w_label = $_REQUEST['p_ra'];
           else $w_label = $_REQUEST['p_problema'];
           ShowHTML('       <td>'.$w_label.'</td>');
           ShowHTML('       <td align="center">'.nvl(formataDataEdicao(f($row,'phpdt_atualizacao'),3),'---').'</td>');

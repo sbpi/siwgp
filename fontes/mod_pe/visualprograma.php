@@ -446,6 +446,10 @@ function VisualPrograma($l_chave,$l_o,$l_usuario,$l_p1,$l_tipo,$l_identificacao,
 
   // Encaminhamentos
   if ($l_ocorrencia=='S') {
+    // Reportes de andamento
+    include_once($w_dir_volta.'funcoes/exibeSituacao.php');
+    $l_html .= exibeSituacao($l_chave,$l_O,$l_usuario,'PE',(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
+
     include_once($w_dir_volta.'funcoes/exibeLog.php');
     $l_html .= exibeLog($l_chave,$l_O,$l_usuario,$w_tramite_ativo,(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
   } 

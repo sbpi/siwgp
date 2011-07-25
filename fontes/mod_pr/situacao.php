@@ -109,7 +109,14 @@ function Situacao() {
   $w_chave_aux  = $_REQUEST['w_chave_aux'];
   
   $sql = new db_getSolicData; $RS = $sql->getInstanceOf($dbms,$w_chave,'PJGERAL');
-  $w_cabecalho   = f($RS,'titulo').' ('.$w_chave.')';  
+  if (count($RS)) {
+    $w_cabecalho   = 'PROJETO: '.f($RS,'titulo').' ('.$w_chave.')';
+    $w_tipo        = 'PR';
+  } else {
+    $sql = new db_getSolicData; $RS = $sql->getInstanceOf($dbms,$w_chave,'PEPROCAD');
+    $w_cabecalho   = 'PROGRAMA: '.f($RS,'titulo').' ('.$w_chave.')';
+    $w_tipo        = 'PE';
+  }
   
   if ($P1==1 || $P1==2) {
     $w_edita = true;
@@ -310,8 +317,16 @@ function VisualSituacao() {
   global $w_Disabled;
   $w_chave      = $_REQUEST['w_chave'];
   $w_chave_aux  = $_REQUEST['w_chave_aux'];
+
   $sql = new db_getSolicData; $RS = $sql->getInstanceOf($dbms,$w_chave,'PJGERAL');
-  $w_cabecalho  = f($RS,'titulo').' ('.$w_chave.')';
+  if (count($RS)) {
+    $w_cabecalho   = 'PROJETO: '.f($RS,'titulo').' ('.$w_chave.')';
+    $w_tipo        = 'PR';
+  } else {
+    $sql = new db_getSolicData; $RS = $sql->getInstanceOf($dbms,$w_chave,'PEPROCAD');
+    $w_cabecalho   = 'PROGRAMA: '.f($RS,'titulo').' ('.$w_chave.')';
+    $w_tipo        = 'PE';
+  }
 
   $sql = new db_getSolicSituacao; $RS = $sql->getInstanceOf($dbms,$w_chave,$w_chave_aux,null,null,null,null,null,null);
 

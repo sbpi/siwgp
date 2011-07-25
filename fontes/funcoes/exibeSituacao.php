@@ -1,5 +1,5 @@
 <?php
-function exibeSituacao($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
+function exibeSituacao($l_chave,$l_O,$l_usuario,$l_modulo,$l_formato) {
   extract($GLOBALS,EXTR_PREFIX_SAME,'local');
   include_once($w_dir_volta.'classes/sp/db_getSolicSituacao.php');
 
@@ -32,7 +32,9 @@ function exibeSituacao($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
     $l_html.=chr(13).'        <table id="encsit" width="100%"  border="1" bordercolor="#00000">';    
     $l_html.=chr(13).'          <tr align="center">';
     $l_html.=chr(13).'            <td bgColor="#f0f0f0"><b>Período</b></td>';
-    $l_html.=chr(13).'            <td bgColor="#f0f0f0" colspan="2"><b>IDE</b></td>';
+    if ($l_modulo=='PR') {
+      $l_html.=chr(13).'            <td bgColor="#f0f0f0" colspan="2"><b>IDE</b></td>';
+    }
     $l_html.=chr(13).'            <td bgColor="#f0f0f0"><b>Comentários gerais e pontos de atenção</b></td>';
     $l_html.=chr(13).'            <td bgColor="#f0f0f0"><b>Principais progressos</b></td>';
     $l_html.=chr(13).'            <td bgColor="#f0f0f0"><b>Próximos passos</b></td>';
@@ -43,7 +45,9 @@ function exibeSituacao($l_chave,$l_O,$l_usuario,$l_tramite_ativo,$l_formato) {
     foreach($RS_Sit as $row) {
       $l_html.=chr(13).'      <tr valign="top">';
       $l_html.=chr(13).'        <td width="1%" nowrap>&nbsp;'.FormataDataEdicao(f($row,'inicio'),5).' a '.FormataDataEdicao(f($row,'fim'),5).'&nbsp;</td>';
-      $l_html.=chr(13).'        <td>'.ExibeSmile('IDE',f($row,'ide')).'</td><td align="right" width="1" nowrap>'.formatNumber(f($row,'ide'),2).'%</td>';
+      if ($l_modulo=='PR') {
+        $l_html.=chr(13).'        <td>'.ExibeSmile('IDE',f($row,'ide')).'</td><td align="right" width="1" nowrap>'.formatNumber(f($row,'ide'),2).'%</td>';
+      }
       $l_html.=chr(13).'        <td>'.CRLF2BR(f($row,'situacao')).'</td>';
       $l_html.=chr(13).'        <td>'.CRLF2BR(Nvl(f($row,'progressos'),'---')).'</td>';
       $l_html.=chr(13).'        <td>'.CRLF2BR(Nvl(f($row,'passos'),'---')).'</td>';

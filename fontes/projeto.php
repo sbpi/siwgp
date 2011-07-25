@@ -69,8 +69,6 @@ include_once($w_dir_volta.'funcoes/selecaoInfluencia.php');
 include_once($w_dir_volta.'classes/sp/db_verificaAssinatura.php');
 include_once($w_dir_volta.'visualprojeto.php');
 
-//exibeVariaveis();
-
 // =========================================================================
 //  /Projeto.php
 // ------------------------------------------------------------------------
@@ -4542,7 +4540,7 @@ function EtapaLinhaAtiv($l_chave,$l_chave_aux,$l_titulo,$l_resp,$l_setor,$l_inic
       if($P4!=1) $l_ativ .= chr(13).'  <A class="HL" HREF="projetoativ.php?par=Visual&R=projetoativ.php?par=Visual&O=L&w_chave='.f($row,'sq_siw_solicitacao').'&w_tipo=&P1='.$P1.'&P2='.f($row,'sq_menu').'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Exibe as informações deste registro." target="_blank">'.f($row,'sq_siw_solicitacao').'</a>';
       else       $l_ativ .= chr(13).'  '.f($row,'sq_siw_solicitacao');
       if (strlen(Nvl(f($row,'assunto'),'-'))>50 && upper($l_assunto)!='COMPLETO') $l_ativ .= ' - '.substr(Nvl(f($row,'assunto'),'-'),0,50).'...';
-      else                                                                             $l_ativ .= ' - '.Nvl(f($row,'assunto'),'-');
+      else                                                                        $l_ativ .= ' - '.Nvl(f($row,'assunto'),'-');
       if($P4!=1) $l_ativ .= chr(13).'     <td>'.ExibePessoa(null,$w_cliente,f($row,'solicitante'),$TP,f($row,'nm_resp')).'</td>';
       else       $l_ativ .= chr(13).'     <td>'.f($row,'nm_resp').'</td>';
       $l_ativ .= chr(13).'     <td align="center">'.Nvl(formataDataEdicao(f($row,'inicio'),5),'-').'</td>';

@@ -929,7 +929,14 @@ function ExibePrograma($l_chave,$operacao,$l_usuario,$l_tipo) {
       $l_html .=chr(13).'                              <li>(*) Projeto sem orçamento previsto</li></ul></td></tr>';
     } 
   }
+  if(nvl($_REQUEST['p_ra'],'')!='') {
+    // Reportes de andamento
+    include_once($w_dir_volta.'funcoes/exibeSituacao.php');
+    $l_html .= exibeSituacao($l_chave,$l_O,$l_usuario,'PE',(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
+  }
+
   if(nvl($_REQUEST['p_tramite'],'')!='') {
+    // Encaminhamentos
     include_once($w_dir_volta.'funcoes/exibeLog.php');
     $l_html .= exibeLog($l_chave,$l_O,$l_usuario,$w_tramite_ativo,(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
   }
