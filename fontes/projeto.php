@@ -545,6 +545,7 @@ function Inicial() {
                 if (f($row,'sg_tramite')=='EA' || f($row,'sg_tramite')=='EE') {
                   ShowHTML('          <A class="HL" HREF="'.$w_pagina.'Anotacao&R='.$w_pagina.$par.'&O=V&w_chave='.f($row,'sq_siw_solicitacao').'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Registra anotações para o projeto, sem enviá-la.">AN</A>&nbsp');
                 } 
+                if ($P1==2) ShowHTML('          <A class="HL" HREF="mod_pr/situacao.php?par=Situacao&w_chave='.f($row,'sq_siw_solicitacao').'&R='.$w_pagina.$par.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&SG='.$SG.'&TP='.$TP.' - Situação atual&SG=SITSOLIC'.MontaFiltro('GET').'" title="Situação atual." target="Situacao">SA</A>&nbsp');
                 ShowHTML('          <A class="HL" HREF="'.$w_pagina.'Envio&R='.$w_pagina.$par.'&O=V&w_chave='.f($row,'sq_siw_solicitacao').'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Envia o projeto para outro responsável.">EN</A>&nbsp');
                 if (f($row,'sg_tramite')=='EE') {
                   ShowHTML('          <A class="HL" HREF="'.$w_pagina.'Concluir&R='.$w_pagina.$par.'&O=V&w_chave='.f($row,'sq_siw_solicitacao').'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Conclui a execução do projeto.">CO</A>&nbsp');
@@ -603,7 +604,7 @@ function Inicial() {
           ShowHTML('        <tr bgcolor="'.$conTrBgColor.'">');
           ShowHTML('          <td colspan=7 align="right"><b>Total da listagem&nbsp;</td>');
           ShowHTML('          <td align="right"><b>'.formatNumber($w_total).'&nbsp;</td>');
-          ShowHTML('          <td>&nbsp;</td>');
+          ShowHTML('          <td'.(($_SESSION['INTERNO']=='S' && $w_embed!='WORD') ? ' colspan="2"' : '').'>&nbsp;</td>');
           ShowHTML('        </tr>');
         } 
       } 
@@ -1854,7 +1855,7 @@ function AtualizaRubrica() {
     ShowHTML('          <td rowspan="2"><b>'.LinkOrdena('AF','aplicacao_financeira').'</b></td>');
     ShowHTML('          <td rowspan="2"><b>'.LinkOrdena('Ativo','ativo').'</b></td>');
     ShowHTML('          <td colspan="2"><b>Orçamento</b></td>');
-    if($O==L)ShowHTML('          <td class="remover" rowspan="2" valign="top"><b>Operação </b></td>');
+    if($O==L)ShowHTML('          <td rowspan="2" valign="top"><b>Operação </b></td>');
     ShowHTML('        </tr>');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
     ShowHTML('          <td align="center"><b>'.LinkOrdena('Previsto','total_previsto').'</b></td>');
@@ -1880,7 +1881,7 @@ function AtualizaRubrica() {
         ShowHTML('        <td align="center">'.f($row,'nm_ativo').'</td>');
         ShowHTML('        <td align="right">'.formatNumber(f($row,'total_previsto')).'</td>');
         ShowHTML('        <td align="right">'.formatNumber(f($row,'total_real')).'</td>');
-        ShowHTML('        <td class="remover">');
+        ShowHTML('        <td>');
         ShowHTML('          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=V&w_chave_rub='.f($row,'sq_projeto_rubrica').'&w_chave='.$w_chave.'&w_tipo=Volta&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.MontaFiltro('GET').'" title="Atualizar o orçamento realizado no cronograma desembolso." target="CronDes">Atualizar</A>&nbsp');
         ShowHTML('        </td>');
         ShowHTML('      </tr>');
@@ -3330,7 +3331,7 @@ function Recursos() {
     ShowHTML('          <td><b>Tipo</td>');
     ShowHTML('          <td><b>Nome</td>');
     ShowHTML('          <td><b>Finalidade</td>');
-    ShowHTML('          <td class="remover"><b>Operações</td>');
+    ShowHTML('          <td><b>Operações</td>');
     ShowHTML('        </tr>');
     if (count($RS)<=0) {
       // Se não foram selecionados registros, exibe mensagem
@@ -3530,7 +3531,7 @@ function Interessados() {
   if ($O=='L') {
     // Exibe a quantidade de registros apresentados na listagem e o cabeçalho da tabela de listagem
     ShowHTML('<tr><td><a accesskey="I" class="SS" href="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=I&w_chave='.$w_chave.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'"><u>I</u>ncluir</a>&nbsp;');
-    ShowHTML('    <td align="right">'.exportaOffice().'<b>Registros: '.count($RS));
+    ShowHTML('    <td align="right"><b>Registros: '.count($RS));
     ShowHTML('<tr><td align="center" colspan=3>');
     ShowHTML('    <TABLE class="tudo" WIDTH="100%" bgcolor="'.$conTableBgColor.'" BORDER="'.$conTableBorder.'" CELLSPACING="'.$conTableCellSpacing.'" CELLPADDING="'.$conTableCellPadding.'" BorderColorDark="'.$conTableBorderColorDark.'" BorderColorLight="'.$conTableBorderColorLight.'">');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
@@ -4366,7 +4367,7 @@ function EtapaLinha($l_chave, $l_chave_aux, $l_titulo, $l_resp, $l_setor, $l_ini
     if ($P4 != 1)
       $l_html .= chr(13) . '        <td width="1%" nowrap>' . ExibePessoa(null, $w_cliente, $l_sq_resp, $TP, $l_resp) . '</b></td>';
     else
-      $l_html .= chr(13) . '        <td>' . $l_resp . '</b><td>';
+      $l_html .= chr(13) . '        <td>' . $l_resp . '</td>';
   } else {
     $l_html .= chr(13) . '        <td colspan=3 align="right"><b>Linha resumo </b></td>';
   }
@@ -4509,7 +4510,7 @@ function EtapaLinhaAtiv($l_chave,$l_chave_aux,$l_titulo,$l_resp,$l_setor,$l_inic
   if($P4!=1 && $l_arquivo>0) $l_html .= chr(13).'        <td width="1%" nowrap align="center" >'.ExibeEtapa('V',$l_chave,$l_chave_aux,'Volta',10,$l_arquivo,$TP,$SG).'</td>';
   else             $l_html .= chr(13).'        <td width="1%" nowrap align="center" >'.$l_arquivo.'</td>';
   if ($l_oper == 'S') {
-    $l_html .= chr(13).'        <td class="remover" width="1%" valign="top" nowrap rowspan='.$l_row.'>';
+    $l_html .= chr(13).'        <td width="1%" nowrap align="top" nowrap rowspan='.$l_row.'>';
     // Se for listagem de etapas no cadastramento do projeto, exibe operações de alteração, exclusão e recursos
     if ($l_tipo == 'PROJETO') {
       $l_html .= chr(13).'          <A class="HL" HREF="'.$w_pagina.$par.'&R='.$w_pagina.$par.'&O=A&w_chave='.$l_chave.'&w_chave_aux='.$l_chave_aux.'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.'" title="Alterar">AL</A>&nbsp';

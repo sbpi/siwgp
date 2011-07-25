@@ -1054,8 +1054,12 @@ function VisualProjeto($l_chave,$l_O,$l_usuario,$l_tipo=null) {
     }
   }
   if ($l_O=='V' || $l_O=='T') {
-    // Encaminhamentos
     if($w_tipo_visao!=2) {
+      // Reportes de andamento
+      include_once($w_dir_volta.'funcoes/exibeSituacao.php');
+      $l_html .= exibeSituacao($l_chave,$l_O,$l_usuario,$w_tramite_ativo,(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
+
+    // Encaminhamentos
       include_once($w_dir_volta.'funcoes/exibeLog.php');
       $l_html .= exibeLog($l_chave,$l_O,$l_usuario,$w_tramite_ativo,(($l_tipo=='WORD') ? 'WORD' : 'HTML'));
     }

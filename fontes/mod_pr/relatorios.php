@@ -80,7 +80,6 @@ $w_dir          = 'mod_pr/';
 
 // Verifica se o usuário está autenticado
 if ($_SESSION['LOGON']!='Sim') EncerraSessao();
-
 // Declaração de variáveis
 $dbms = new abreSessao; $dbms = $dbms->getInstanceOf($_SESSION['DBMS']);
 
@@ -1310,12 +1309,12 @@ function Rel_Projeto() {
     ShowHTML('                                                 <input '.$w_Disabled.' accesskey="P" type="text" name="p_fim" class="sti" SIZE="10" MAXLENGTH="10" VALUE="'.$p_fim.'" onKeyDown="FormataData(this,event);" onKeyUp="SaltaCampo(this.form.name,this,10,event);">'.ExibeCalendario('Form','p_fim').'</td>');
     */
     ShowHTML('      <tr><td colspan=2><b>Informações a serem exibidas:');
-    if ($w_marca_bloco) ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="w_marca_bloco" value="S" onClick="javascript:MarcaTodosBloco();" TITLE="Marca todos os itens da relação" checked> Todas</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="w_marca_bloco" value="S" onClick="javascript:MarcaTodosBloco();" TITLE="Marca todos os itens da relação"> Todas</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="w_marca_bloco" value="S" onClick="javascript:MarcaTodosBloco();" TITLE="Marca todos os itens da relação"'.(($w_marca_bloco) ? 'checked' : '').'> Todas</td>');
     //Recupera as informações do sub-menu
     $sql = new db_getLinkSubMenu; $RS = $sql->getInstanceOf($dbms, $w_cliente, 'PJCAD');
     $RS = SortArray($RS,'ordem','asc'); 
     foreach ($RS as $row) {
-      if     (strpos(f($row,'sigla'),'ANEXO')!==false)    if ($_REQUEST['p_anexo']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_anexo" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_anexo" value="S"> '.f($row,'nome').'</td>');
+      if     (strpos(f($row,'sigla'),'ANEXO')!==false)    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_anexo" value="S"'.((($_REQUEST['p_anexo'])) ? 'checked' : '').'> '.f($row,'nome').'</td>');
       elseif (strpos(f($row,'sigla'),'AREAS')!==false) {
         if ($_REQUEST['p_partes']) {
           $w_Disabled = '';
@@ -1324,7 +1323,7 @@ function Rel_Projeto() {
           $w_Disabled = ' DISABLED ';
           ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_partes" value="S" onclick="javascript:marcaParte();"> '.f($row,'nome').'</td>');
         }
-        if ($_REQUEST['p_ca']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_ca" value="S"> Pacotes vinculados</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ca" value="S"> Pacotes vinculados</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ca" value="S"'.((($_REQUEST['p_ca'])) ? 'checked' : '').'> Pacotes vinculados</td>');
       } elseif (strpos(f($row,'sigla'),'GERAL')!==false)    {
         ShowHTML('          <tr><td colspan=2><INPUT disabled type="CHECKBOX" name="p_geral1" value="S" checked> '.f($row,'nome').'</td>');
         ShowHTML('<input type="hidden" name="p_geral" value="S">');
@@ -1336,12 +1335,12 @@ function Rel_Projeto() {
           $w_Disabled = ' DISABLED ';
           ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_qualit" value="S" onclick="javascript:marcaQualit();"> '.f($row,'nome').'</td>');
         }
-        if ($_REQUEST['p_os']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_os" value="S"> Objetivo Superior</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_os" value="S"> Objetivo Superior</td>');
-        if ($_REQUEST['p_oe']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_oe" value="S"> Objetivos Específicos</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_oe" value="S"> Objetivos Específicos</td>');
-        if ($_REQUEST['p_ee']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_ee" value="S"> Exclusões Específicas</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ee" value="S"> Exclusões Específicas</td>');
-        if ($_REQUEST['p_pr']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_pr" value="S"> Premissas</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_pr" value="S"> Premissas</td>');
-        if ($_REQUEST['p_re']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_re" value="S"> Restricões</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_re" value="S"> Restricões</td>');
-        if ($_REQUEST['p_ob']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_ob" value="S"> Observações</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ob" value="S"> Observações</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_os" value="S"'.(($_REQUEST['p_os']) ? ' checked' : '').'> Objetivo Superior</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_oe" value="S"'.(($_REQUEST['p_oe']) ? ' checked' : '').'> Objetivos Específicos</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ee" value="S"'.(($_REQUEST['p_ee']) ? ' checked' : '').'> Exclusões Específicas</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_pr" value="S"'.(($_REQUEST['p_pr']) ? ' checked' : '').'> Premissas</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_re" value="S"'.(($_REQUEST['p_re']) ? ' checked' : '').'> Restricões</td>');
+        ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_ob" value="S"'.(($_REQUEST['p_ob']) ? ' checked' : '').'> Observações</td>');
       } elseif (strpos(f($row,'sigla'),'ETAPA')!==false) {
         if ((!$_REQUEST['w_origem']) || $_REQUEST['p_etapa']) {
           $w_Disabled = '';
@@ -1362,16 +1361,16 @@ function Rel_Projeto() {
         if ($_REQUEST['p_cf']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_cf" value="S"> Pacotes impactados</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_cf" value="S"> Pacotes impactados</td>');
         if ($_REQUEST['p_tf']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_tf" value="S"> Tarefas vinculadas</td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_tf" value="S"> Tarefas vinculadas</td>');
       }
-      elseif (strpos(f($row,'sigla'),'INTERES')!==false)   if ($_REQUEST['p_interes']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_interes" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_interes" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'RESP')!==false)      if ($_REQUEST['p_resp']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_resp" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_resp" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'RECURSO')!==false)   if ($_REQUEST['p_recurso']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_recurso" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_recurso" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'RUBRICA')!==false)   if ($_REQUEST['p_rubrica']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_rubrica" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_rubrica" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'INDSOLIC')!==false)  if ($_REQUEST['p_indicador']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_indicador" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_indicador" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'METASOLIC')!==false) if ($_REQUEST['p_meta']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_meta" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_meta" value="S"> '.f($row,'nome').'</td>');
-      elseif (strpos(f($row,'sigla'),'RECSOLIC')!==false)  if ($_REQUEST['p_recurso']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_recurso" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_recurso" value="S"> '.f($row,'nome').'</td>');
-      //else if ($_REQUEST['p_'.lower(f($row,'sigla'))]) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_'.lower(f($row,'sigla')).'" value="S"> '.f($row,'nome').'</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_'.lower(f($row,'sigla')).'" value="S"> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'INTERES')!==false)   ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_interes" value="S"'.(($_REQUEST['p_interes']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'RESP')!==false)      ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_resp" value="S"'.(($_REQUEST['p_resp']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'RECURSO')!==false)   ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_recurso" value="S"'.(($_REQUEST['p_recurso']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'RUBRICA')!==false)   ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_rubrica" value="S"'.(($_REQUEST['p_rubrica']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'INDSOLIC')!==false)  ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_indicador" value="S"'.(($_REQUEST['p_indicador']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'METASOLIC')!==false) ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_meta" value="S"'.(($_REQUEST['p_meta']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
+      elseif (strpos(f($row,'sigla'),'RECSOLIC')!==false)  ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_recurso" value="S"'.(($_REQUEST['p_recurso']) ? ' checked' : '').'> '.f($row,'nome').'</td>');
     }
-    if ($_REQUEST['p_tramite']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_tramite" value="S"> Ocorrências e anotações</td>'); else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_tramite" value="S"> Ocorrências e anotações</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_ra" value="S"'.(($_REQUEST['p_ra']) ? ' checked' : '').'> Reportes de andamento</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_tramite" value="S"'.(($_REQUEST['p_tramite']) ? ' checked' : '').'> Ocorrências e anotações</td>');
     if ($_REQUEST['p_sinal']) {
       $w_Disabled = '';
       ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_sinal" value="S" onclick="javascript:marcaSinal();"> Sinalizadores </td>'); 
@@ -1379,7 +1378,7 @@ function Rel_Projeto() {
       $w_Disabled = ' DISABLED ';
       ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_sinal" value="S" onclick="javascript:marcaSinal();"> Sinalizadores </td>');
     }
-    if ($_REQUEST['p_legenda']) ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' checked type="CHECKBOX" name="p_legenda" value="S"> Legenda dos sinalizadores </td>'); else ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_legenda" value="S"> Legenda dos sinalizadores </td>');
+    ShowHTML('          <tr><td width="3%"><td><INPUT '.$w_Disabled.' type="CHECKBOX" name="p_legenda" value="S"'.((($_REQUEST['p_legenda'])) ? 'checked' : '').'> Legenda dos sinalizadores </td>');
     ShowHTML('      <tr><td align="center" colspan=2><hr>');
     ShowHTML('            <input class="STB" type="submit" name="Botao" value="Exibir">');
     ShowHTML('          </td>');

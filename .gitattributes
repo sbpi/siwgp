@@ -279,6 +279,7 @@ fontes/classes/sp/db_getSolicResp.php -text
 fontes/classes/sp/db_getSolicRestricao.php -text
 fontes/classes/sp/db_getSolicResultado.php -text
 fontes/classes/sp/db_getSolicRubrica.php -text
+fontes/classes/sp/db_getSolicSituacao.php -text
 fontes/classes/sp/db_getSolic_Vinculo.php -text
 fontes/classes/sp/db_getStateData.php -text
 fontes/classes/sp/db_getStateList.php -text
@@ -459,6 +460,7 @@ fontes/classes/sp/dml_putSolicInter.php -text
 fontes/classes/sp/dml_putSolicRecAlocacao.php -text
 fontes/classes/sp/dml_putSolicRecurso.php -text
 fontes/classes/sp/dml_putSolicRestricao.php -text
+fontes/classes/sp/dml_putSolicSituacao.php -text
 fontes/classes/sp/dml_putStoredProcedure.php -text
 fontes/classes/sp/dml_putTabela.php -text
 fontes/classes/sp/dml_putTipoArquivo.php -text
@@ -527,6 +529,7 @@ fontes/funcoes/cabecalhoWordSint.php -text
 fontes/funcoes/csshover.htc -text
 fontes/funcoes/envio.php -text
 fontes/funcoes/exibeLog.php -text
+fontes/funcoes/exibeSituacao.php -text
 fontes/funcoes/exibeTipoArquivo.php -text
 fontes/funcoes/formataDataXML.php -text
 fontes/funcoes/geragraficoflash.php -text
@@ -1163,6 +1166,7 @@ fontes/mod_pr/graficos.php -text
 fontes/mod_pr/project.php -text
 fontes/mod_pr/relatorios.php -text
 fontes/mod_pr/restricao.php -text
+fontes/mod_pr/situacao.php -text
 fontes/mod_pr/tabelas.php -text
 fontes/mod_rh/tabelas.php -text
 fontes/mod_sg/relatorios.php -text
@@ -1219,6 +1223,7 @@ sp/oracle/sp_ajustadataetapa.prc -text
 sp/oracle/sp_ajustapesoetapa.prc -text
 sp/oracle/sp_calculapercetapa.prc -text
 sp/oracle/sp_get10percentdays.prc -text
+sp/oracle/sp_getSolicSituacao.prc -text
 sp/oracle/sp_getaddressdata.prc -text
 sp/oracle/sp_getaddresslist.prc -text
 sp/oracle/sp_getaddressmenu.prc -text
@@ -1398,6 +1403,7 @@ sp/oracle/sp_getusuariotabs.prc -text
 sp/oracle/sp_getusuariotemp.prc -text
 sp/oracle/sp_getvinckinddata.prc -text
 sp/oracle/sp_getvinckindlist.prc -text
+sp/oracle/sp_putSolicSituacao.prc -text
 sp/oracle/sp_putanotacao.prc -text
 sp/oracle/sp_putarquivo.prc -text
 sp/oracle/sp_putarquivo_pe.prc -text
