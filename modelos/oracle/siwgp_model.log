@@ -1,0 +1,193 @@
+
+Conectado a: Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production
+Exportação executada no conjunto de caracteres de WE8MSWIN1252  e no conjunto de caracteres de AL16UTF16 NCHAR
+ OBS: dados (linhas) da tabela não serão exportados
+
+Sobre exportar usuários especificados ...
+. exportando objetos e ações procedurais anteriores ao esquema
+. exportando os nomes da biblioteca de função externa para usuário SIWGP 
+. exportando sinônimos do tipo PÚBLICO
+. exportando sinônimos do tipo privado
+. exportando definições de tipos de objeto para usuário SIWGP 
+Sobre exportar objetos de SIWGP ...
+. exportando vínculos de banco de dados
+. exportando números de seqüência
+. exportando definições de cluster
+. sobre exportar tabelas de SIWGP ... via Caminho Convencional ...
+. . exportando tabela                     CO_AGENCIA
+. . exportando tabela                       CO_BANCO
+. . exportando tabela                      CO_CIDADE
+. . exportando tabela                        CO_PAIS
+. . exportando tabela                      CO_PESSOA
+. . exportando tabela                CO_PESSOA_CONTA
+. . exportando tabela             CO_PESSOA_ENDERECO
+. . exportando tabela               CO_PESSOA_FISICA
+. . exportando tabela             CO_PESSOA_JURIDICA
+. . exportando tabela             CO_PESSOA_SEGMENTO
+. . exportando tabela             CO_PESSOA_TELEFONE
+. . exportando tabela                      CO_REGIAO
+. . exportando tabela                    CO_SEGMENTO
+. . exportando tabela               CO_TIPO_ENDERECO
+. . exportando tabela                 CO_TIPO_PESSOA
+. . exportando tabela               CO_TIPO_TELEFONE
+. . exportando tabela                CO_TIPO_VINCULO
+. . exportando tabela                          CO_UF
+. . exportando tabela              CO_UNIDADE_MEDIDA
+. . exportando tabela                     DC_ARQUIVO
+. . exportando tabela                      DC_COLUNA
+. . exportando tabela                   DC_DADO_TIPO
+. . exportando tabela                     DC_ESQUEMA
+. . exportando tabela            DC_ESQUEMA_ATRIBUTO
+. . exportando tabela              DC_ESQUEMA_INSERT
+. . exportando tabela              DC_ESQUEMA_SCRIPT
+. . exportando tabela              DC_ESQUEMA_TABELA
+. . exportando tabela                      DC_EVENTO
+. . exportando tabela                      DC_INDICE
+. . exportando tabela                 DC_INDICE_COLS
+. . exportando tabela                 DC_INDICE_TIPO
+. . exportando tabela                  DC_OCORRENCIA
+. . exportando tabela                   DC_PROCEDURE
+. . exportando tabela                  DC_PROC_PARAM
+. . exportando tabela                     DC_PROC_SP
+. . exportando tabela                 DC_PROC_TABELA
+. . exportando tabela                  DC_RELAC_COLS
+. . exportando tabela              DC_RELACIONAMENTO
+. . exportando tabela                     DC_SISTEMA
+. . exportando tabela                    DC_SP_PARAM
+. . exportando tabela                       DC_SP_SP
+. . exportando tabela                     DC_SP_TABS
+. . exportando tabela                     DC_SP_TIPO
+. . exportando tabela                 DC_STORED_PROC
+. . exportando tabela                      DC_TABELA
+. . exportando tabela                 DC_TABELA_TIPO
+. . exportando tabela                     DC_TRIGGER
+. . exportando tabela              DC_TRIGGER_EVENTO
+. . exportando tabela                     DC_USUARIO
+. . exportando tabela               DM_SEGMENTO_MENU
+. . exportando tabela                 DM_SEG_VINCULO
+. . exportando tabela                EO_AREA_ATUACAO
+. . exportando tabela               EO_DATA_ESPECIAL
+. . exportando tabela                   EO_INDICADOR
+. . exportando tabela          EO_INDICADOR_AFERICAO
+. . exportando tabela          EO_INDICADOR_AFERIDOR
+. . exportando tabela            EO_INDICADOR_AGENDA
+. . exportando tabela                 EO_LOCALIZACAO
+. . exportando tabela                     EO_RECURSO
+. . exportando tabela          EO_RECURSO_DISPONIVEL
+. . exportando tabela        EO_RECURSO_INDISPONIVEL
+. . exportando tabela                EO_RECURSO_MENU
+. . exportando tabela              EO_TIPO_INDICADOR
+. . exportando tabela                EO_TIPO_RECURSO
+. . exportando tabela                EO_TIPO_UNIDADE
+. . exportando tabela                     EO_UNIDADE
+. . exportando tabela             EO_UNIDADE_ARQUIVO
+. . exportando tabela                EO_UNIDADE_RESP
+. . exportando tabela                     GD_DEMANDA
+. . exportando tabela              GD_DEMANDA_ENVOLV
+. . exportando tabela             GD_DEMANDA_INTERES
+. . exportando tabela                 GD_DEMANDA_LOG
+. . exportando tabela             GD_DEMANDA_LOG_ARQ
+. . exportando tabela                GD_DEMANDA_TIPO
+. . exportando tabela                   PE_HORIZONTE
+. . exportando tabela                    PE_NATUREZA
+. . exportando tabela                    PE_OBJETIVO
+. . exportando tabela                       PE_PLANO
+. . exportando tabela                   PE_PLANO_ARQ
+. . exportando tabela             PE_PLANO_INDICADOR
+. . exportando tabela                  PE_PLANO_MENU
+. . exportando tabela                    PE_PROGRAMA
+. . exportando tabela                PE_PROGRAMA_LOG
+. . exportando tabela            PE_PROGRAMA_LOG_ARQ
+. . exportando tabela                     PE_UNIDADE
+. . exportando tabela              PJ_COMENTARIO_ARQ
+. . exportando tabela            PJ_ETAPA_COMENTARIO
+. . exportando tabela              PJ_ETAPA_CONTRATO
+. . exportando tabela               PJ_ETAPA_DEMANDA
+. . exportando tabela                PJ_ETAPA_MENSAL
+. . exportando tabela                     PJ_PROJETO
+. . exportando tabela              PJ_PROJETO_ENVOLV
+. . exportando tabela               PJ_PROJETO_ETAPA
+. . exportando tabela           PJ_PROJETO_ETAPA_ARQ
+. . exportando tabela             PJ_PROJETO_INTERES
+. . exportando tabela                 PJ_PROJETO_LOG
+. . exportando tabela             PJ_PROJETO_LOG_ARQ
+. . exportando tabela             PJ_PROJETO_RECURSO
+. . exportando tabela       PJ_PROJETO_REPRESENTANTE
+. . exportando tabela               PJ_RECURSO_ETAPA
+. . exportando tabela                     PJ_RUBRICA
+. . exportando tabela          PJ_RUBRICA_CRONOGRAMA
+. . exportando tabela                       PT_CAMPO
+. . exportando tabela                    PT_CONTEUDO
+. . exportando tabela                        PT_EIXO
+. . exportando tabela           PT_EXIBICAO_CONTEUDO
+. . exportando tabela                      PT_FILTRO
+. . exportando tabela                        PT_MENU
+. . exportando tabela                    PT_OPERADOR
+. . exportando tabela                    PT_PESQUISA
+. . exportando tabela                SG_AUTENTICACAO
+. . exportando tabela           SG_AUTENTICACAO_TEMP
+. . exportando tabela                 SG_PERFIL_MENU
+. . exportando tabela                 SG_PESSOA_MAIL
+. . exportando tabela                 SG_PESSOA_MENU
+. . exportando tabela               SG_PESSOA_MODULO
+. . exportando tabela              SG_PESSOA_UNIDADE
+. . exportando tabela              SG_TRAMITE_PESSOA
+. . exportando tabela                    SIW_ARQUIVO
+. . exportando tabela                    SIW_CLIENTE
+. . exportando tabela             SIW_CLIENTE_MODULO
+. . exportando tabela                 SIW_COORDENADA
+. . exportando tabela        SIW_COORDENADA_ENDERECO
+. . exportando tabela     SIW_COORDENADA_SOLICITACAO
+. . exportando tabela          SIW_ETAPA_INTERESSADO
+. . exportando tabela                       SIW_MAIL
+. . exportando tabela                 SIW_MAIL_ANEXO
+. . exportando tabela          SIW_MAIL_DESTINATARIO
+. . exportando tabela                       SIW_MENU
+. . exportando tabela               SIW_MENU_ARQUIVO
+. . exportando tabela              SIW_MENU_ENDERECO
+. . exportando tabela                 SIW_MENU_RELAC
+. . exportando tabela               SIW_META_ARQUIVO
+. . exportando tabela            SIW_META_CRONOGRAMA
+. . exportando tabela                    SIW_MOD_SEG
+. . exportando tabela                     SIW_MODULO
+. . exportando tabela                  SIW_RESTRICAO
+. . exportando tabela            SIW_RESTRICAO_ETAPA
+. . exportando tabela                SIW_SOLIC_APOIO
+. . exportando tabela              SIW_SOLIC_ARQUIVO
+. . exportando tabela            SIW_SOLIC_INDICADOR
+. . exportando tabela                SIW_SOLICITACAO
+. . exportando tabela    SIW_SOLICITACAO_INTERESSADO
+. . exportando tabela       SIW_SOLICITACAO_OBJETIVO
+. . exportando tabela                  SIW_SOLIC_LOG
+. . exportando tabela              SIW_SOLIC_LOG_ARQ
+. . exportando tabela                 SIW_SOLIC_META
+. . exportando tabela              SIW_SOLIC_RECURSO
+. . exportando tabela     SIW_SOLIC_RECURSO_ALOCACAO
+. . exportando tabela          SIW_SOLIC_RECURSO_LOG
+. . exportando tabela             SIW_SOLIC_SITUACAO
+. . exportando tabela              SIW_SOLIC_VINCULO
+. . exportando tabela                 SIW_TIPO_APOIO
+. . exportando tabela               SIW_TIPO_ARQUIVO
+. . exportando tabela                SIW_TIPO_EVENTO
+. . exportando tabela           SIW_TIPO_INTERESSADO
+. . exportando tabela                   SIW_TIPO_LOG
+. . exportando tabela             SIW_TIPO_RESTRICAO
+. . exportando tabela                    SIW_TRAMITE
+. . exportando tabela              SIW_TRAMITE_FLUXO
+. exportando sinônimos
+. exportando views
+. exportando procedimentos armazenados
+. exportando operadores
+. exportando restrições referenciais de integridade
+. exportando gatilhos
+. exportando tipos de índices
+. exportando índices funcionais, extensíveis e de bitmap
+. exportando ações contabilizáveis
+. exportando views materializadas
+. exportando logs de snapshot
+. exportando filas de serviço
+. exportando filhos e grupos de renovação
+. exportando dimensões
+. exportando objetos e ações procedurais posteriores ao esquema
+. exportando estatística
+Exportação encerrada com sucesso, sem advertências.
