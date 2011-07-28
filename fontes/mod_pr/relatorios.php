@@ -1608,9 +1608,10 @@ function Rel_Atualizacao() {
         }
       }
     }
-    if ($_REQUEST['p_risco'])    ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_risco" value="Riscos"> Riscos</td>');           else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_risco" value="Riscos"> Riscos</td>');
-    if ($_REQUEST['p_problema']) ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_problema" value="Problemas"> Problemas</td>');  else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_problema" value="Problemas"> Problemas</td>');
-    if ($_REQUEST['p_meta'])     ShowHTML('          <tr><td colspan=2><INPUT checked type="CHECKBOX" name="p_meta" value="Metas"> Metas</td>');              else ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_meta" value="Metas"> Metas</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_risco" value="Riscos"'.(($_REQUEST['p_risco']) ? ' checked' : '').'> Riscos</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_problema" value="Problemas"'.(($_REQUEST['p_problema']) ? ' checked' : '').'> Problemas</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_meta" value="Metas"'.(($_REQUEST['p_meta']) ? ' checked' : '').'> Metas</td>');
+    ShowHTML('          <tr><td colspan=2><INPUT type="CHECKBOX" name="p_ra" value="Reportes"'.(($_REQUEST['p_ra']) ? ' checked' : '').'> Reportes de andamento</td>');
     ShowHTML('      <tr><td align="center" colspan=2><hr>');
     ShowHTML('            <input class="STB" type="submit" name="Botao" value="Exibir">');
     ShowHTML('          </td>');
