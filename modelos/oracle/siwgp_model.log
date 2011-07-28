@@ -2,18 +2,19 @@
 Conectado a: Oracle Database 10g Express Edition Release 10.2.0.1.0 - Production
 Exportação executada no conjunto de caracteres de WE8MSWIN1252  e no conjunto de caracteres de AL16UTF16 NCHAR
  OBS: dados (linhas) da tabela não serão exportados
+ OBS: concessões em tabelas/views/seqüências/funções não serão exportadas
 
 Sobre exportar usuários especificados ...
 . exportando objetos e ações procedurais anteriores ao esquema
-. exportando os nomes da biblioteca de função externa para usuário SIWGP 
+. exportando os nomes da biblioteca de função externa para usuário MODELO_SIW 
 . exportando sinônimos do tipo PÚBLICO
 . exportando sinônimos do tipo privado
-. exportando definições de tipos de objeto para usuário SIWGP 
-Sobre exportar objetos de SIWGP ...
+. exportando definições de tipos de objeto para usuário MODELO_SIW 
+Sobre exportar objetos de MODELO_SIW ...
 . exportando vínculos de banco de dados
 . exportando números de seqüência
 . exportando definições de cluster
-. sobre exportar tabelas de SIWGP ... via Caminho Convencional ...
+. sobre exportar tabelas de MODELO_SIW ... via Caminho Convencional ...
 . . exportando tabela                     CO_AGENCIA
 . . exportando tabela                       CO_BANCO
 . . exportando tabela                      CO_CIDADE

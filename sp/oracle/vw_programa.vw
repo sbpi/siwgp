@@ -4,7 +4,7 @@ SELECT s.sq_siw_solicitacao,
        s.codigo_interno AS CODIGO,
        s.valor as valor_previsto,
        (s.fim - s.inicio) as cronograma,
-       (SELECT SUM(pre.peso) AS pesos
+       NVL((SELECT SUM(pre.peso) AS pesos
           FROM pj_projeto_etapa pre
          WHERE pre.sq_siw_solicitacao IN
                (SELECT so.sq_siw_solicitacao
@@ -15,7 +15,7 @@ SELECT s.sq_siw_solicitacao,
                    AND men.nome = 'Projetos'
                 CONNECT BY PRIOR so.sq_siw_solicitacao = so.sq_solic_pai
                  START WITH so.sq_siw_solicitacao = s.sq_siw_solicitacao)
-           AND pre.pacote_trabalho = 'S') as peso,
+           AND pre.pacote_trabalho = 'S'),0) as peso,
        (SELECT SUM(ss.valor)
           FROM siw_solicitacao ss
          WHERE ss.sq_siw_solicitacao IN
