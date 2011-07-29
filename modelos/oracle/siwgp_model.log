@@ -6,15 +6,15 @@ Exportação executada no conjunto de caracteres de WE8MSWIN1252  e no conjunto de
 
 Sobre exportar usuários especificados ...
 . exportando objetos e ações procedurais anteriores ao esquema
-. exportando os nomes da biblioteca de função externa para usuário MODELO_SIW 
+. exportando os nomes da biblioteca de função externa para usuário SIWGP_MODEL 
 . exportando sinônimos do tipo PÚBLICO
 . exportando sinônimos do tipo privado
-. exportando definições de tipos de objeto para usuário MODELO_SIW 
-Sobre exportar objetos de MODELO_SIW ...
+. exportando definições de tipos de objeto para usuário SIWGP_MODEL 
+Sobre exportar objetos de SIWGP_MODEL ...
 . exportando vínculos de banco de dados
 . exportando números de seqüência
 . exportando definições de cluster
-. sobre exportar tabelas de MODELO_SIW ... via Caminho Convencional ...
+. sobre exportar tabelas de SIWGP_MODEL ... via Caminho Convencional ...
 . . exportando tabela                     CO_AGENCIA
 . . exportando tabela                       CO_BANCO
 . . exportando tabela                      CO_CIDADE
