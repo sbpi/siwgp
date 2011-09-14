@@ -1,4 +1,4 @@
-create or replace procedure SP_GetPersonData
+CREATE OR REPLACE procedure SP_GetPersonData
    (p_cliente   in number,
     p_sq_pessoa in number   default null,
     p_cpf       in varchar2 default null,
@@ -9,7 +9,7 @@ begin
    open p_result for
      select a.*,
            b.username, b.ativo, b.sq_unidade, b.sq_localizacao, b.tipo_autenticacao,
-           b.gestor_portal, b.gestor_dashboard as gestor_dashbord, b.gestor_conteudo,
+           b.gestor_portal, b.gestor_dashboard, b.gestor_conteudo,b.gestor_pesquisa_publica,
            b.gestor_seguranca, b.gestor_sistema, coalesce(b.email,i.email) as email,
            case b.tipo_autenticacao when 'B' then 'BD' when 'A' then 'MS-AD' else 'O-LDAP' end as nm_tipo_autenticacao,
            d.sq_tipo_vinculo, d.nome nome_vinculo, d.interno, d.ativo vinculo_ativo, d.contratado,
@@ -23,8 +23,9 @@ begin
            case b.gestor_seguranca when 'S' then 'Sim' else 'Não' end as nm_gestor_seguranca,
            case b.gestor_sistema   when 'S' then 'Sim' else 'Não' end as nm_gestor_sistema,
            case b.gestor_portal    when 'S' then 'Sim' else 'Não' end as nm_gestor_portal,
-           case b.gestor_dashboard when 'S' then 'Sim' else 'Não' end as nm_gestor_dashbord,
+           case b.gestor_dashboard when 'S' then 'Sim' else 'Não' end as nm_gestor_dashboard,
            case b.gestor_conteudo  when 'S' then 'Sim' else 'Não' end as nm_gestor_conteudo,
+           case b.gestor_pesquisa_publica  when 'S' then 'Sim' else 'Não' end as nm_gestor_pesquisa_publica,
            case b.ativo            when 'S' then 'Sim' else 'Não' end as nm_ativo,
            case d.interno          when 'S' then 'Sim' else 'Não' end as nm_interno,
            case d.contratado       when 'S' then 'Sim' else 'Não' end as nm_contratado
@@ -53,5 +54,3 @@ begin
         and (p_cpf          is null or (p_cpf        is not null and (j.cpf       = p_cpf or b.username = p_cpf)))
         and (p_cnpj         is null or (p_cnpj       is not null and k.cnpj       = p_cnpj));
 end SP_GetPersonData;
-/
-

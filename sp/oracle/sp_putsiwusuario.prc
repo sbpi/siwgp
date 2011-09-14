@@ -1,41 +1,43 @@
-create or replace procedure SP_PutSiwUsuario
-   (p_operacao            in  varchar2,
-    p_chave               in  number   default null,
-    p_cliente             in  number   default null,
-    p_nome                in  varchar2 default null,
-    p_nome_resumido       in  varchar2 default null,
-    p_cpf                 in  varchar2 default null,
-    p_sexo                in  varchar2 default null,
-    p_vinculo             in  number   default null,
-    p_tipo_pessoa         in  varchar2 default null,
-    p_unidade             in  number   default null,
-    p_localizacao         in  number   default null,
-    p_username            in  varchar2 default null,
-    p_email               in  varchar2 default null,
-    p_gestor_seguranca    in  varchar2 default null,
-    p_gestor_sistema      in  varchar2 default null,
-    p_tipo_autenticacao   in  varchar2 default null,
-    p_gestor_portal       in  varchar2 default null,
-    p_gestor_dashboard    in  varchar2 default null,
-    p_gestor_conteudo     in  varchar2 default null
+CREATE OR REPLACE procedure SP_PutSiwUsuario
+   (p_operacao                      in  varchar2,
+    p_chave                         in  number   default null,
+    p_cliente                       in  number   default null,
+    p_nome                          in  varchar2 default null,
+    p_nome_resumido                 in  varchar2 default null,
+    p_cpf                           in  varchar2 default null,
+    p_sexo                          in  varchar2 default null,
+    p_vinculo                       in  number   default null,
+    p_tipo_pessoa                   in  varchar2 default null,
+    p_unidade                       in  number   default null,
+    p_localizacao                   in  number   default null,
+    p_username                      in  varchar2 default null,
+    p_email                         in  varchar2 default null,
+    p_gestor_seguranca              in  varchar2 default null,
+    p_gestor_sistema                in  varchar2 default null,
+    p_tipo_autenticacao             in  varchar2 default null,
+    p_gestor_portal                 in  varchar2 default null,
+    p_gestor_dashboard              in  varchar2 default null,
+    p_gestor_conteudo               in  varchar2 default null,
+    p_gestor_pesquisa_publica       in  varchar2 default null
    ) is
-   w_existe            number(18);
-   w_chave             co_pessoa.sq_pessoa%type               := p_chave;
-   w_cpf               co_pessoa_fisica.cpf%type              := p_cpf;
-   w_sexo              co_pessoa_fisica.sexo%type             := p_sexo;
-   w_nome              co_pessoa.nome%type                    := p_nome; -- Obrigatório
-   w_nome_resumido     co_pessoa.nome_resumido%type           := p_nome_resumido;
-   w_vinculo           co_pessoa.sq_tipo_vinculo%type         := p_vinculo;
-   w_tipo_pessoa       co_tipo_pessoa.nome%type               := p_tipo_pessoa;
-   w_unidade           eo_unidade.sq_unidade%type             := p_unidade;
-   w_localizacao       eo_localizacao.sq_localizacao%type     := p_localizacao;
-   w_email             sg_autenticacao.email%type             := p_email; -- Obrigatório
-   w_gestor_seguranca  sg_autenticacao.gestor_seguranca%type  := p_gestor_seguranca;
-   w_gestor_sistema    sg_autenticacao.gestor_sistema%type    := p_gestor_sistema;
-   w_tipo_autenticacao sg_autenticacao.tipo_autenticacao%type := p_tipo_autenticacao;
-   w_gestor_portal     sg_autenticacao.gestor_portal%type     := p_gestor_portal;
-   w_gestor_dashboard  sg_autenticacao.gestor_dashboard%type  := p_gestor_dashboard;
-   w_gestor_conteudo   sg_autenticacao.gestor_conteudo%type   := p_gestor_conteudo;
+   w_existe                         number(18);
+   w_chave                          co_pessoa.sq_pessoa%type                            := p_chave;
+   w_cpf                            co_pessoa_fisica.cpf%type                           := p_cpf;
+   w_sexo                           co_pessoa_fisica.sexo%type                          := p_sexo;
+   w_nome                           co_pessoa.nome%type                                 := p_nome; -- Obrigatório
+   w_nome_resumido                  co_pessoa.nome_resumido%type                        := p_nome_resumido;
+   w_vinculo                        co_pessoa.sq_tipo_vinculo%type                      := p_vinculo;
+   w_tipo_pessoa                    co_tipo_pessoa.nome%type                            := p_tipo_pessoa;
+   w_unidade                        eo_unidade.sq_unidade%type                          := p_unidade;
+   w_localizacao                    eo_localizacao.sq_localizacao%type                  := p_localizacao;
+   w_email                          sg_autenticacao.email%type                          := p_email; -- Obrigatório
+   w_gestor_seguranca               sg_autenticacao.gestor_seguranca%type               := p_gestor_seguranca;
+   w_gestor_sistema                 sg_autenticacao.gestor_sistema%type                 := p_gestor_sistema;
+   w_tipo_autenticacao              sg_autenticacao.tipo_autenticacao%type              := p_tipo_autenticacao;
+   w_gestor_portal                  sg_autenticacao.gestor_portal%type                  := p_gestor_portal;
+   w_gestor_dashboard               sg_autenticacao.gestor_dashboard%type               := p_gestor_dashboard;
+   w_gestor_conteudo                sg_autenticacao.gestor_conteudo%type                := p_gestor_conteudo;
+   w_gestor_pesquisa_publica        sg_autenticacao.gestor_pesquisa_publica%type        := p_gestor_pesquisa_publica;
 begin
    -- Verifica se o usuário já existe em CO_PESSOA_FISICA ou em SG_AUTENTICACAO
    if w_cpf is not null or p_username is not null then
@@ -85,6 +87,7 @@ begin
    w_gestor_portal     := coalesce(p_gestor_portal,w_gestor_portal,'N'); -- Default: Não
    w_gestor_dashboard  := coalesce(p_gestor_dashboard,w_gestor_dashboard,'N'); -- Default: Não
    w_gestor_conteudo   := coalesce(p_gestor_conteudo,w_gestor_conteudo,'N'); -- Default: Não
+   w_gestor_pesquisa_publica   := coalesce(p_gestor_pesquisa_publica,w_gestor_pesquisa_publica,'N'); -- Default: Não
 
    if p_vinculo is null and w_vinculo is null then
       -- Default: primeiro vinculo interno ordenado alfabeticamente
@@ -186,14 +189,14 @@ begin
               cliente,              username,         email,
               gestor_seguranca,     gestor_sistema,   senha,
               assinatura,           tipo_autenticacao,gestor_portal,
-              gestor_dashboard,     gestor_conteudo
+              gestor_dashboard,     gestor_conteudo, gestor_pesquisa_publica
             )
          Values
             ( w_chave,              coalesce(p_unidade, w_unidade), coalesce(p_localizacao, w_localizacao),
               p_cliente,            p_username,       w_email,
               w_gestor_seguranca,   w_gestor_sistema, case w_tipo_autenticacao  when 'B' then criptografia(p_username) else 'Externa' end,
               criptografia(p_username), w_tipo_autenticacao, w_gestor_portal,
-              w_gestor_dashboard,   w_gestor_conteudo
+              w_gestor_dashboard,   w_gestor_conteudo, w_gestor_pesquisa_publica
             );
 
          -- Insere registros de configuração de e-mail
@@ -220,6 +223,7 @@ begin
              gestor_portal         = coalesce(p_gestor_portal, w_gestor_portal),
              gestor_dashboard      = coalesce(p_gestor_dashboard, w_gestor_dashboard),
              gestor_conteudo       = coalesce(p_gestor_conteudo, w_gestor_conteudo),
+             gestor_pesquisa_publica = coalesce(p_gestor_pesquisa_publica, w_gestor_pesquisa_publica),
              email                 = w_email,
              tipo_autenticacao     = w_tipo_autenticacao
          where sq_pessoa      = w_chave;
@@ -248,5 +252,3 @@ begin
    End If;
 
 end SP_PutSiwUsuario;
-/
-

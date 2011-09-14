@@ -1,4 +1,4 @@
-create or replace procedure SP_GetUserList
+CREATE OR REPLACE procedure SP_GetUserList
    (p_cliente          in number,
     p_localizacao      in number   default null,
     p_lotacao          in number   default null,
@@ -21,7 +21,7 @@ begin
    If p_restricao is null Then
       open p_result for
         select a.sq_pessoa, a.username, a.gestor_seguranca, a.gestor_sistema, a.ativo, a.email,
-               a.tipo_autenticacao, a.gestor_portal, a.gestor_dashboard as gestor_dashbord, a.gestor_conteudo,
+               a.tipo_autenticacao, a.gestor_portal, a.gestor_dashboard, a.gestor_conteudo,a.gestor_pesquisa_publica,
                case a.tipo_autenticacao when 'B' then 'BD' when 'A' then 'MS-AD' else 'O-LDAP' end as nm_tipo_autenticacao,
                b.nome_resumido, b.nome, b.nome_indice, b.nome_resumido_ind,
                c.sigla as lotacao, c.sq_unidade, c.codigo,
@@ -87,6 +87,4 @@ begin
                )
         order by b.nome;
    End If;
-end SP_GetUserList;
-/
-
+end SP_GetUserList; 
