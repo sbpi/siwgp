@@ -12,7 +12,7 @@ class dml_putSiwUsuario {
    function getInstanceOf($dbms, $operacao, $p_chave, $p_cliente, $p_nome, $p_nome_resumido, 
          $p_cpf, $p_sexo, $p_vinculo, $p_tipo_pessoa, $p_unidade, $p_localizacao, $p_username, 
          $p_email, $p_gestor_seguranca, $p_gestor_sistema,$p_tipo_autenticacao, $p_gestor_portal,
-         $p_gestor_dashboard, $p_gestor_conteudo) {
+         $p_gestor_dashboard, $p_gestor_conteudo,$p_gestor_pesquisa_publica) {
      extract($GLOBALS,EXTR_PREFIX_SAME,'strchema'); $sql=$strschema.'sp_putSiwUsuario';
      $params=array('p_operacao'         =>array($operacao,              B_VARCHAR,      1),
                    'p_chave'            =>array($p_chave,               B_NUMERIC,     32),
@@ -32,7 +32,8 @@ class dml_putSiwUsuario {
                    'p_tipo_autenticacao'=>array($p_tipo_autenticacao,   B_VARCHAR,     1),
                    'p_gestor_portal'    =>array($p_gestor_portal,       B_VARCHAR,     1),
                    'p_gestor_dashboard' =>array($p_gestor_dashboard,    B_VARCHAR,     1),
-                   'p_gestor_conteudo'  =>array($p_gestor_conteudo,     B_VARCHAR,     1)
+                   'p_gestor_conteudo'  =>array($p_gestor_conteudo,     B_VARCHAR,     1),
+     			   'p_gestor_pesquisa_publica'  =>array($p_gestor_pesquisa_publica,     B_VARCHAR,     1)
                   );
      $lql = new DatabaseQueriesFactory; $l_rs = $lql->getInstanceOf($sql, $dbms, $params, DB_TYPE);
      $l_error_reporting = error_reporting(); 
