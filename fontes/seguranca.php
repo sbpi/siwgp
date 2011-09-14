@@ -205,7 +205,7 @@ function Usuarios() {
     ShowHTML('          <td rowspan="2"><b>'.LinkOrdena('Lotação','lotacao').'</td>');
     ShowHTML('          <td rowspan="2"><b>'.LinkOrdena('Vínculo','vinculo').'</td>');
     ShowHTML('          <td colspan="3"><b>Gestor</td>');
-    ShowHTML('          <td colspan="3"><b>Portal</td>');
+    ShowHTML('          <td colspan="4"><b>Portal</td>');
     ShowHTML('          <td class="remover" rowspan="2"><b>Operações</td>');
     ShowHTML('        </tr>');
     ShowHTML('        <tr bgcolor="'.$conTrBgColor.'" align="center">');
@@ -213,8 +213,9 @@ function Usuarios() {
     ShowHTML('          <td><b>'.LinkOrdena('Sist.','gestor_sistema').'</td>');
     ShowHTML('          <td><b>'.LinkOrdena('Mod.','qtd_modulo').'</td>');
     ShowHTML('          <td title="Gestor do portal"><b>'.LinkOrdena('Portal','gestor_portal').'</td>');
-    ShowHTML('          <td title="Gestor do dashboard"><b>'.LinkOrdena('Dash','gestor_dashbord').'</td>');
+    ShowHTML('          <td title="Gestor do dashboard"><b>'.LinkOrdena('Dash','gestor_dashboard').'</td>');
     ShowHTML('          <td title="Gestor de conteúdo do portal"><b>'.LinkOrdena('Cont.','gestor_conteudo').'</td>');
+    ShowHTML('          <td title="Gestor pesquisa pública"><b>'.LinkOrdena('Pesq.','gestor_pesquisa_publica').'</td>');
     ShowHTML('        </tr>');    
     if (count($RS) <= 0) {
       ShowHTML('      <tr bgcolor="'.$conTrBgColor.'"><td colspan=9 align="center"><font size="2"><b>Não foram encontrados registros.</b></td></tr>');
@@ -242,8 +243,9 @@ function Usuarios() {
         if(f($row,'qtd_modulo')>0) ShowHTML('        <td align="center">'.nvl(f($row,'qtd_modulo'),'---').'</td>');
         else                       ShowHTML('        <td align="center">---</td>');
         ShowHTML('        <td align="center">'.nvl(f($row,'gestor_portal'),'---').'</td>');
-        ShowHTML('        <td align="center">'.nvl(f($row,'gestor_dashbord'),'---').'</td>');
+        ShowHTML('        <td align="center">'.nvl(f($row,'gestor_dashboard'),'---').'</td>');
         ShowHTML('        <td align="center">'.nvl(f($row,'gestor_conteudo'),'---').'</td>');
+        ShowHTML('        <td align="center">'.nvl(f($row,'gestor_pesquisa_publica'),'---').'</td>');
         ShowHTML('        <td class="remover" align="top" nowrap>');
         if ($w_libera_edicao=='S') {
           ShowHTML('          <A class="hl" HREF="pessoa.php?par=BENEF&R='.$w_pagina.$par.'&O=A&w_cliente='.$w_cliente.'&w_sq_pessoa='.f($row,'sq_pessoa').'&w_username='.f($row,'username').'&P1='.$P1.'&P2='.$P2.'&P3='.$P3.'&P4='.$P4.'&TP='.$TP.'&SG='.$SG.MontaFiltro('GET').'" title="Altera as informações cadastrais do usuário">AL</A>&nbsp');
@@ -379,6 +381,46 @@ function Usuarios() {
     } else {
       ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_dirigente" value="S"> Apenas dirigentes<br><input '.$w_Disabled.' class="str" type="radio" name="p_dirigente" value="N" checked> Apenas não dirigentes<br><input '.$w_Disabled.' class="str" type="radio" name="p_dirigente" value=""> Tanto faz');
     } 
+          
+    ShowHTML('        <tr valign="top">');
+    ShowHTML('          <td><br><b>Administradores do Portal:</b><br>');
+    if ($p_gestor_portal=='') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="S"> Apenas administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="N"> Apenas não administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="" checked> Tanto faz');
+    } elseif ($p_gestor_portal=='S') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="S" checked> Apenas administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="N"> Apenas não administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value=""> Tanto faz');
+    } else {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="S"> Apenas administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value="N" checked> Apenas não administradores<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_portal" value=""> Tanto faz');
+    } 
+    
+    ShowHTML('          <td><br><b>Dashboard do Portal:</b><br>');
+    if ($p_gestor_dashboard=='') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="" checked> Tanto faz');
+    } elseif ($p_gestor_dashboard=='S') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="S" checked> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value=""> Tanto faz');
+    } else {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value="N" checked> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_dashboard" value=""> Tanto faz');
+    } 
+
+    ShowHTML('          <td><br><b>Conteúdo restrito do Portal:</b><br>');
+    if ($p_gestor_conteudo=='') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="" checked> Tanto faz');
+    } elseif ($p_gestor_conteudo=='S') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="S" checked> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value=""> Tanto faz');
+    } else {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value="N" checked> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_conteudo" value=""> Tanto faz');
+    } 
+    
+    ShowHTML('          <td><br><b>Pesquisa Pública do Portal:</b><br>');
+    if ($p_gestor_conteudo=='') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="" checked> Tanto faz');
+    } elseif ($p_gestor_conteudo=='S') {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="S" checked> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="N"> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value=""> Tanto faz');
+    } else {
+      ShowHTML('              <input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="S"> Apenas usuários com acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value="N" checked> Apenas usuários sem acesso<br><input '.$w_Disabled.' class="str" type="radio" name="p_gestor_pesquisa_publica" value=""> Tanto faz');
+    } 
+    
+    
+    
           
     ShowHTML('          </table></td></tr>');
     ShowHTML('      <tr><td><b><U>O</U>rdenação por:<br><SELECT ACCESSKEY="O" '.$w_Disabled.' class="sts" name="p_ordena" size="1">');
