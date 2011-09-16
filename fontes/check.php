@@ -47,8 +47,6 @@ array_push($arrayIni,array('texto' => 'variables_order' ,'param' => 'variables_o
 
 echo '<html><head><style>';
 echo 'ul { padding-bottom:0; padding-left:1em; margin-left:1em; margin-bottom:0; }';
-echo 'b { font-size: 110%; }';
-echo 'tr { font-size: 120%; }';
 echo '</style></head>';
 BodyOpen('');
 echo '<table border="0" width="100%">';
@@ -72,12 +70,11 @@ function checkMod($arrayMod,$arrayReq){
 
   foreach($arrayReq as $row){
     foreach($row as $k => $v){
-      $saida .= '<tr>';
       if (in_array($v,$arrayMod)) {
+        $saida .= '<tr>';
         $saida .= '<td>' . $v . '</td><td>' . '<font color="green"><b>OK</b></font></td>';
-      }
-      else
-      {
+      } else {
+        $saida .= '<tr bgcolor="yellow" valign="top">';
         $saida .= '<td> ' . $v . ' </td><td>' . '<font color="red"><b>ER</b></font></td>';
       }
       $saida .='</tr>';
@@ -98,22 +95,20 @@ function checkFun($arrayFun){
   $saida .= '<tr><td><b>Item</b></td><td><b>Check</b></td></tr>';
 
   foreach($arrayFun as $row){
-    $saida .= '<tr valign="top">';
     if(function_exists($row['param'])===$row['test']){
+      $saida .= '<tr valign="top">';
       $saida .= '<td>' . $row['texto'] . '</td><td>' . '<font color="green"><b>OK</b></font></td>';
-    }
-    else
-    {
+    } else {
+      $saida .= '<tr bgcolor="yellow" valign="top">';
       $saida .= '<td> ' . $row['texto'] . ' </td><td>' . '<font color="red"><b>X</b></font></td>';
     }
     $saida .='</tr>';
   }
-  $saida .= '<tr valign="top">';
   if($error == 0 || $error == 2){
+    $saida .= '<tr valign="top">';
     $saida .= '<td>exec</td><td>' . '<font color="green"><b>OK</b></font></td>';
-  }
-  else
-  {
+  } else {
+    $saida .= '<tr bgcolor="yellow" valign="top">';
     $saida .= '<td>exec</td><td>' . '<font color="red"><b>X</b></font></td>';
   }
   $saida .='</tr>';  
@@ -137,10 +132,8 @@ function checkIni($arrayIni){
 
 function checkBanco() {
   $saida = '<table border="1"><caption><b>Acesso a Banco de Dados</b></caption>';
-  $saida .= '<tr><td><b>Server name</b></td><td><b>Username</b></td><td><b>Password</b></td><td><b>Database name</b></td></tr>';
-  $saida .= '<tr><td> ' . ORA9_SERVER_NAME . '</td><td>' . ORA9_DB_USERID . '</td><td>' . ORA9_DB_PASSWORD . ' </td><td>' . ORA9_DATABASE_NAME . ' </td></tr>';
-  $saida .= '<tr><td colspan="4">';
-  $saida .= 'Resultado do teste de conexão:<br>';
+  $saida .= '<tr valign="top"><td><b>Server name</b></td><td><b>Username</b></td><td><b>Password</b></td><td><b>Database name</b></td></tr>';
+  $saida .= '<tr valign="top"><td rowspan="2"> ' . ORA9_SERVER_NAME . '</td><td>' . ORA9_DB_USERID . '</td><td>' . ORA9_DB_PASSWORD . ' </td><td>' . ORA9_DATABASE_NAME . ' </td></tr>';
   ob_start();
   $l_error_reporting = error_reporting(); error_reporting(E_ALL);
   $ret = oci_new_connect(ORA9_DB_USERID,ORA9_DB_PASSWORD,ORA9_SERVER_NAME);
@@ -148,9 +141,58 @@ function checkBanco() {
   $texto .= ob_get_contents();
   error_reporting($l_error_reporting);
   ob_end_clean();
-  if (!$ret) $saida .= '<font color="#FF00OO"><B>ERRO</B></font> '.$texto .'<tr><td colspan="4"><b>Verifique ORA9_SERVER_NAME, ORA9_DB_USERID e ORA9_DB_PASSWORD em <i>classes/db/db_constants.php</i></font></td></tr>'; else $saida .= '<font color="#0000FF">Sucesso</font>: '.$texto;
-  $saida .= '</td></tr>';
-  $saida .='</tr>';
+  if (!$ret) {
+    $saida .= '<tr bgcolor="yellow"><td colspan="3">';
+    $saida .= '<font color="#FF00OO"><B>ERRO: </B></font> '.$texto .'<tr><td colspan="4"><b>Verifique ORA9_SERVER_NAME, ORA9_DB_USERID e ORA9_DB_PASSWORD em <i>classes/db/db_constants.php</i></font></td></tr>';
+  } else {
+    $saida .= '<tr><td colspan="3">';
+    $saida .= '<font color="green"><b>Conexão OK</b></font>: '.$texto;
+  }
+  $saida .= '<tr align="center"><td colspan="4"><b>VARIÁVEIS DE AMBIENTE</b></td></tr>';
+  $saida .= '<tr><td>ORACLE_HOME</td><td colspan="3">' . getenv('ORACLE_HOME') . '&nbsp;</td></tr>';
+  $saida .= '<tr><td>NLS_LANG</td><td colspan="3">' . getenv('NLS_LANG') . '&nbsp;</td></tr>';
+  $saida .= '<tr><td>ORACLE_SID</td><td colspan="3">' . getenv('ORACLE_SID') . '&nbsp;</td></tr>';
+  $saida .= '<tr><td>LD_LIBRARY_PATH</td><td colspan="3">' . getenv('LD_LIBRARY_PATH') . '&nbsp;</td></tr>';
+  if ($ret) {
+    $query = 'SELECT PARAMETER, VALUE FROM V$NLS_PARAMETERS ORDER BY PARAMETER';
+    $stid = oci_parse($ret, $query);
+    if (!$stid) {
+      $e = oci_error($ret); $saida .= htmlentities($e['message']);
+    } else {
+      $r = oci_execute($stid, OCI_DEFAULT);
+      if (!$r) {
+        $e = oci_error($stid); $saida .= htmlentities($e['message']);
+      } else {
+        $saida .= '<tr align="center"><td colspan="4"><b>PARAMETROS NLS</b></td></tr>';
+        $j = 2;
+        while ($row = oci_fetch_array($stid, OCI_RETURN_NULLS)) {
+          $i = 2;
+          if (!($j%2)) $saida .= '<tr>';
+          foreach ($row as $item) { 
+            if (!($i%2)) $saida .= '<td>'.($item?htmlentities($item):'&nbsp;').'</td>';
+            $i++;
+          }
+          $j++;
+        }
+        if ($j%2) $saida .= '<td colspan=2>&nbsp;</td>';
+      }
+    }
+    oci_close($ret);
+  }
+  $locale_info = localeconv();
+  $saida .= '<tr align="center"><td colspan="4"><b>INFORMAÇÕES MONETÁRIAS CONFIGURADAS VIA SETLOCALE</b></td></tr>';
+  $saida .= '<tr valign="top">';
+  $saida .= "<td>decimal_point:</td><td>{$locale_info["decimal_point"]}&nbsp;</td>";
+  $saida .= "<td>thousands_sep:</td><td>{$locale_info["thousands_sep"]}&nbsp;</td>";
+  $saida .= '</tr>';
+  $saida .= '<tr valign="top">';
+  $saida .= "<td>int_curr_symbol:</td><td>{$locale_info["int_curr_symbol"]}&nbsp;</td>";
+  $saida .= "<td>currency_symbol:</td><td>{$locale_info["currency_symbol"]}&nbsp;</td>";
+  $saida .= '</tr>';
+  $saida .= '<tr valign="top">';
+  $saida .= "<td>mon_decimal_point:</td><td>{$locale_info["mon_decimal_point"]}&nbsp;</td>";
+  $saida .= "<td>mon_thousands_sep:</td><td>{$locale_info["mon_thousands_sep"]}&nbsp;</td>";
+  $saida .= '</tr>';
   $saida .='</table>';
   return $saida;
 }
