@@ -226,9 +226,9 @@ function Situacao() {
         ShowHTML('      <tr bgcolor="'.$w_cor.'" valign="top">');
         ShowHTML('        <td width="1%" nowrap align="center">&nbsp;'.formataDataEdicao(f($row,'inicio'),5).'&nbsp;</td>');
         ShowHTML('        <td width="1%" nowrap align="center">&nbsp;'.formataDataEdicao(f($row,'fim'),5).'&nbsp;</td>');
-        ShowHTML('        <td>'.f($row,'situacao').'</td>');
-        ShowHTML('        <td>'.f($row,'progressos').'</td>');
-        ShowHTML('        <td>'.f($row,'passos').'</td>');
+        ShowHTML('        <td>'.CRLF2BR(f($row,'situacao')).'</td>');
+        ShowHTML('        <td>'.CRLF2BR(f($row,'progressos')).'</td>');
+        ShowHTML('        <td>'.CRLF2BR(f($row,'passos')).'</td>');
         ShowHTML('        <td width="1%" nowrap>&nbsp;'.ExibePessoa(null,$w_cliente,f($row,'sq_pessoa'),$TP,f($row,'nm_atualiz')).'&nbsp;</td>');
         ShowHTML('        <td width="1%" nowrap align="center">&nbsp;'.formataDataEdicao(f($row,'phpdt_ultima_alteracao'),6).'&nbsp;</td>');
         ShowHTML('        <td width="1%" nowrap class="remover" align="top" nowrap>&nbsp;');

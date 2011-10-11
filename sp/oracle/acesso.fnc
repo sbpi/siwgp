@@ -54,7 +54,7 @@ create or replace function Acesso
   w_destinatario           siw_menu.destinatario%type;
   w_username               sg_autenticacao.sq_pessoa%type;
   w_sq_unidade_lotacao     sg_autenticacao.sq_unidade%type;
-  w_gestor_seguranca       sg_autenticacao.gestor_seguranca%type;
+  w_gestor_seguranca       sg_autenticacao.gestor_seguranca%type;  
   w_gestor_sistema         sg_autenticacao.gestor_sistema%type;
   w_gestor_financeiro      varchar2(1);
   w_sq_unidade_executora   siw_menu.sq_unid_executora%type;        -- Unidade executora do serviço
@@ -104,10 +104,10 @@ create or replace function Acesso
                      ) pt on (a.sq_unidade  = pt.sq_unidade)
            left join (select b.sq_unidade, a.sq_pessoa, nome_resumido as nome
                         from co_pessoa                  a
-                             inner join eo_unidade_resp b on (a.sq_pessoa      = b.sq_pessoa and
-                                                              b.tipo_respons   = 'S' and
-                                                              b.fim            is null and
-                                                              b.sq_unidade     = p_unidade
+                             inner join eo_unidade_resp b on (a.sq_pessoa      = b.sq_pessoa and 
+                                                              b.tipo_respons   = 'S' and 
+                                                              b.fim            is null and 
+                                                              b.sq_unidade     = p_unidade 
                                                              )
                      ) ps on (a.sq_unidade  = ps.sq_unidade)
      where a.sq_unidade  = p_unidade;
@@ -119,28 +119,28 @@ begin
     Result := 0;
     Return (Result);
  End If;
-
+ 
  select count(*) into w_existe from co_pessoa where sq_pessoa = p_usuario;
  If w_existe = 0 Then
     Result := 0;
     Return (Result);
  End If;
-
+ 
  -- Recupera as informações da opção à qual a solicitação pertence
  select a.sq_pessoa, a.acesso_geral, a.consulta_geral, a.sq_menu, a.sq_modulo, a.sigla, e.destinatario,
         a1.sigla,
         b.sq_pessoa, b.sq_unidade, b.gestor_seguranca, b.gestor_sistema, b.ativo as usuario_ativo,
         b2.nome, b2.interno,
-        a.sq_unid_executora, a.consulta_opiniao, a.envia_email, a.exibe_relatorio, a.vinculacao,
+        a.sq_unid_executora, a.consulta_opiniao, a.envia_email, a.exibe_relatorio, a.vinculacao, 
         d.sq_siw_tramite, d.cadastrador, d.sq_unidade, d.executor, d.sq_solic_pai,
         e.ordem, e.sigla, e.ativo, e.chefia_imediata, e.assina_tramite_anterior, e.beneficiario_cumpre, e.gestor_cumpre,
-        h.sq_pessoa_endereco
+        h.sq_pessoa_endereco 
    into w_cliente, w_acesso_geral, w_consulta_geral, w_sq_servico, w_modulo, w_sigla, w_destinatario,
         w_sg_modulo,
         w_username, w_sq_unidade_lotacao, w_gestor_seguranca, w_gestor_sistema, w_usuario_ativo,
         w_nm_vinculo, w_interno,
         w_sq_unidade_executora, w_consulta_opiniao, w_envia_email, w_exibe_relatorio, w_vinculacao,
-        w_sq_siw_tramite, w_cadastrador, w_unidade_solicitante, w_executor,
+        w_sq_siw_tramite, w_cadastrador, w_unidade_solicitante, w_executor, 
         w_solic_pai,
         w_ordem, w_sigla_situacao, w_ativo, w_chefia_imediata, w_anterior_assina, w_beneficiario_assina, w_gestor_cumpre,
         w_sq_endereco_unidade
@@ -156,7 +156,7 @@ begin
     and b.sq_pessoa              = p_usuario;
 
  Result := 0;
-
+ 
  -- Verifica se o usuário está ativo
  If w_usuario_ativo = 'N' Then
    -- Se não estiver, retorna 0
@@ -165,7 +165,7 @@ begin
 
  -- Verifica se o usuário é o cadastrador
  If p_usuario = w_cadastrador Then Result := 1; End If;
-
+ 
  -- Verifica se o usuário é o executor
  If p_usuario = w_executor Then Result := 1; End If;
 
@@ -176,14 +176,14 @@ begin
  If w_cliente in (14014,11134) and upper(w_nm_vinculo) in ('ABDI','SECRETARIA EXECUTIVA') Then
     Result := 1;
  End If;
-
+  
  -- Verifica se o usuário é representante de projeto
  select count(*) into w_existe from pj_projeto_representante a where a.sq_pessoa = p_usuario and a.sq_siw_solicitacao = p_solicitacao;
  If w_existe > 0 Then Result := 1; End If;
-
+ 
  -- Verifica se o usuário é coordenador de macroprograma da pdp
  If w_solic_pai is not null Then
-   select count(*) into w_existe
+   select count(*) into w_existe 
      from siw_solicitacao a
           inner   join siw_menu                    d on (a.sq_menu             = d.sq_menu             and d.sigla = 'PEPROCAD')
           inner   join siw_solicitacao_interessado b on (a.sq_siw_solicitacao  = b.sq_siw_solicitacao  and b.sq_pessoa = p_usuario)
@@ -191,18 +191,34 @@ begin
     where a.sq_siw_solicitacao = w_solic_pai;
    If w_existe > 0 Then Result := 1; End If;
  End If;
-
+ 
+ -- Verifica se o usuário é gestor do módulo financeiro e, 
+ -- se a solicitacao for do módulo de contratos, projetos ou passagens
+ select count(*)
+   into w_existe
+   from sg_pessoa_modulo a
+  where a.sq_pessoa           = p_usuario
+    and w_modulo              in (select sq_modulo from siw_modulo where sigla in ('AC','PR','PD')) 
+    and a.sq_modulo           = (select sq_modulo from siw_modulo where sigla = 'FN')
+    and (a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_solicitante,0)) or
+         a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_beneficiario,0)) or
+         a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_resp,0))
+        );
+ If w_existe > 0 Then
+    Result := 1;
+ End If;
+ 
  -- Verifica se o usuário é o solicitante
- If w_solicitante = p_usuario Then
-    Result                   := Result + 2;
+ If w_solicitante = p_usuario Then 
+    Result                   := Result + 2; 
     select sq_unidade into w_unidade_beneficiario from sg_autenticacao where sq_pessoa = p_usuario;
- Else
+ Else 
     -- Verifica se o usuário participou de alguma forma na solicitação
     select count(*) into w_existe from (
       -- Verifica se o usuário é interessado na demanda
       select 1 from gd_demanda_interes a where a.sq_siw_solicitacao = p_solicitacao and a.sq_pessoa = p_usuario
       UNION
-      -- Verifica se já participou em algum momento na demanda
+      -- Verifica se já participou em algum momento na demanda 
       select 1 from gd_demanda_log a where a.sq_siw_solicitacao = p_solicitacao and a.destinatario = p_usuario
       UNION
       -- Verifica se o usuário é interessado no projeto
@@ -217,7 +233,7 @@ begin
     If w_existe > 0 Then
        Result := Result + 2;
     End If;
-
+    
     -- recupera o código e a lotação do solicitante, para verificar, mais abaixo,
     -- se o usuário é chefe dele
     select count(b.sq_pessoa) into w_existe
@@ -239,22 +255,18 @@ begin
         where a.sq_siw_solicitacao = p_solicitacao;
     end if;
  End If;
-
- -- Verifica se o usuário é gestor do módulo à qual a solicitação pertence ou,
- -- se a solicitacao for do módulo de contratos, se o usuário é gestor do módulo financeiro
+ 
+ -- Verifica se o usuário é gestor do módulo à qual a solicitação pertence
  select count(*)
    into w_existe
    from sg_pessoa_modulo a
-  where a.sq_pessoa          = p_usuario
-    and (a.sq_modulo         = w_modulo or
-         (w_modulo           in (select sq_modulo from siw_modulo where sigla in ('AC','PR','PD')) and
-          a.sq_modulo        = (select sq_modulo from siw_modulo where sigla = 'FN')
-         )
-        )
+  where a.sq_pessoa           = p_usuario
+    and a.sq_modulo           = w_modulo
     and (a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_solicitante,0)) or
          a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_beneficiario,0)) or
          a.sq_pessoa_endereco = (select sq_pessoa_endereco from eo_unidade where sq_unidade = coalesce(w_unidade_resp,0))
         );
+    
  If w_existe > 0 or w_gestor_sistema = 'S' Then
     Result := Result + 6;
     If w_existe > 0 and w_gestor_cumpre = 'S' and w_destinatario = 'N' and w_sigla_situacao <> 'CI' Then
@@ -272,8 +284,8 @@ begin
                                            )
      where a.sq_siw_solicitacao = p_solicitacao
        and a.sq_unidade         = w_unidade_beneficiario;
-    If w_existe > 0 Then
-       Result := Result + 8;
+    If w_existe > 0 Then 
+       Result := Result + 8; 
     Else
        -- Verifica se é responsável por alguma etapa do projeto ou por alguma questão ou por alguma meta
        select count(*) into w_existe from (
@@ -291,8 +303,8 @@ begin
  End If;
 
  -- Recupera as informações da opção à qual a solicitação pertence
- select d.solicitante,
-        coalesce(f.sq_pessoa,-1), coalesce(g.sq_pessoa,-1),
+ select d.solicitante, 
+        coalesce(f.sq_pessoa,-1), coalesce(g.sq_pessoa,-1),  
         coalesce(k1.sq_unidade, l1.sq_unidade,m1.sq_unidade,d.sq_unidade) --d.sq_unidade deve sempre ser a última opção
    into w_solicitante, w_sq_pessoa_titular, w_sq_pessoa_substituto, w_unidade_resp
    from siw_solicitacao                     d
@@ -316,11 +328,14 @@ begin
 
  -- Se o serviço for vinculado à unidade
  If w_vinculacao = 'U' Then
-    -- Verifica se o usuário está lotado ou se é titular/substituto
-    -- da unidade de CADASTRAMENTO da solicitação
+    -- Verifica se o usuário está lotado ou se é titular/substituto 
+    -- da unidade de CADASTRAMENTO da solicitação 
     -- ou se é da unidade RESPONSÁVEL e o módulo for de protocolo
-    If w_sq_pessoa_titular    = p_usuario or
-       w_sq_pessoa_substituto = p_usuario
+    If w_sq_unidade_lotacao   = w_unidade_solicitante or
+       w_sq_unidade_lotacao   = w_unidade_resp Then
+       Result := Result + 1;
+    Elsif w_sq_pessoa_titular    = p_usuario or
+          w_sq_pessoa_substituto = p_usuario
     Then
        If w_interno = 'S' Then Result := Result + 4; End If;
     Else
@@ -333,8 +348,8 @@ begin
                                               )
         where a.sq_siw_solicitacao = p_solicitacao
           and a.sq_unidade         = w_sq_unidade_lotacao;
-       If w_existe > 0 Then
-          Result := Result + 4;
+       If w_existe > 0 Then 
+          Result := Result + 4; 
        Else
           -- Verifica se o usuário é responsável por uma unidade envolvida na execução
           select count(*) into w_existe
@@ -345,8 +360,8 @@ begin
                                                  )
            where a.sq_siw_solicitacao = p_solicitacao
              and a.sq_unidade         = w_sq_unidade_lotacao;
-          If w_existe > 0 Then
-             Result := Result + 4;
+          If w_existe > 0 Then 
+             Result := Result + 4; 
           End If;
        End If;
     End If;
@@ -356,15 +371,15 @@ begin
     -- Verifica se o usuário é responsável pela unidade do solicitante
     select count(*) into w_chefe_beneficiario
       from eo_unidade_resp a
-     where a.sq_unidade = w_unidade_beneficiario
+     where a.sq_unidade = w_unidade_beneficiario 
        and a.sq_pessoa  = p_usuario
        and a.fim        is null;
 
     -- Verifica se o usuário é o titular ou o substituto da unidade
     -- de lotação do BENEFICIÁRIO da solicitação, ou se participa em algum trâmite
     -- do serviço
-    If w_chefe_beneficiario > 0 Then
-       Result := Result + 4;
+    If w_chefe_beneficiario > 0 Then 
+       Result := Result + 4; 
     Else
        -- Verifica se o usuário é responsável por uma unidade envolvida na execução
        select count(*) into w_existe
@@ -375,8 +390,8 @@ begin
                                                )
         where a.sq_siw_solicitacao = p_solicitacao
           and a.sq_unidade         = w_unidade_beneficiario;
-       If w_existe > 0 Then
-          Result := Result + 4;
+       If w_existe > 0 Then 
+          Result := Result + 4; 
        Else
           -- Verifica se o usuário é responsável por uma unidade envolvida na execução
           select count(*) into w_existe
@@ -387,18 +402,18 @@ begin
                                                   )
             where a.sq_siw_solicitacao = p_solicitacao
               and a.sq_unidade         = w_unidade_beneficiario;
-          If w_existe > 0 Then
-             Result := Result + 4;
+          If w_existe > 0 Then 
+             Result := Result + 4; 
           End If;
        End If;
     End If;
  End If;
-
+ 
  -- Se o trâmite atual não puder ser cumprido pela mesma pessoa que cumpriu o trâmite anterior, identifica quem cumpriu o trâmite anterior
  If w_anterior_assina = 'N' Then
    select c.sq_pessoa into w_anterior
      from siw_solicitacao                   a
-          inner   join (select x.sq_siw_solicitacao, max(x.sq_siw_solic_log) as chave
+          inner   join (select x.sq_siw_solicitacao, max(x.sq_siw_solic_log) as chave 
                           from siw_solic_log              x
                                inner join siw_solicitacao y on (x.sq_siw_solicitacao = y.sq_siw_solicitacao)
                          where y.sq_menu   = w_sq_servico
@@ -410,36 +425,40 @@ begin
  Else
    w_anterior := 0;
  End If;
-
+ 
  -- Se o trâmite atual não puder ser cumprido pelo beneficiário da solicitação, identifica o beneficiário
  If w_beneficiario_assina = 'N' Then
    w_beneficiario := w_solicitante;
  Else
    w_beneficiario := 0;
  End If;
+ 
+ -- Solicitação de celular na fase de ciência pelo beneficiário deve ser cumprida pelo beneficiário
+ if w_sigla_situacao = 'CB' and w_sigla = 'SRSOLCEL' and w_solicitante = p_usuario Then
+    Result := Result + 16;
+ Elsif w_anterior <> p_usuario and w_beneficiario <> p_usuario Then 
+   -- A condição abaixo verifica se:
+   -- 1) o trâmite atual pode ser cumprido pelo cumpridor do trâmite anterior
+   -- 2) o trâmite atual pode ser cumprido pelo beneficiário da solicitação
 
- -- A condição abaixo verifica se:
- -- 1) o trâmite atual pode ser cumprido pelo cumpridor do trâmite anterior
- -- 2) o trâmite atual pode ser cumprido pelo beneficiário da solicitação
- If w_anterior <> p_usuario and w_beneficiario <> p_usuario Then
    -- Verifica se o usuário tem permissão para cumprir o trâmite atual da solicitação
    -- Uma das possibilidades é o trâmite ser cumprido pelo titular/substituto
    -- da unidade do cadastrador ou da solicitação ou usuários que tenham permissão
    If w_chefia_imediata = 'S' Then
-
+   
       If w_executor = p_usuario Then
          -- Se a solicitação tem indicação do executor, verifica se ele é o usuário.
          Result := Result + 16;
       Else
-         -- Se o trâmite NÃO tem indicação de destinatário,
+         -- Se o trâmite NÃO tem indicação de destinatário, 
          -- verifica se o usuário está entre as pessoas que podem cumprí-lo
-         select count(*) into w_existe
-           from sg_tramite_pessoa a
+         select count(*) into w_existe 
+           from sg_tramite_pessoa a 
           where a.sq_pessoa          = p_usuario
-            and a.sq_pessoa_endereco = w_sq_endereco_unidade
+            and a.sq_pessoa_endereco = w_sq_endereco_unidade 
             and a.sq_siw_tramite     = w_sq_siw_tramite;
-         If w_existe > 0 Then
-            Result := Result + 16;
+         If w_existe > 0 Then 
+            Result := Result + 16; 
          Else
             -- Se o serviço for vinculado à unidade, testa a unidade que cadastrou a solicitação.
             -- Caso contrário, testa a unidade de lotação do solicitante.
@@ -448,7 +467,7 @@ begin
             Elsif w_vinculacao = 'P' Then
                w_unidade_atual := w_unidade_beneficiario;
             End If;
-
+       
             loop
                w_existe := 1;
                w_sair   := 1; -- Variável que controla a saída do laço quando o primeiro chefe é identificado
@@ -466,9 +485,9 @@ begin
                          If (crec.sq_pessoa_titular    <> w_solicitante or
                              (crec.sq_pessoa_titular    = w_solicitante and
                               w_solicitante             <> w_cadastrador
-                             )
-                            ) and
-                            crec.sq_pessoa_substituto <> w_solicitante and
+                             )                             
+                            ) and 
+                            crec.sq_pessoa_substituto <> w_solicitante and 
                             (crec.sq_pessoa_titular   = p_usuario or crec.sq_pessoa_substituto = p_usuario) Then
                             Result   := Result + 16;
                             w_sair   := 1;
@@ -528,7 +547,7 @@ begin
                       End If;
                    End If;
                end loop;
-
+              
                If w_existe = 1 or w_sair = 1 Then
                   exit;
                End If;
@@ -549,14 +568,15 @@ begin
           where a.sq_unidade = w_sq_unidade_executora
             and a.sq_pessoa  = p_usuario
             and a.fim        is null;
-         If w_existe > 0 Then
+         If w_existe > 0 Then 
             Result := Result + 16;
          Else
-            select count(*) into w_existe
-              from sg_tramite_pessoa a
+            select count(*) into w_existe 
+              from sg_tramite_pessoa a 
              where a.sq_pessoa          = p_usuario
-               and a.sq_pessoa_endereco = w_sq_endereco_unidade
+               and a.sq_pessoa_endereco = w_sq_endereco_unidade 
                and a.sq_siw_tramite     = w_sq_siw_tramite;
+               
             If w_existe > 0 Then Result := Result + 16; End If;
          End If;
       End If;
@@ -568,17 +588,17 @@ begin
    Else
       -- Outra possibilidade é o trâmite ser cumprido por uma pessoa que tenha
       -- permissão para isso
-      select count(*) into w_existe
-        from sg_tramite_pessoa a
+      select count(*) into w_existe 
+        from sg_tramite_pessoa a 
        where a.sq_pessoa          = p_usuario
-         and a.sq_pessoa_endereco = w_sq_endereco_unidade
+         and a.sq_pessoa_endereco = w_sq_endereco_unidade 
          and a.sq_siw_tramite     = coalesce(p_tramite, w_sq_siw_tramite);
-      If w_existe > 0 and w_destinatario = 'N' Then
-         Result := Result + 16;
+      If w_existe > 0 and w_destinatario = 'N' Then 
+         Result := Result + 16; 
       Else
          -- Outra possibilidade é a solicitação estar sendo executada pelo usuário
          -- Neste caso a solicitação deve estar em tramite ativo e diferente de cadastramento
-         If w_executor = p_usuario and w_ativo = 'S' and w_sigla_situacao <> 'CI' Then
+         If w_executor = p_usuario and w_ativo = 'S' and w_sigla_situacao <> 'CI' Then 
             Result := Result + 16;
          Elsif w_sg_modulo = 'OR' Then
             -- Se for módulo de orçamento, outra possibilidade é a solicitação ter metas e o usuário ser:
@@ -593,7 +613,7 @@ begin
                 where a.sq_unidade = w_sq_unidade_executora
                   and a.sq_pessoa  = p_usuario
                   and a.fim        is null;
-               If w_existe > 0 Then
+               If w_existe > 0 Then 
                   Result := Result + 16;
                Else
                   -- Verifica, nas demandas, se o usuário é responsável pela unidade responsável pelo monitoramento
@@ -603,7 +623,7 @@ begin
                    where b.sq_siw_solicitacao = p_solicitacao
                      and a.sq_pessoa          = p_usuario
                      and a.fim                is null;
-                  If w_existe > 0 Then
+                  If w_existe > 0 Then 
                      Result := Result + 16;
                   Else
                      -- Verifica, nas demandas, se o usuário é responsável pela unidade responsável pelo monitoramento
@@ -613,7 +633,7 @@ begin
                       where b.sq_siw_solicitacao = p_solicitacao
                         and a.sq_pessoa          = p_usuario
                         and a.fim                is null;
-                     If w_existe > 0 Then
+                     If w_existe > 0 Then 
                         Result := Result + 16;
                      End If;
                   End If;
@@ -627,4 +647,3 @@ begin
  return(Result);
 end Acesso;
 /
-
