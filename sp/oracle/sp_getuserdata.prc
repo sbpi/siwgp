@@ -8,7 +8,7 @@ begin
      select a.sq_pessoa, a.username, a.senha, a.assinatura, a.ativo, a.sq_unidade, a.sq_localizacao,
             a.gestor_seguranca, a.gestor_sistema, a.cliente, a.email,
             a.ultima_troca_senha, a.ultima_troca_assin, a.tentativas_senha, a.tentativas_assin,
-            a.tipo_autenticacao, a.gestor_portal, a.gestor_dashboard as gestor_dashbord, a.gestor_conteudo,
+            a.tipo_autenticacao, a.gestor_portal, a.gestor_dashboard, a.gestor_conteudo,
             case a.tipo_autenticacao when 'B' then 'BD' when 'A' then 'MS-AD' else 'O-LDAP' end as nm_tipo_autenticacao,
             b.sq_tipo_pessoa, b.nome, b.nome_resumido,
             c.sq_tipo_vinculo, c.interno, c.nome as nm_tipo_vinculo, c.contratado,
