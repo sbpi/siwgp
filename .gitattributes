@@ -1190,6 +1190,7 @@ modelos/oracle/SIWGP.pdm -text
 modelos/oracle/script.sql -text
 modelos/oracle/siwgp_model.dmp -text
 modelos/oracle/siwgp_model.log -text
+modelos/postgresql/script.sql -text
 sp/oracle/acentos.fnc -text
 sp/oracle/acesso.fnc -text
 sp/oracle/acesso_recurso.fnc -text
@@ -1564,3 +1565,4 @@ sp/oracle/vw_projetos.vw -text
 sp/oracle/vw_status_projeto.vw -text
 sp/oracle/vw_tarefas_projeto.vw -text
 sp/oracle/vw_usuarios.vw -text
+sp/postgresql/to_number.sql -text
