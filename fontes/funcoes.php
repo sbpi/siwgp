@@ -84,6 +84,33 @@ function SortArray() {
 // =========================================================================
 // Montagem do link para abrir o calendário
 // -------------------------------------------------------------------------
+function nextval($sequenceName) {
+  extract($GLOBALS);
+  if ($_SESSION["DBMS"] && ($_SESSION["DBMS"] == '1' || $_SESSION["DBMS"] == '3' || $_SESSION["DBMS"] == '5' || $_SESSION["DBMS"] == '6')) {   //Se Oracle
+    $query = $sequenceName . ".nextval";  
+  }else if($_SESSION["DBMS"] && ($_SESSION["DBMS"] == '4')){ //Se PostgreSQL
+    $query = "NEXTVAL('" . $sequenceName . "')";  
+  }  
+  //TODO MSSQL
+  return $query;
+}
+// =========================================================================
+// Montagem do link para abrir o calendário
+// -------------------------------------------------------------------------
+function sysdate() {
+  extract($GLOBALS);
+  if ($_SESSION["DBMS"] && ($_SESSION["DBMS"] == '1' || $_SESSION["DBMS"] == '3' || $_SESSION["DBMS"] == '5' || $_SESSION["DBMS"] == '6')) {   //Se Oracle
+    $query = 'sysdate';
+  }else if($_SESSION["DBMS"] && ($_SESSION["DBMS"] == '4')){ //Se PostgreSQL
+    $query = 'now()';
+  }  
+  //TODO MSSQL
+  return $query;
+}
+
+// =========================================================================
+// Montagem do link para abrir o calendário
+// -------------------------------------------------------------------------
 function exibeCalendario($form, $campo) {
   extract($GLOBALS);
   return '   <a class="ss" HREF="javascript:this.status.value;" onClick="window.open(\'' . $conRootSIW . 'calendario.php?form=' . $form . '&field=' . $campo . '&vData=\'+document.' . $form . '.' . $campo . '.value,\'dp\',\'toolbar=0, location=0, directories=0, status=0, menubar=0, scrollbars=0, resizable=0, width=150, height=160, left=500, top=200\'); return false;" title="Visualizar calendário"><img src="images/icone/GotoTop.gif" alt="img" border=0 align=top height=16 width=16 /></a>';
@@ -149,8 +176,14 @@ function CriaBaseLine($l_chave,$l_html,$l_nome,$l_tramite) {
   fwrite($l_arq,'<html>');
   fwrite($l_arq,'<head>');
   fwrite($l_arq,'<title>Visualização de '.$l_nome.'</title>');
-  fwrite($l_arq,'</head>');
+  fwrite($l_arq,'<meta NAME="robots" CONTENT="noindex, nofollow, noarchive" />');
+  fwrite($l_arq,'<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE" />');
+  fwrite($l_arq,'<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />');
+  fwrite($l_arq,'<meta NAME="author" CONTENT="SBPI Consultoria Ltda" />');
+  fwrite($l_arq,'<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR" />');
+  fwrite($l_arq,'<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1" />');
   fwrite($l_arq,'<base HREF="'.$conRootSIW.'">');
+  fwrite($l_arq,'</head>');
   fwrite($l_arq,'<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css"/>');
   fwrite($l_arq,'<body>');
   fwrite($l_arq,'<div align="center">');
@@ -871,6 +904,16 @@ function RetornaFormulario($l_troca=null,$l_sg=null,$l_menu=null,$l_o=null,$l_di
 // Exibe o conteúdo da querystring, do formulário e das variáveis de sessão
 // -------------------------------------------------------------------------
 function ExibeArray($array) { echo '<pre>'.var_export($array,true).'</pre>'; }
+
+function ExibeSql($SQL) {
+  extract($GLOBALS);
+  echo '<script type="text/javascript" src="' . $w_dir_volta . 'js/shCore.js"></script>';
+  echo '<script type="text/javascript" src="' . $w_dir_volta . 'js/shBrushSql.js"></script>';
+  echo '<link href="' . $w_dir_volta . 'classes/menu/shCore.css" rel="stylesheet" type="text/css" />';
+  echo '<link href="' . $w_dir_volta . 'classes/menu/shThemeDefault.css" rel="stylesheet" type="text/css" />';
+  echo '<script type="text/javascript">SyntaxHighlighter.all()</script>';
+  echo '<pre class="brush: sql; tab-size: 2; toolbar:true">' . $SQL . '</pre>';
+}
 
 // =========================================================================
 // Exibe o conteúdo da querystring, do formulário e das variáveis de sessão
@@ -2886,12 +2929,12 @@ function TrataErro($sp, $Err, $params, $file, $line, $object) {
   } else {
     $w_html='<html>';
     $w_html .= chr(10).'<head>';
-    $w_html .= chr(10).'<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">';
-    $w_html .= chr(10).'<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">';
-    $w_html .= chr(10).'<meta NAME="author" CONTENT="SBPI Consultoria Ltda">';
-    $w_html .= chr(10).'<meta NAME="robots" CONTENT="noindex,nofollow">';
-    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR">';
-    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1">';
+    $w_html .= chr(10).'<meta NAME="robots" CONTENT="noindex, nofollow, noarchive" />';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE" />';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />';
+    $w_html .= chr(10).'<meta NAME="author" CONTENT="SBPI Consultoria Ltda" />';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR" />';
+    $w_html .= chr(10).'<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1" />';
     $w_html .= chr(10).'  <baseFONT FACE="Arial" SIZE="2">';
     $w_html .= chr(10).'</head>';
     $w_html .= chr(10).'<body BGCOLOR="#FF5555">';
@@ -2924,6 +2967,7 @@ function TrataErro($sp, $Err, $params, $file, $line, $object) {
     $w_html .= chr(10).'<tr valign="top"><td align="right">SERVER_PROTOCOL=><td>['.$_SERVER['SERVER_PROTOCOL'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">HTTP_ACCEPT_LANGUAGE=><td>['.$_SERVER['HTTP_ACCEPT_LANGUAGE'].']';
     $w_html .= chr(10).'<tr valign="top"><td align="right">HTTP_USER_AGENT=><td>['.$_SERVER['HTTP_USER_AGENT'].']';
+    $w_html .= chr(10).'<tr valign="top"><td align="right">HTTP_REFERER=><td>['.$_SERVER['HTTP_REFERER'].']';
     $w_html .= chr(10).'</table></dt><br />';
 
     $w_html .= chr(10).'<dt>Dados da querystring:<table border=0>';
@@ -2970,10 +3014,10 @@ function Cabecalho() {
 function head() {
   extract($GLOBALS);
   ShowHTML('<head>');
+  ShowHTML('<meta NAME="robots" CONTENT="noindex, nofollow, noarchive" />');
   ShowHTML('<meta HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE" />');
   ShowHTML('<meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE" />');
   ShowHTML('<meta NAME="author" CONTENT="SBPI Consultoria Ltda" />');
-  ShowHTML('<meta NAME="robots" CONTENT="noindex,nofollow" />');
   ShowHTML('<meta HTTP-EQUIV="CONTENT-LANGUAGE" CONTENT="pt-BR" />');
   ShowHTML('<meta HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=ISO-8859-1" />');
   ShowHTML('<script language="javascript" type="text/javascript" src="'.$conRootSIW.'js/jquery.js"></script>');
