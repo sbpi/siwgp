@@ -1188,7 +1188,6 @@ fontes/visualalerta.php -text
 fontes/visualprojeto.php -text
 modelos/oracle/SIWGP.pdm -text
 modelos/oracle/script.sql -text
-modelos/oracle/siwgp_model.dmp -text
 modelos/oracle/siwgp_model.log -text
 modelos/postgresql/script.sql -text
 sp/oracle/acentos.fnc -text
