@@ -91,14 +91,14 @@ $conEnviaMail   = false;
 
 $crlf           = chr(13).chr(10);
 $conSgSistema   = 'SIW';
-$conApacheStat  = 'http://www2.sbpi.com.br/server-status-sbpi';
-$conDefaultPath = 'http://www2.sbpi.com.br/siwgp/';
+$conApacheStat  = 'http://www2.sbpi1.com.br/server-status-sbpi';
+$conDefaultPath = 'http://www2.sbpi1.com.br/siwgp/';
 $conNmSistema   = 'Solução Integrada Web';
-$conRootSIW     = 'http://www2.sbpi.com.br/siwgp/';
-$conDiretorio   = '/var/www/siwgp/';
+$conRootSIW     = 'http://www2.sbpi1.com.br/siwgp/';
+$conDiretorio   = 'c:/www/siwgp/';
 $conFontPath    = $conDiretorio.'fonts/linux/';
 $conFileVirtual = '/siwgp_files/';
-$conFilePhysical= '/var/www/siwgp_files/';
+$conFilePhysical= 'c:/www/siwgp_files/';
 
 // Define se deve ser gravado arquivo de log e o seu caminho
 $conLog         = false;

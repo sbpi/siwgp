@@ -15,13 +15,15 @@ class abreSessao {
      $DBMS->doConnection();
      $DBMS->selectDatabase();
      if ($DB_TYPE==ORA8 || $DB_TYPE==ORA9 || $DB_TYPE==ORA10 || $DB_TYPE==ORAHM) { 
-       $query = 'ALTER SESSION SET NLS_TERRITORY = \'BRAZIL\'';
+       //$query = 'ALTER SESSION SET NLS_TERRITORY = \'BRAZIL\'';
+       $query = 'ALTER SESSION SET NLS_LANG = \'BRAZILIAN PORTUGUESE_BRAZIL.WE8MSWIN1252\'';
        $stid  = oci_parse($DBMS->getConnectionHandle(),$query);
        $r = oci_execute($stid,OCI_DEFAULT);
      }
      if ($DB_TYPE==MSSQL) { ini_set('mssql.datetimeconvert', 0);}
      if ($DB_TYPE==PGSQL) { 
        pg_query($DBMS->getConnectionHandle(), "set client_encoding to 'LATIN1'"); 
+       pg_query($DBMS->getConnectionHandle(), "set datestyle to 'SQL, DMY'"); 
        //pg_query($DBMS->getConnectionHandle(), "set search_path to siw,public");
      }
      return $DBMS->getConnectionHandle();

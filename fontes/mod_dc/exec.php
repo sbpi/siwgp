@@ -240,8 +240,10 @@ function ResultSql() {
   $login    = $_POST['userName'];
 
   ShowHTML('<html>');
+  ShowHTML('<head>');
   ShowHTML('<BASE HREF="'.$conRootSIW.'">');
-  ShowHTML('<link rel="stylesheet" type="text/css" href="http://www2.sbpi.com.br/siw/classes/menu/xPandMenu.css">');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
+  ShowHTML('</head>');
   BodyOpen(null);
   ShowHTML('<table border="0" cellpadding="0" cellspacing="0" width="100%">');
   ShowHTML('<tr bgcolor="'.$conTrBgColor.'"><td>');
@@ -444,8 +446,10 @@ function ResultCom() {
   } 
 
   ShowHTML('<html>');
+  ShowHTML('<head>');
   ShowHTML('<BASE HREF="'.$conRootSIW.'">');
-  ShowHTML('<link rel="stylesheet" type="text/css" href="http://www2.sbpi.com.br/siw/classes/menu/xPandMenu.css">');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
+  ShowHTML('</head>');
   BodyOpen(null);
   ShowHTML('<table border="0" cellpadding="0" cellspacing="0" width="100%">');
   ShowHTML('<tr bgcolor="'.$conTrBgColor.'"><td>');

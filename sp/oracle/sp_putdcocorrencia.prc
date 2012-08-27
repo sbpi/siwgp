@@ -57,7 +57,7 @@ begin
         );
 
       -- Recupera o valor da próxima chave
-      select sq_orimporta.nextval into w_chave from dual;
+      select sq_ocorrencia.nextval into w_chave from dual;
 
       -- Insere registro
       insert into dc_ocorrencia
@@ -73,4 +73,3 @@ begin
    End If;
 end SP_PutDcOcorrencia;
 /
-

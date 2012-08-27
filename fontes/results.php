@@ -2,11 +2,12 @@
   include('constants.inc');
   include('classes/db/db_constants.php');
   include('funcoes.php');
+  ShowHTML('<html>');
+  ShowHTML('<head>');
+  ShowHTML('<BASE HREF="'.$conRootSIW.'">');
+  ShowHTML('<link rel="stylesheet" type="text/css" href="'.$conRootSIW.'classes/menu/xPandMenu.css">');
+  ShowHTML('</head>');
 ?>
-<html>
-<head>
-</head>
-<link rel='stylesheet' type='text/css' href='http://www2.sbpi.com.br/siw/classes/menu/xPandMenu.css'>
 <body bgcolor='#FFFFFF' background='bg.jpg' bgproperties='fixed'>
 <font size='1'>
 <br>
