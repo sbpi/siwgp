@@ -2423,7 +2423,7 @@ function toSQLDate($date) {
 }
 
 // =========================================================================
-// Função que retorna um valor da string informada
+// Função que retorna um valor da string informada para gravacao no BD
 // valor: string contendo o valor
 // -------------------------------------------------------------------------
 function toNumber($valor) {
@@ -2431,16 +2431,7 @@ function toNumber($valor) {
   if ($_SESSION['DBMS']==2) {
     $l_valor = str_replace(',','.',str_replace('.','',$valor)); 
   } else {
-    if ($_SESSION['DBMS']==1 || $_SESSION['DBMS']==3 || $_SESSION['DBMS']==5) {
-      $territorio = substr(getenv('NLS_LANG'),strpos(getenv('NLS_LANG'),'_')+1,(strpos(getenv('NLS_LANG'),'.')-1-strpos(getenv('NLS_LANG'),'_')));
-      if ($territorio=='BRAZIL') {
-        $l_valor = str_replace('.','',$valor);
-      } else {
-        $l_valor = str_replace(',','.',str_replace('.','',$valor));
-      }
-    } else {
-      $l_valor = str_replace('.','',$valor);
-    }
+    $l_valor = str_replace('.','',$valor);
   }
   return $l_valor;
 }
